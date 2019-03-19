@@ -152,6 +152,17 @@ func elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 		return
 	}
 
-	w.Header().Add("Content-Type", "application/json")
+	// Replace w's header by resp's header.
+	hdr := w.Header()
+	for k := range hdr {
+		hdr.Del(k)
+	}
+	for k, vs := range resp.Header {
+		for _, v := range vs {
+			hdr.Add(k, v)
+		}
+	}
+
+	w.WriteHeader(resp.StatusCode)
 	io.Copy(w, resp.Body)
 }
