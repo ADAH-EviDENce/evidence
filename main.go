@@ -48,8 +48,7 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	dec.DisallowUnknownFields()
 	err := dec.Decode(&assessments)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		io.WriteString(w, err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -68,8 +67,7 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	tx, err := db.db.Begin()
 	defer func() {
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, "database error")
+			http.Error(w, "database error", http.StatusInternalServerError)
 			log.Printf("%v; rolling back", err)
 			if tx != nil {
 				tx.Rollback()
@@ -108,8 +106,7 @@ func (db assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	var ids []string
 	err := json.NewDecoder(r.Body).Decode(&ids)
 	if err != nil && err != io.EOF {
-		w.WriteHeader(http.StatusBadRequest)
-		io.WriteString(w, err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -122,8 +119,7 @@ func (db assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 			continue
 		}
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, "database error")
+			http.Error(w, "database error", http.StatusInternalServerError)
 			log.Printf("%v", err)
 			return
 		}
@@ -151,7 +147,7 @@ func elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 
 	resp, err := http.Get(url)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "cannot reach Elasticsearch", http.StatusInternalServerError)
 		log.Printf("%v", err)
 		return
 	}
