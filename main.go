@@ -36,9 +36,22 @@ type assessDB struct {
 
 	// Set to a function that validates identifiers.
 	validateId func(http.ResponseWriter, []string) bool
+
+	// Prepared statements.
+	insertAssessment, selectRelevant *sql.Stmt
 }
 
 func (db assessDB) installHandler(r *httprouter.Router) {
+	var err error
+	db.insertAssessment, err = db.db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
+	if err != nil {
+		panic(err)
+	}
+	db.selectRelevant, err = db.db.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
+	if err != nil {
+		panic(err)
+	}
+
 	r.POST("/assess", db.add)
 	r.GET("/assess", db.get)
 }
@@ -48,7 +61,7 @@ type assessment struct {
 	Relevant string `json:"relevant"` // "yes", "no" or ""
 }
 
-func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (db *assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var assessments []assessment
 
 	dec := json.NewDecoder(r.Body)
@@ -90,6 +103,8 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 		return
 	}
 
+	insert := tx.Stmt(db.insertAssessment)
+
 	for _, a := range assessments {
 		relevant := sql.NullBool{Bool: false, Valid: false}
 
@@ -102,7 +117,7 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 		case "":
 		}
 
-		_, err = tx.Exec(`INSERT INTO assessments VALUES (?, ?)`, a.Id, relevant)
+		_, err = insert.Exec(a.Id, relevant)
 		if err != nil {
 			return
 		}
@@ -116,7 +131,7 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 
 // Reads identifiers (JSON list of strings) from body, writes assessments for
 // designated snippets.
-func (db assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (db *assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var ids []string
 	err := json.NewDecoder(r.Body).Decode(&ids)
 	if err != nil && err != io.EOF {
@@ -131,7 +146,7 @@ func (db assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	result := make([]assessment, 0)
 	for _, id := range ids {
 		var relevant sql.NullBool
-		err = db.db.QueryRow(`SELECT relevant FROM assessments WHERE id = ?`, id).Scan(&relevant)
+		err = db.selectRelevant.QueryRow(id).Scan(&relevant)
 		if err == sql.ErrNoRows {
 			// For id not in database, we skip it in the output.
 			continue
