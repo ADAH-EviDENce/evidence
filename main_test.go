@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	//"os"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -20,8 +20,7 @@ func TestAssessments(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	println(tempdir)
-	//defer os.RemoveAll(tempdir)
+	defer os.RemoveAll(tempdir)
 
 	db, err := sql.Open("sqlite3", filepath.Join(tempdir, "relevance.db"))
 	if err != nil {
