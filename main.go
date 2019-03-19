@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -12,6 +14,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const elasticEndpoint = "http://localhost:9200"
+
 func main() {
 	db, err := sql.Open("sqlite3", "relevance.db")
 	if err != nil {
@@ -20,7 +24,7 @@ func main() {
 	defer db.Close()
 
 	r := httprouter.New()
-	assessDB{db: db}.installHandler(r)
+	assessDB{db: db, validateId: validateElastic}.installHandler(r)
 	r.GET("/es/*path", elasticsearch)
 	r.ServeFiles("/static/*filepath", http.Dir("static"))
 
@@ -29,6 +33,9 @@ func main() {
 
 type assessDB struct {
 	db *sql.DB
+
+	// Set to a function that validates identifiers.
+	validateId func(http.ResponseWriter, []string) bool
 }
 
 func (db assessDB) installHandler(r *httprouter.Router) {
@@ -52,7 +59,8 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 		return
 	}
 
-	for _, a := range assessments {
+	ids := make([]string, len(assessments))
+	for i, a := range assessments {
 		switch a.Relevant {
 		case "yes", "no", "":
 		default:
@@ -60,9 +68,13 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 			fmt.Fprintf(w, `relevant must be "yes", "no" or empty, got %q`, a.Relevant)
 			return
 		}
+
+		ids[i] = a.Id
 	}
 
-	// TODO validate identifiers against Elasticsearch.
+	if !db.validateId(w, ids) {
+		return
+	}
 
 	tx, err := db.db.Begin()
 	defer func() {
@@ -102,11 +114,17 @@ func (db assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	}
 }
 
+// Reads identifiers (JSON list of strings) from body, writes assessments for
+// designated snippets.
 func (db assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var ids []string
 	err := json.NewDecoder(r.Body).Decode(&ids)
 	if err != nil && err != io.EOF {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if !db.validateId(w, ids) {
 		return
 	}
 
@@ -139,7 +157,7 @@ func (db assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 
 // Proxy for Elasticsearch. Only passes through GET requests.
 func elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	url := "http://localhost:9200" + ps.ByName("path")
+	url := elasticEndpoint + ps.ByName("path")
 	q := r.URL.RawQuery
 	if q != "" {
 		url += "?" + q
@@ -165,4 +183,69 @@ func elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 
 	w.WriteHeader(resp.StatusCode)
 	io.Copy(w, resp.Body)
+	resp.Body.Close()
+}
+
+// Checks if snippets with the given ids exist in the ES index.
+func validateElastic(w http.ResponseWriter, ids []string) (valid bool) {
+	url := elasticEndpoint + "/snippets/snippet/_mget?_source=false"
+
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+
+	// ES multi-GET API wants list of {"_id": id}.
+	esIds := make([]map[string]string, len(ids))
+	for i, id := range ids {
+		esIds[i] = map[string]string{"_id": id}
+	}
+
+	enc.Encode(map[string]interface{}{"docs": esIds})
+
+	req, err := http.NewRequest("GET", url, &buf)
+	if err != nil {
+		// This means either the URL is invalid, or GET is no longer an HTTP verb.
+		panic(err)
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		http.Error(w, "HTTP client error", http.StatusInternalServerError)
+		if err == nil {
+			log.Printf("Elasticsearch reports status %s\n", resp.Status)
+		} else {
+			log.Print(err)
+		}
+		return
+	}
+	defer resp.Body.Close()
+
+	dec := json.NewDecoder(resp.Body)
+	m := make(map[string][]struct {
+		Found bool   `json:"found"`
+		Id    string `json:"_id"`
+	})
+	err = dec.Decode(&m)
+	if err == nil && len(m["docs"]) != len(ids) {
+		err = errors.New("no docs or wrong number in Elasticsearch output")
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	for i, result := range m["docs"] {
+		if result.Id != ids[i] {
+			http.Error(w, "Elasticsearch checked wrong id", http.StatusInternalServerError)
+			return
+		}
+		if !result.Found {
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprintf(w, "invalid or unknown snippet %q", result.Id)
+			return
+		}
+	}
+
+	return true
 }

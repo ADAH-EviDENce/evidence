@@ -37,7 +37,7 @@ func TestAssessments(t *testing.T) {
 	}
 
 	r := httprouter.New()
-	assessDB{db: db}.installHandler(r)
+	assessDB{db: db, validateId: alwaysOk}.installHandler(r)
 
 	req := httptest.NewRequest("GET", "/assess",
 		strings.NewReader(`["foo", "bar", "baz"]`))
@@ -80,3 +80,6 @@ func TestAssessments(t *testing.T) {
 		// no value for quux
 	}, assess)
 }
+
+// Mock id validator.
+func alwaysOk(http.ResponseWriter, []string) bool { return true }
