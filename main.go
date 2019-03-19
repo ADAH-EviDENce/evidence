@@ -40,7 +40,6 @@ func main() {
 type assessDB struct {
 	db              *sql.DB
 	elasticEndpoint string
-	skipValidation  bool // Set to true for testing without Elasticsearch.
 
 	// Prepared statements.
 	insertAssessment, selectRelevant *sql.Stmt
@@ -222,10 +221,6 @@ func (db *assessDB) elasticsearch(w http.ResponseWriter, r *http.Request, ps htt
 
 // Checks if snippets with the given ids exist in the ES index.
 func (db *assessDB) validateId(w http.ResponseWriter, ids []string) (valid bool) {
-	if db.skipValidation {
-		return true
-	}
-
 	url := db.elasticEndpoint + "/snippets/snippet/_mget?_source=false"
 
 	var buf bytes.Buffer
