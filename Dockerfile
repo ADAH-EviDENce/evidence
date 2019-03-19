@@ -11,6 +11,13 @@ RUN go test ./...
 RUN go install -ldflags="-s" .
 
 FROM debian:buster
+RUN apt-get -y update && apt-get -y install sqlite3
+
+WORKDIR /evidence
+
+COPY schema.sql .
+RUN sqlite3 relevance.db < schema.sql
+
 COPY --from=build /go/bin/evidence-gui .
 
 EXPOSE 8080

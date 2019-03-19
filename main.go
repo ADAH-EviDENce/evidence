@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -14,9 +15,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const elasticEndpoint = "http://localhost:9200"
-
 func main() {
+	elasticEndpoint := flag.String("elastic", "Elasticsearch endpoint",
+		"http://localhost:9200")
+	flag.Parse()
+
 	db, err := sql.Open("sqlite3", "relevance.db")
 	if err != nil {
 		log.Fatal(err)
@@ -24,18 +27,20 @@ func main() {
 	defer db.Close()
 
 	r := httprouter.New()
-	assessDB{db: db, validateId: validateElastic}.installHandler(r)
-	r.GET("/es/*path", elasticsearch)
+	assessDB{
+		db:              db,
+		elasticEndpoint: *elasticEndpoint,
+	}.installHandler(r)
+
 	r.ServeFiles("/static/*filepath", http.Dir("static"))
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 type assessDB struct {
-	db *sql.DB
-
-	// Set to a function that validates identifiers.
-	validateId func(http.ResponseWriter, []string) bool
+	db              *sql.DB
+	elasticEndpoint string
+	skipValidation  bool // Set to true for testing without Elasticsearch.
 
 	// Prepared statements.
 	insertAssessment, selectRelevant *sql.Stmt
@@ -54,6 +59,7 @@ func (db assessDB) installHandler(r *httprouter.Router) {
 
 	r.POST("/assess", db.add)
 	r.GET("/assess", db.get)
+	r.GET("/es/*path", db.elasticsearch)
 }
 
 type assessment struct {
@@ -171,8 +177,8 @@ func (db *assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 }
 
 // Proxy for Elasticsearch. Only passes through GET requests.
-func elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	url := elasticEndpoint + ps.ByName("path")
+func (db *assessDB) elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	url := db.elasticEndpoint + ps.ByName("path")
 	q := r.URL.RawQuery
 	if q != "" {
 		url += "?" + q
@@ -202,8 +208,12 @@ func elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 }
 
 // Checks if snippets with the given ids exist in the ES index.
-func validateElastic(w http.ResponseWriter, ids []string) (valid bool) {
-	url := elasticEndpoint + "/snippets/snippet/_mget?_source=false"
+func (db *assessDB) validateId(w http.ResponseWriter, ids []string) (valid bool) {
+	if db.skipValidation {
+		return true
+	}
+
+	url := db.elasticEndpoint + "/snippets/snippet/_mget?_source=false"
 
 	var buf bytes.Buffer
 	enc := json.NewEncoder(&buf)

@@ -4,6 +4,7 @@ import json
 from io import StringIO
 import os
 import re
+import sys
 
 import elasticsearch
 
@@ -16,7 +17,7 @@ def natural_key(s):
     return [int(part) if part.isdigit() else part for part in NUM_PARTS.split(s)]
 
 
-es = elasticsearch.Elasticsearch()
+es = elasticsearch.Elasticsearch(*sys.argv[1:])
 
 # Documents are lists of snippets.
 es.indices.create('documents', ignore=400, body={
