@@ -184,22 +184,35 @@ func (db *assessDB) elasticsearch(w http.ResponseWriter, r *http.Request, ps htt
 		url += "?" + q
 	}
 
-	resp, err := http.Get(url)
+	r2, err := http.NewRequest("GET", url, r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Copy r's header to r2.
+	for k := range r2.Header {
+		r2.Header.Del(k)
+	}
+	for k, vs := range r.Header {
+		r2.Header[k] = vs
+	}
+
+	resp, err := http.DefaultClient.Do(r2)
 	if err != nil {
 		http.Error(w, "cannot reach Elasticsearch", http.StatusInternalServerError)
 		log.Printf("%v", err)
 		return
 	}
+	defer resp.Body.Close()
 
 	// Replace w's header by resp's header.
-	hdr := w.Header()
-	for k := range hdr {
-		hdr.Del(k)
+	wHeader := w.Header()
+	for k := range wHeader {
+		wHeader.Del(k)
 	}
 	for k, vs := range resp.Header {
-		for _, v := range vs {
-			hdr.Add(k, v)
-		}
+		wHeader[k] = vs
 	}
 
 	w.WriteHeader(resp.StatusCode)
