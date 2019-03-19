@@ -16,8 +16,8 @@ import (
 )
 
 func main() {
-	elasticEndpoint := flag.String("elastic", "Elasticsearch endpoint",
-		"http://localhost:9200")
+	elasticEndpoint := flag.String("elastic", "http://localhost:9200",
+		"Elasticsearch endpoint")
 	flag.Parse()
 
 	db, err := sql.Open("sqlite3", "relevance.db")
