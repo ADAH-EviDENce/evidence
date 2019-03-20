@@ -86,6 +86,22 @@ func TestAssessments(t *testing.T) {
 	}, assess)
 }
 
+func TestESProxy(t *testing.T) {
+	es := mockElastic()
+	defer es.Close()
+
+	r := httprouter.New()
+	assessDB{elasticEndpoint: es.URL}.installHandler(r)
+
+	req := httptest.NewRequest("GET", "/es/snippets/snippet/_mget", nil)
+
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	// We care about getting through to the proxied server,
+	// not about its handling of incorrect requests.
+	assert.NotEqual(t, http.StatusNotFound, w.Result().StatusCode)
+}
+
 func mockElastic() *httptest.Server {
 	r := httprouter.New()
 	r.GET("/snippets/snippet/_mget", mget)

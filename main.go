@@ -46,14 +46,17 @@ type assessDB struct {
 }
 
 func (db assessDB) installHandler(r *httprouter.Router) {
-	var err error
-	db.insertAssessment, err = db.db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
-	if err != nil {
-		panic(err)
-	}
-	db.selectRelevant, err = db.db.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
-	if err != nil {
-		panic(err)
+	// db.db may be nil in tests.
+	if db.db != nil {
+		var err error
+		db.insertAssessment, err = db.db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
+		if err != nil {
+			panic(err)
+		}
+		db.selectRelevant, err = db.db.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	r.POST("/assess", db.add)
