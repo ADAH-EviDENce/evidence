@@ -16,8 +16,6 @@ services:
       discovery.type: "single-node"
     expose:
       - "9200"
-    ports:
-      - "9200:9200"
 
   indexer:
     build:
