@@ -2,20 +2,22 @@
 
 
 ## Techniques
-- React
+- React 16
 - React Router 4
-- Bootstrap
+- Bootstrap 4
 
 
 ## Development
 
 ### First time
-Run `npm install`
+
+Run `npm i react-scripts && npm install`
+Run `cd ./mocks && npm install`
 
 ### Start locally
-Run `npm start`
-
-Open [http://localhost:3000](http://localhost:3000)
+- Run `npm start`
+- Run mock server: `cd ./mocks && node app.js`
+- Open [http://localhost:3000](http://localhost:3000)
 
 ## Build
 
@@ -23,15 +25,15 @@ Run `./build-ui.sh`
 
 Generated files can be found in `../static`
 
-### React Starter App
+## React Starter App
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-#### `npm test`
+### `npm test`
 
 Launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-#### `npm run build`
+### `npm run build`
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -41,7 +43,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-#### `npm run eject`
+### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
@@ -51,7 +53,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-#### Learn More
+### Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 

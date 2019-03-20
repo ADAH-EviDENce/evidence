@@ -8,11 +8,15 @@ class Search extends React.Component<any, any> {
         this.state = {};
     }
 
+    handleSearch = (query: string) => {
+        console.log('handle search with query', query);
+    };
+
     render() {
         return (
             <Page>
                 <div className="offset-2 col-8">
-                    <SearchBar/>
+                    <SearchBar onSearch={this.handleSearch}/>
                 </div>
             </Page>
         );

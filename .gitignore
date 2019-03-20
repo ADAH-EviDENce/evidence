@@ -5,7 +5,7 @@ __pycache__
 /static
 
 # UI
-/ui/node_modules
+node_modules/
 /ui/coverage
 /ui/build
 

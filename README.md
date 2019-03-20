@@ -1,3 +1,11 @@
+# Evidence
+
+## Deploy locally
+Add TargetSize150 to `./indexer`
+
+Run: `docker-compose up --build`
+
+## Elastic search example query
 List of snippets:
 
     http://localhost:8080/es/snippets/_search
