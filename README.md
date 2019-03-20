@@ -8,7 +8,8 @@ Single snippet:
 
 More like this:
 
-    curl -XGET http://localhost:8080/es/snippets/_search -d '{
+    curl -XGET -H 'Content-Type: application/json' \
+        http://localhost:8080/es/snippets/_search -d '{
         "query": {
             "more_like_this": {
                 "fields": ["text", "lemma"],
@@ -19,8 +20,8 @@ More like this:
                 "like": [{
                     "_index": "snippets",
                     "_type": "snippet",
-                    "_id": "'${id}'",
-                }],
-            },
-        },
+                    "_id": "'${id}'"
+                }]
+            }
+        }
     }'
