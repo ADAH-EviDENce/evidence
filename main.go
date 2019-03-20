@@ -10,6 +10,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/mattn/go-sqlite3"
@@ -40,6 +42,7 @@ func main() {
 type assessDB struct {
 	db              *sql.DB
 	elasticEndpoint string
+	elasticProxy    *httputil.ReverseProxy
 
 	// Prepared statements.
 	insertAssessment, selectRelevant *sql.Stmt
@@ -61,6 +64,13 @@ func (db assessDB) installHandler(r *httprouter.Router) {
 
 	r.POST("/assess", db.add)
 	r.GET("/assess", db.get)
+
+	esURL, err := url.Parse(db.elasticEndpoint)
+	if err != nil {
+		log.Fatal(err)
+	}
+	db.elasticProxy = httputil.NewSingleHostReverseProxy(esURL)
+
 	r.GET("/es/*path", db.elasticsearch)
 }
 
@@ -180,46 +190,8 @@ func (db *assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 
 // Proxy for Elasticsearch. Only passes through GET requests.
 func (db *assessDB) elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	url := db.elasticEndpoint + ps.ByName("path")
-	q := r.URL.RawQuery
-	if q != "" {
-		url += "?" + q
-	}
-
-	r2, err := http.NewRequest("GET", url, r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// Copy r's header to r2.
-	for k := range r2.Header {
-		r2.Header.Del(k)
-	}
-	for k, vs := range r.Header {
-		r2.Header[k] = vs
-	}
-
-	resp, err := http.DefaultClient.Do(r2)
-	if err != nil {
-		http.Error(w, "cannot reach Elasticsearch", http.StatusInternalServerError)
-		log.Printf("%v", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	// Replace w's header by resp's header.
-	wHeader := w.Header()
-	for k := range wHeader {
-		wHeader.Del(k)
-	}
-	for k, vs := range resp.Header {
-		wHeader[k] = vs
-	}
-
-	w.WriteHeader(resp.StatusCode)
-	io.Copy(w, resp.Body)
-	resp.Body.Close()
+	r.URL.Path = ps.ByName("path")
+	db.elasticProxy.ServeHTTP(w, r)
 }
 
 // Checks if snippets with the given ids exist in the ES index.
