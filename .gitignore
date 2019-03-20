@@ -2,6 +2,8 @@ evidence-gui
 *.db
 __pycache__
 
+/static
+
 # UI
 /ui/node_modules
 /ui/coverage

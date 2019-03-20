@@ -1,18 +1,27 @@
 # Evidence UI
 
 
-### Techniques
+## Techniques
 - React
 - React Router 4
 - Bootstrap
 
+
+## Development
+
 ### First time
 Run `npm install`
 
-### Start locally 
+### Start locally
 Run `npm start`
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Build
+
+Run `./build-ui.sh`
+
+Generated files can be found in `../static`
 
 ### React Starter App
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
