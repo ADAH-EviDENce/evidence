@@ -29,17 +29,15 @@ func main() {
 	defer db.Close()
 
 	r := httprouter.New()
-	assessDB{
-		db:              db,
-		elasticEndpoint: *elasticEndpoint,
-	}.installHandler(r)
+	newServer(db, *elasticEndpoint, r)
 
 	r.ServeFiles("/static/*filepath", http.Dir("static"))
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-type assessDB struct {
+// A server encapsulates an assessment database and an Elasticsearch proxy.
+type server struct {
 	db              *sql.DB
 	elasticEndpoint string
 	elasticProxy    *httputil.ReverseProxy
@@ -48,30 +46,35 @@ type assessDB struct {
 	insertAssessment, selectRelevant *sql.Stmt
 }
 
-func (db assessDB) installHandler(r *httprouter.Router) {
-	// db.db may be nil in tests.
-	if db.db != nil {
-		var err error
-		db.insertAssessment, err = db.db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
-		if err != nil {
-			panic(err)
-		}
-		db.selectRelevant, err = db.db.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	r.POST("/assess", db.add)
-	r.GET("/assess", db.get)
-
-	esURL, err := url.Parse(db.elasticEndpoint)
+func newServer(db *sql.DB, elasticEndpoint string, r *httprouter.Router) *server {
+	esURL, err := url.Parse(elasticEndpoint)
 	if err != nil {
 		log.Fatal(err)
 	}
-	db.elasticProxy = httputil.NewSingleHostReverseProxy(esURL)
 
-	r.GET("/es/*path", db.elasticsearch)
+	s := &server{db: db, elasticEndpoint: elasticEndpoint}
+
+	// db may be nil in tests.
+	if db != nil {
+		var err error
+		s.insertAssessment, err = db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
+		if err != nil {
+			panic(err)
+		}
+		s.selectRelevant, err = db.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	r.POST("/assess", s.add)
+	r.GET("/assess", s.get)
+
+	s.elasticProxy = httputil.NewSingleHostReverseProxy(esURL)
+
+	r.GET("/es/*path", s.elasticsearch)
+
+	return s
 }
 
 type assessment struct {
@@ -79,7 +82,7 @@ type assessment struct {
 	Relevant string `json:"relevant"` // "yes", "no" or ""
 }
 
-func (db *assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var assessments []assessment
 
 	dec := json.NewDecoder(r.Body)
@@ -103,11 +106,11 @@ func (db *assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		ids[i] = a.Id
 	}
 
-	if !db.validateId(w, ids) {
+	if !s.validateId(w, ids) {
 		return
 	}
 
-	tx, err := db.db.Begin()
+	tx, err := s.db.Begin()
 	defer func() {
 		if err != nil {
 			http.Error(w, "database error", http.StatusInternalServerError)
@@ -121,7 +124,7 @@ func (db *assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		return
 	}
 
-	insert := tx.Stmt(db.insertAssessment)
+	insert := tx.Stmt(s.insertAssessment)
 
 	for _, a := range assessments {
 		relevant := sql.NullBool{Bool: false, Valid: false}
@@ -149,7 +152,7 @@ func (db *assessDB) add(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 
 // Reads identifiers (JSON list of strings) from body, writes assessments for
 // designated snippets.
-func (db *assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var ids []string
 	err := json.NewDecoder(r.Body).Decode(&ids)
 	if err != nil && err != io.EOF {
@@ -157,14 +160,14 @@ func (db *assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		return
 	}
 
-	if !db.validateId(w, ids) {
+	if !s.validateId(w, ids) {
 		return
 	}
 
 	result := make([]assessment, 0)
 	for _, id := range ids {
 		var relevant sql.NullBool
-		err = db.selectRelevant.QueryRow(id).Scan(&relevant)
+		err = s.selectRelevant.QueryRow(id).Scan(&relevant)
 		if err == sql.ErrNoRows {
 			// For id not in database, we skip it in the output.
 			continue
@@ -189,14 +192,14 @@ func (db *assessDB) get(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 }
 
 // Proxy for Elasticsearch. Only passes through GET requests.
-func (db *assessDB) elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *server) elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	r.URL.Path = ps.ByName("path")
-	db.elasticProxy.ServeHTTP(w, r)
+	s.elasticProxy.ServeHTTP(w, r)
 }
 
 // Checks if snippets with the given ids exist in the ES index.
-func (db *assessDB) validateId(w http.ResponseWriter, ids []string) (valid bool) {
-	url := db.elasticEndpoint + "/snippets/snippet/_mget?_source=false"
+func (s *server) validateId(w http.ResponseWriter, ids []string) (valid bool) {
+	url := s.elasticEndpoint + "/snippets/snippet/_mget?_source=false"
 
 	var buf bytes.Buffer
 	enc := json.NewEncoder(&buf)
