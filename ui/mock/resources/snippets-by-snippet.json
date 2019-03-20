@@ -1,0 +1,116 @@
+{
+  "took": 26,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 13703,
+    "max_score": 1116.5264,
+    "hits": [
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 1116.5264,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 634.83936,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 589.42914,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 567.03516,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 561.8431,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 542.7162,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 529.3253,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 527.9845,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 519.1889,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      },
+      {
+        "_index": "snippets",
+        "_type": "snippet",
+        "_id": "doc1_clipped_150_paragraph_1-8",
+        "_score": 475.9139,
+        "_source": {
+          "text": "Lorem ipsum jups.",
+          "lemma": "lorem ipsum jups ."
+        }
+      }
+    ]
+  }
+}

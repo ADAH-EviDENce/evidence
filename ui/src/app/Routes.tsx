@@ -13,9 +13,9 @@ class Routes extends React.Component<any, any> {
 
         return (
             <Switch>
-                <Redirect exact from="/" to="/search" key={pathname}/>
+                <Redirect exact from="/" to="/search/" key={pathname}/>
 
-                <Route exact path='/search' component={Search}/>
+                <Route exact path='/search/' component={Search}/>
 
             </Switch>
         );

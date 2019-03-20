@@ -1,0 +1,17 @@
+{
+  "docs": [
+    {
+      "_index": "snippets",
+      "_type": "snippet",
+      "_id": "doc1_clipped_150_paragraph_1-8",
+      "_version": 1,
+      "_seq_no": 913,
+      "_primary_term": 1,
+      "found": true,
+      "_source": {
+        "text": "Text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus rhoncus risus felis, sodales tristique ex tincidunt sed. Aliquam eu hendrerit ante. Fusce in magna commodo, ultrices lacus sit amet, condimentum orci. Pellentesque nec tellus ut enim laoreet cursus ac ut tortor. Donec vitae fringilla quam. Aliquam id sem at purus malesuada viverra. Sed ornare eget lectus ut suscipit. Curabitur at lorem sit amet quam ullamcorper sagittis luctus in nunc.",
+        "lemma": "lemma . lorem ipsum dolor sit amet , consectetur adipiscing elit . vivamus rhoncus risus felis , sodales tristique ex tincidunt sed . aliquam eu hendrerit ante . fusce in magna commodo , ultrices lacus sit amet , condimentum orci . pellentesque nec tellus ut enim laoreet cursus ac ut tortor . donec vitae fringilla quam . aliquam id sem at purus malesuada viverra . sed ornare eget lectus ut suscipit . curabitur at lorem sit amet quam ullamcorper sagittis luctus in nunc ."
+      }
+    }
+  ]
+}
