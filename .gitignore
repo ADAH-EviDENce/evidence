@@ -1,3 +1,23 @@
 evidence-gui
 *.db
 __pycache__
+
+# UI
+/ui/node_modules
+/ui/coverage
+/ui/build
+
+# IDE
+.idea
+*.iml
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
