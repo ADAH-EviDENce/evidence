@@ -1,0 +1,16 @@
+h1 {
+    text-align: center;
+}
+
+
+.nav-link {
+    float: left;
+}
+
+.nav-item {
+    margin: 10px;
+}
+
+.search-bar {
+    margin-top: 2em;
+}
