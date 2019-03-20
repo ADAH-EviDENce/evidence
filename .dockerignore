@@ -2,6 +2,7 @@ Dockerfile
 docker-compose.yml
 evidence-gui
 indexer
+ui/
 
 **/.*
 **/_*
