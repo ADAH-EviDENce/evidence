@@ -31,10 +31,8 @@ func main() {
 	r := httprouter.New()
 	newServer(db, *elasticEndpoint, r)
 
-	r.GET("/", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		http.ServeFile(w, r, "static/index.html")
-	})
-	r.ServeFiles("/static/*filepath", http.Dir("static"))
+	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
+	r.ServeFiles("/ui/*filepath", http.Dir("static"))
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
