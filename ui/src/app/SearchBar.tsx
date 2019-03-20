@@ -28,7 +28,7 @@ class SearchBar extends React.Component<any, any> {
                             <button className="btn btn-outline-secondary" onClick={this.onClick}>Zoek fragmenten</button>
                         </div>
                     </div>
-                    <small id="help" className="form-text text-muted">Voorbeeld: <code>Foo</code></small>
+                    <small id="help" className="form-text text-muted"><code>documents/document/_search</code></small>
                 </div>
             </div>
         );

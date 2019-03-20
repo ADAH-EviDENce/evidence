@@ -11,8 +11,8 @@
 
 ### First time
 
-Run `npm i react-scripts && npm install`
-Run `cd ./mocks && npm install`
+- Run `npm i react-scripts && npm install`
+- Run mock server: `cd ./mocks && npm install`
 
 ### Start locally
 - Run `npm start`

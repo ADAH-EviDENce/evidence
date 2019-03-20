@@ -1,6 +1,7 @@
 import * as React from "react";
 import SearchBar from "./SearchBar";
 import Page from "./Page";
+import DocumentResource from "./DocumentResource";
 
 class Search extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -9,7 +10,11 @@ class Search extends React.Component<any, any> {
     }
 
     handleSearch = (query: string) => {
-        console.log('handle search with query', query);
+        DocumentResource.getDocuments(query).then((data) => {
+            data.json().then((json) => {
+                this.setState({documents: JSON.stringify(json, null, 2)});
+            });
+        });
     };
 
     render() {
@@ -17,6 +22,7 @@ class Search extends React.Component<any, any> {
             <Page>
                 <div className="offset-2 col-8">
                     <SearchBar onSearch={this.handleSearch}/>
+                    <pre>{this.state.documents}</pre>
                 </div>
             </Page>
         );

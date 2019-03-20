@@ -18,6 +18,6 @@ app.get('/es/documents/document/_search', function (req, res) {
     res.send(documents);
 });
 
-app.listen(1080, function () {
-    console.log('listening on port 1080...');
+app.listen(8080, function () {
+    console.log('listening on port 8080...');
 });
