@@ -15,7 +15,6 @@ FROM node:11-alpine as buildui
 
 WORKDIR /evidence
 COPY ui .
-#RUN ./build-ui.sh
 
 RUN npm i && npm run build
 
