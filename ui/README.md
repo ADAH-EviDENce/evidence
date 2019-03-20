@@ -21,9 +21,7 @@
 
 ## Build
 
-Run `./build-ui.sh`
-
-Generated files can be found in `../static`
+Use Dockerfile, one level up.
 
 ## React Starter App
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
