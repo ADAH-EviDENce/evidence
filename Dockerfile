@@ -4,7 +4,7 @@ FROM golang:1.12-stretch as buildserver
 RUN go get github.com/mattn/go-sqlite3
 
 WORKDIR /go/src/github.com/knaw-huc/evidence-gui
-COPY . .
+COPY *.go schema.sql ./
 
 RUN go get -t ./...
 RUN go test ./...
