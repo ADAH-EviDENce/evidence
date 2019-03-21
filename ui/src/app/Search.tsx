@@ -1,7 +1,7 @@
 import * as React from "react";
 import SearchBar from "./SearchBar";
 import Page from "./Page";
-import DocumentResource from "./DocumentResource";
+import Resources from "./Resources";
 import ErrorBox from "./common/ErrorBox";
 import QueryDocumentList from "./QueryDocumentList";
 
@@ -12,12 +12,11 @@ class Search extends React.Component<any, any> {
     }
 
     handleSearch = (query: string) => {
-        DocumentResource.getDocuments(query).then((data) => {
+        Resources.getDocuments(query).then((data) => {
             if(!data.ok) {
                 throw Error("Status " + data.status);
             }
             data.json().then((json) => {
-                console.log(json);
                 this.setState({documents: json});
             });
         }).catch((data) => {
@@ -25,15 +24,11 @@ class Search extends React.Component<any, any> {
         });
     };
 
-    closeErrorMsg = ()  => {
-        this.setState({error: null});
-    };
-
     render() {
         return (
             <Page>
                 <div className="offset-2 col-8">
-                    <ErrorBox error={this.state.error} onClose={this.closeErrorMsg}/>
+                    <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                     <SearchBar onSearch={this.handleSearch}/>
                     <QueryDocumentList documents={this.state.documents}/>
                 </div>

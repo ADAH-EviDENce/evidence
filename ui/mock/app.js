@@ -30,7 +30,7 @@ server.get('/es/documents/document/_search', function (req, res) {
 });
 
 // get snippets by document
-server.get('/es/snippets/snippet/_mget', function (req, res) {
+server.post('/es/snippets/snippet/_mget', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(snippetsByDocument);
 });

@@ -9,11 +9,11 @@ interface QueryDocumentProps {
 }
 
 class QueryDocument extends React.Component<QueryDocumentProps, any> {
+
     constructor(props: any, context: any) {
         super(props, context);
         this.toggle = this.toggle.bind(this);
         this.state = {collapse: false};
-
     }
 
     toggle() {
@@ -33,7 +33,7 @@ class QueryDocument extends React.Component<QueryDocumentProps, any> {
                         {this.props.id}
                     </CardHeader>
                     <Collapse isOpen={this.state.collapse}>
-                        <DocumentSnippetList snippetIds={this.props.snippetIds}/>
+                        <DocumentSnippetList isOpen={this.state.collapse} snippetIds={this.props.snippetIds}/>
                     </Collapse>
 
                 </Card>
