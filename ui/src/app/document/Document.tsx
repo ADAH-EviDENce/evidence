@@ -33,7 +33,7 @@ class Document extends React.Component<QueryDocumentProps, any> {
                         {this.props.id}
                     </CardHeader>
                     <Collapse isOpen={this.state.collapse}>
-                        <DocumentSnippetList isOpen={this.state.collapse} snippetIds={this.props.snippetIds}/>
+                        <DocumentSnippetList isOpen={this.state.collapse} snippetIds={this.props.snippetIds} documentId={this.props.id}/>
                     </Collapse>
 
                 </Card>

@@ -2,8 +2,10 @@ import * as React from "react";
 import FontAwesome from "react-fontawesome";
 import Resources from "../Resources";
 import ErrorBox from "../common/ErrorBox";
+import DocumentSnippet from "./DocumentSnippet";
 
 interface DocumentSnippetListProps {
+    documentId: string,
     snippetIds: Array<number>,
     isOpen: boolean
 }
@@ -32,12 +34,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
     private renderSnippets() {
         return <>
             {this.state.snippets.docs.map((s: any, i: number) => {
-                return <li
-                    key={i}
-                    className="list-group-item"
-                >
-                    {s._id}
-                </li>
+                return <DocumentSnippet key={i} id={s._id} text={s._source.text} documentId={this.props.documentId}/>
             })}
         </>;
     }

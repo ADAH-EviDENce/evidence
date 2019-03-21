@@ -17,7 +17,7 @@ class Resources {
     public static getDocumentSnippets = (docs: Array<any>) => {
         const client = new elasticsearch.Client({
             host: ES_HOST + "/snippets/snippet",
-            log: 'trace'
+            log: 'error'
         });
         return client.mget({body: {docs: docs}});
     }

@@ -18,7 +18,7 @@ class Routes extends React.Component<any, any> {
 
                 <Route exact path='/search/' component={Search}/>
 
-                <Route exact path='/documents/:did/snippets/:sid' component={MoreLikeThis}/>
+                <Route exact path='/documents/:did/snippets/:sid/' component={MoreLikeThis}/>
 
             </Switch>
         );

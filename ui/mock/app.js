@@ -42,5 +42,5 @@ server.get(' /es/snippets/_search', function (req, res) {
 });
 
 server.listen(port, function () {
-    console.log('listening on port ' + port + '...');
+    console.info('listening on port ' + port + '...');
 });
