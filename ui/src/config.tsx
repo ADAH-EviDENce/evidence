@@ -1,4 +1,7 @@
 export const BASENAME = "/ui";
 
-export const ES_HOST = "http://localhost:3000/es";
+// with es docker:
+export const ES_HOST = "http://localhost:3000";
+
+// with es docker-compose or mock:
 // export const ES_HOST = "http://localhost:3000";

@@ -17,6 +17,9 @@
 ### Start locally
 - Run `npm start`
 - Run mock server: `cd ./mocks && node app.js`
+- Or run elasticsearch: 
+  - `./start-es.sh`
+  - `cd ../indexer && python3 index.py`
 - Open [http://localhost:3000](http://localhost:3000)
 
 ## Build
