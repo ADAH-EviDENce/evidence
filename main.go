@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"path"
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/mattn/go-sqlite3"
@@ -74,6 +75,7 @@ func newServer(db *sql.DB, elasticEndpoint string, r *httprouter.Router) *server
 	s.elasticProxy = httputil.NewSingleHostReverseProxy(esURL)
 
 	r.GET("/es/*path", s.elasticsearch)
+	r.POST("/es/*path", s.elasticsearch)
 
 	return s
 }
@@ -192,9 +194,22 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	json.NewEncoder(w).Encode(result)
 }
 
-// Proxy for Elasticsearch. Only passes through GET requests.
+// Proxy for Elasticsearch. Only passes through GET requests
+// and selected POST requests that don't modify the index.
 func (s *server) elasticsearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	r.URL.Path = ps.ByName("path")
+
+	if r.Method == "POST" {
+		switch path.Base(r.URL.Path) {
+		case "_mget", "_search":
+		default:
+			// Same message that httprouter gives.
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			io.WriteString(w, "Method Not Allowed")
+			return
+		}
+	}
+
 	s.elasticProxy.ServeHTTP(w, r)
 }
 
