@@ -1,9 +1,11 @@
 import * as React from "react";
-import {Collapse, Card, CardBody, CardHeader} from "reactstrap";
+import {Card, CardHeader, Collapse} from "reactstrap";
 import FontAwesome from 'react-fontawesome';
+import DocumentSnippetList from "./DocumentSnippetList";
 
 interface QueryDocumentProps {
     id: string;
+    snippetIds: Array<number>
 }
 
 class QueryDocument extends React.Component<QueryDocumentProps, any> {
@@ -23,20 +25,15 @@ class QueryDocument extends React.Component<QueryDocumentProps, any> {
             <div>
                 <Card>
                     <CardHeader className="" onClick={this.toggle}>
-                        <button className="btn btn-primary btn-sm float-right stretched-link">
-                            <FontAwesome name='plus-square-o' />
+                        <button className="btn btn-primary btn-sm float-right">
+                            <FontAwesome name='plus-square-o'/>
                             &nbsp;
                             <span>Snippets</span>
                         </button>
                         {this.props.id}
                     </CardHeader>
                     <Collapse isOpen={this.state.collapse}>
-                        <CardBody>
-                            Anim pariatur cliche reprehenderit,
-                            enim eiusmod high life accusamus terry richardson ad squid. Nihil
-                            anim keffiyeh helvetica, craft beer labore wes anderson cred
-                            nesciunt sapiente ea proident.
-                        </CardBody>
+                        <DocumentSnippetList snippetIds={this.props.snippetIds}/>
                     </Collapse>
 
                 </Card>
