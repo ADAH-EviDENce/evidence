@@ -1,6 +1,5 @@
 import * as React from "react";
 import MainHeader from "./MainHeader";
-import SearchBar from "./SearchBar";
 const Fragment = React.Fragment;
 
 class Page extends React.Component<any, any> {

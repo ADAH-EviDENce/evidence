@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Redirect, Route, Switch, withRouter} from "react-router-dom";
-import Search from "./Search";
+import Search from "./search/Search";
+import MoreLikeThis from "./MoreLikeThis";
 
 class Routes extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -16,6 +17,8 @@ class Routes extends React.Component<any, any> {
                 <Redirect exact from="/" to="/search/" key={pathname}/>
 
                 <Route exact path='/search/' component={Search}/>
+
+                <Route exact path='/documents/:did/snippets/:sid' component={MoreLikeThis}/>
 
             </Switch>
         );

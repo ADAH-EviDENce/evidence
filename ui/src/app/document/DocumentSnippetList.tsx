@@ -1,7 +1,7 @@
 import * as React from "react";
 import FontAwesome from "react-fontawesome";
-import Resources from "./Resources";
-import ErrorBox from "./common/ErrorBox";
+import Resources from "../Resources";
+import ErrorBox from "../common/ErrorBox";
 
 interface DocumentSnippetListProps {
     snippetIds: Array<number>,

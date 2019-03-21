@@ -1,7 +1,7 @@
 import * as React from "react";
-import QueryDocument from "./QueryDocument";
+import Document from "./Document";
 
-class QueryDocumentList extends React.Component<any, any> {
+class DocumentList extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.toggle = this.toggle.bind(this);
@@ -19,11 +19,11 @@ class QueryDocumentList extends React.Component<any, any> {
         return (
             <div className="query-document-list">
                 {this.props.documents.hits.hits.map((h: any, i: number) => {
-                    return <QueryDocument key={i} id={h._id} snippetIds = {h._source.sub.map((s: number) => {return {_id: s}})} />
+                    return <Document key={i} id={h._id} snippetIds = {h._source.sub.map((s: number) => {return {_id: s}})} />
                 })}
             </div>
         );
     }
 }
 
-export default QueryDocumentList;
+export default DocumentList;

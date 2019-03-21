@@ -8,7 +8,7 @@ interface QueryDocumentProps {
     snippetIds: Array<number>
 }
 
-class QueryDocument extends React.Component<QueryDocumentProps, any> {
+class Document extends React.Component<QueryDocumentProps, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -42,4 +42,4 @@ class QueryDocument extends React.Component<QueryDocumentProps, any> {
     }
 }
 
-export default QueryDocument;
+export default Document;

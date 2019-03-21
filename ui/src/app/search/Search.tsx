@@ -1,9 +1,9 @@
 import * as React from "react";
 import SearchBar from "./SearchBar";
-import Page from "./Page";
-import Resources from "./Resources";
-import ErrorBox from "./common/ErrorBox";
-import QueryDocumentList from "./QueryDocumentList";
+import Page from "../common/Page";
+import Resources from "../Resources";
+import ErrorBox from "../common/ErrorBox";
+import DocumentList from "../document/DocumentList";
 
 class Search extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -30,7 +30,7 @@ class Search extends React.Component<any, any> {
                 <div className="offset-2 col-8">
                     <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                     <SearchBar onSearch={this.handleSearch}/>
-                    <QueryDocumentList documents={this.state.documents}/>
+                    <DocumentList documents={this.state.documents}/>
                 </div>
             </Page>
         );
