@@ -34,7 +34,13 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
     private renderSnippets() {
         return <>
             {this.state.snippets.docs.map((s: any, i: number) => {
-                return <DocumentSnippet key={i} id={s._id} text={s._source.text} documentId={this.props.documentId}/>
+                return <DocumentSnippet
+                    key={i}
+                    id={s._id}
+                    text={s._source.text}
+                    documentId={this.props.documentId}
+                    moreLikeThis={true}
+                />
             })}
         </>;
     }

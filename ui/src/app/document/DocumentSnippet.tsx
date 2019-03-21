@@ -4,8 +4,9 @@ import {RouteComponentProps, withRouter} from "react-router";
 
 type PropsType = RouteComponentProps & {
     id: string,
+    text: string,
     documentId: string,
-    text: string
+    moreLikeThis: boolean
 }
 
 class DocumentSnippet extends React.Component<PropsType, any> {
@@ -19,16 +20,22 @@ class DocumentSnippet extends React.Component<PropsType, any> {
     };
 
     render() {
+        let moreLikeThis = this.props.moreLikeThis
+            ?
+            <button className="btn btn-primary btn-sm float-right" onClick={this.handleMoreLikeThis}>
+                <span>More like this</span>
+                &nbsp;
+                <FontAwesome name='chevron-right '/>
+            </button>
+            :
+            null;
+
         return (
             <li
                 className="list-group-item"
             >
-                <button className="btn btn-primary btn-sm float-right" onClick={this.handleMoreLikeThis}>
-                    <span>More like this</span>
-                    &nbsp;
-                    <FontAwesome name='chevron-right '/>
-                </button>
-                <p className="small"><strong>{this.props.id}</strong></p>
+                {moreLikeThis}
+                <p className="small"><strong>Snippet {this.props.id}</strong></p>
                 <p className="small">{this.props.text}</p>
             </li>
         );

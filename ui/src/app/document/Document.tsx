@@ -24,13 +24,13 @@ class Document extends React.Component<QueryDocumentProps, any> {
         return (
             <div>
                 <Card>
-                    <CardHeader className="" onClick={this.toggle}>
+                    <CardHeader onClick={this.toggle}>
                         <button className="btn btn-primary btn-sm float-right">
                             <FontAwesome name='plus-square-o'/>
                             &nbsp;
                             <span>Snippets</span>
                         </button>
-                        {this.props.id}
+                        Document {this.props.id}
                     </CardHeader>
                     <Collapse isOpen={this.state.collapse}>
                         <DocumentSnippetList isOpen={this.state.collapse} snippetIds={this.props.snippetIds} documentId={this.props.id}/>

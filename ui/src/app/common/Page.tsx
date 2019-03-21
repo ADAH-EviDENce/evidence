@@ -1,5 +1,7 @@
 import * as React from "react";
 import MainHeader from "./MainHeader";
+import './Page.css';
+
 const Fragment = React.Fragment;
 
 class Page extends React.Component<any, any> {
@@ -12,12 +14,12 @@ class Page extends React.Component<any, any> {
         return (
             <Fragment>
                 <div className="container">
-                    <div className="row">
+                    <div className="row page-header">
                         <div className="col-12">
                             <MainHeader/>
                         </div>
                     </div>
-                    <div className="rows">
+                    <div className="rows page-body">
                         {this.props.children}
                     </div>
                 </div>

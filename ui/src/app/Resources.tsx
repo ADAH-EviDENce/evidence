@@ -8,18 +8,37 @@ class Resources {
         return fetch(ES_HOST + "/" + query);
     };
 
-    /**
-     * curl \
-     *   http://localhost:8080/es/snippets/snippet/_mget \
-     *   -XGET -H "Content-Type: application/json" \
-     *   -d '{"docs": [{"_id": "GV_Verhalis_kloosterzusters_04b_conversation_clipped_150_paragraph_1-8"}]}'
-     */
     public static getDocumentSnippets = (docs: Array<any>) => {
         const client = new elasticsearch.Client({
             host: ES_HOST + "/snippets/snippet",
             log: 'error'
         });
         return client.mget({body: {docs: docs}});
+    };
+
+    public static getMoreLikeThisSnippets = (snippetId: string) => {
+        const client = new elasticsearch.Client({
+            host: ES_HOST + "/snippets/",
+            log: 'error'
+        });
+        return client.search({
+            body: {
+                query: {
+                    more_like_this: {
+                        fields: ["text", "lemma"],
+                        boost_terms: 1,
+                        max_query_terms: 150,
+                        min_doc_freq: 1,
+                        min_term_freq: 1,
+                        like: [{
+                            _index: "snippets",
+                            _type: "snippet",
+                            _id: snippetId
+                        }]
+                    }
+                }
+            }
+        });
     }
 }
 

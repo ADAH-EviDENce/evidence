@@ -1,7 +1,10 @@
-h1 {
+h1, h2 {
     text-align: center;
 }
 
+h2 {
+    padding-top: 1em;
+}
 
 .nav-link {
     float: left;
