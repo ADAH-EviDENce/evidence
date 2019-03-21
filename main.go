@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -16,6 +14,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/olivere/elastic"
 )
 
 func main() {
@@ -109,7 +108,7 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		ids[i] = a.Id
 	}
 
-	if !s.validateId(w, ids) {
+	if !s.validateId(w, r, ids) {
 		return
 	}
 
@@ -163,7 +162,7 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		return
 	}
 
-	if !s.validateId(w, ids) {
+	if !s.validateId(w, r, ids) {
 		return
 	}
 
@@ -214,62 +213,28 @@ func (s *server) elasticsearch(w http.ResponseWriter, r *http.Request, ps httpro
 }
 
 // Checks if snippets with the given ids exist in the ES index.
-func (s *server) validateId(w http.ResponseWriter, ids []string) (valid bool) {
-	url := s.elasticEndpoint + "/snippets/snippet/_mget?_source=false"
+func (s *server) validateId(w http.ResponseWriter, r *http.Request, ids []string) (valid bool) {
+	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint))
 
-	var buf bytes.Buffer
-	enc := json.NewEncoder(&buf)
-
-	// ES multi-GET API wants list of {"_id": id}.
-	esIds := make([]map[string]string, len(ids))
-	for i, id := range ids {
-		esIds[i] = map[string]string{"_id": id}
+	mget := es.MultiGet()
+	for _, id := range ids {
+		mget.Add(elastic.NewMultiGetItem().
+			Id(id).
+			Index("snippets").
+			Type("snippet").
+			FetchSource(elastic.NewFetchSourceContext(false)))
 	}
 
-	enc.Encode(map[string]interface{}{"docs": esIds})
-
-	req, err := http.NewRequest("GET", url, &buf)
+	resp, err := mget.Do(r.Context())
 	if err != nil {
-		// This means either the URL is invalid, or GET is no longer an HTTP verb.
-		panic(err)
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil || resp.StatusCode != http.StatusOK {
-		http.Error(w, "HTTP client error", http.StatusInternalServerError)
-		if err == nil {
-			log.Printf("Elasticsearch reports status %s\n", resp.Status)
-		} else {
-			log.Print(err)
-		}
-		return
-	}
-	defer resp.Body.Close()
-
-	dec := json.NewDecoder(resp.Body)
-	m := make(map[string][]struct {
-		Found bool   `json:"found"`
-		Id    string `json:"_id"`
-	})
-	err = dec.Decode(&m)
-	if err == nil && len(m["docs"]) != len(ids) {
-		err = errors.New("no docs or wrong number in Elasticsearch output")
-	}
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		io.WriteString(w, "Error while connecting to Elasticsearch")
 		return
 	}
 
-	for i, result := range m["docs"] {
-		if result.Id != ids[i] {
-			http.Error(w, "Elasticsearch checked wrong id", http.StatusInternalServerError)
-			return
-		}
-		if !result.Found {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "invalid or unknown snippet %q", result.Id)
+	for _, doc := range resp.Docs {
+		if !doc.Found {
 			return
 		}
 	}

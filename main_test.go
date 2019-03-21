@@ -55,7 +55,7 @@ func TestAssessments(t *testing.T) {
 	var rel []string
 	json.NewDecoder(resp.Body).Decode(&rel)
 
-	assert.Equal(t, []string{}, rel)
+	assert.Empty(t, rel)
 
 	req = httptest.NewRequest("POST", "/assess",
 		strings.NewReader(`[
@@ -104,6 +104,7 @@ func TestESProxy(t *testing.T) {
 
 func mockElastic() *httptest.Server {
 	r := httprouter.New()
+	r.GET("/_mget", mget)
 	r.GET("/snippets/snippet/_mget", mget)
 
 	return httptest.NewServer(r)
@@ -116,7 +117,9 @@ func mget(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 
 	var m map[string][]struct {
-		Id string `json:"_id"`
+		Id    string `json:"_id"`
+		Index string `json:"_index"`
+		Type  string `json:"_type"`
 	}
 	err := json.NewDecoder(r.Body).Decode(&m)
 	if err != nil {
