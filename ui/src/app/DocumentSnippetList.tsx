@@ -36,7 +36,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
                     key={i}
                     className="list-group-item"
                 >
-                    {JSON.stringify(s)}
+                    {s._id}
                 </li>
             })}
         </>;
