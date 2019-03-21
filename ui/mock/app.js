@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+const server = express();
 const morgan = require('morgan');
 const fs = require('fs');
 
@@ -21,27 +21,26 @@ fs.readFile('./resources/snippets-by-snippet.json', 'utf8', function(err, conten
     snippetsBySnippet = contents;
 });
 
-console.log('after calling readFile');
-app.use(morgan('dev'));
+server.use(morgan('dev'));
 
 // get document:
-app.get('/es/documents/document/_search', function (req, res) {
+server.get('/es/documents/document/_search', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(documentsByQuery);
 });
 
 // get snippets by document
-app.get('/es/snippets/snippet/_mget', function (req, res) {
+server.get('/es/snippets/snippet/_mget', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(snippetsByDocument);
 });
 
 // get 'more like this' snippets:
-app.get(' /es/snippets/_search', function (req, res) {
+server.get(' /es/snippets/_search', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(documentsByQuery);
 });
 
-app.listen(port, function () {
+server.listen(port, function () {
     console.log('listening on port ' + port + '...');
 });

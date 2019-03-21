@@ -7,7 +7,6 @@ class ErrorBox extends React.Component<any, any> {
     }
 
     render() {
-        console.log(this.props);
         if (!this.props.error) {
             return null;
         }

@@ -3,7 +3,7 @@ import * as React from "react";
 class SearchBar extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {search: ""};
+        this.state = {search: "documents/document/_search"};
     }
 
     onSearchUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {

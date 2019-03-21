@@ -14,3 +14,7 @@ h1 {
 .search-bar {
     margin-top: 2em;
 }
+
+.clickable {
+    cursor: pointer;
+}

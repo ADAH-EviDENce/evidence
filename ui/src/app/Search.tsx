@@ -3,6 +3,7 @@ import SearchBar from "./SearchBar";
 import Page from "./Page";
 import DocumentResource from "./DocumentResource";
 import ErrorBox from "./common/ErrorBox";
+import QueryDocumentList from "./QueryDocumentList";
 
 class Search extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -16,7 +17,8 @@ class Search extends React.Component<any, any> {
                 throw Error("Status " + data.status);
             }
             data.json().then((json) => {
-                this.setState({documents: JSON.stringify(json, null, 2)});
+                console.log(json);
+                this.setState({documents: json});
             });
         }).catch((data) => {
             this.setState({error: 'Could not fetch documents with provided query.'});
@@ -33,7 +35,7 @@ class Search extends React.Component<any, any> {
                 <div className="offset-2 col-8">
                     <ErrorBox error={this.state.error} onClose={this.closeErrorMsg}/>
                     <SearchBar onSearch={this.handleSearch}/>
-                    <pre>{this.state.documents}</pre>
+                    <QueryDocumentList documents={this.state.documents}/>
                 </div>
             </Page>
         );
