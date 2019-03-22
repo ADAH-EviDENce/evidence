@@ -88,3 +88,5 @@ for d in os.listdir('data/text_preserve_paragraph'):
         'sub': files,
     })
     es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+
+print('Indexing done.')
