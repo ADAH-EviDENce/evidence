@@ -3,7 +3,7 @@ import * as React from "react";
 class SearchBar extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {search: "documents/document/_search"};
+        this.state = {search: ""};
     }
 
     onSearchUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,10 +25,10 @@ class SearchBar extends React.Component<any, any> {
                                value={this.state.search}
                                onChange={this.onSearchUpdate}/>
                         <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={this.onClick}>Zoek documenten met query</button>
+                            <button className="btn btn-outline-secondary" onClick={this.onClick}>Zoek documenten</button>
                         </div>
                     </div>
-                    <small id="help" className="form-text text-muted">Voorbeeld-query: <code>documents/document/_search</code></small>
+                    <small id="help" className="form-text text-muted">Voorbeeldzoekterm: <code>documents/document/_search</code></small>
                 </div>
             </div>
         );
