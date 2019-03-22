@@ -1,9 +1,9 @@
 # Evidence
 
 ## Deploy locally
-Add TargetSize150 to `./indexer`
+Unzip TargetSize150.zip
 
-Run: `docker-compose up --build`
+Run: `DATA=./TargetSize150 docker-compose up --build`
 
 ## Elastic search example query
 List of snippets:

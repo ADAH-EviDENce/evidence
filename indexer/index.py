@@ -51,9 +51,9 @@ es.indices.create('snippets', ignore=400, body={
     },
 })
 
-for d in os.listdir('TargetSize150/text_preserve_paragraph'):
+for d in os.listdir('data/text_preserve_paragraph'):
     print(d)
-    dirpath = os.path.join('TargetSize150', 'text_preserve_paragraph', d)
+    dirpath = os.path.join('data', 'text_preserve_paragraph', d)
 
     data = StringIO()
     files = os.listdir(dirpath)
@@ -71,7 +71,7 @@ for d in os.listdir('TargetSize150/text_preserve_paragraph'):
         json.dump({'index': {'_id': name}}, data)
         data.write('\n')
 
-        path = os.path.join('TargetSize150', 'lemma_preserve_paragraph', d,
+        path = os.path.join('data', 'lemma_preserve_paragraph', d,
                             name + '_lemma.txt')
         lemma = open(path).read()
 
