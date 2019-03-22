@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ES_HOST} from "../config";
+import {ASSESS_HOST, ES_HOST} from "../config";
 import elasticsearch from 'elasticsearch';
 
 class Resources {
@@ -43,8 +43,11 @@ class Resources {
 
     public static commitAnswers = (answers: Array<any>) => {
         console.log('commitAnswers', answers);
-        return fetch(ES_HOST + "/assess/", {
+        return fetch(ASSESS_HOST, {
             method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(answers)
         });
     }

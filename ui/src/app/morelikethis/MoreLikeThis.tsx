@@ -2,7 +2,7 @@ import * as React from "react";
 import Page from "../common/Page";
 import ErrorBox from "../common/ErrorBox";
 import Resources from "../Resources";
-import {Card, CardHeader} from "reactstrap";
+import {Card, CardHeader, ModalBody} from "reactstrap";
 import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 import FontAwesome from "react-fontawesome";
@@ -15,8 +15,8 @@ class MoreLikeThis extends React.Component<any, any> {
         this.state = {
             answers: [],
             canCommit: false,
-            committed: false,
-            saved: false
+            committing: false,
+            committed: false
         };
 
         this.fetchSnippets();
@@ -36,15 +36,15 @@ class MoreLikeThis extends React.Component<any, any> {
     };
 
     handleAllSnippetsHaveAnswers = (answers: Array<any>) => {
-        console.log('handleAllSnippetsHaveAnswers', answers);
         this.setState({answers, canCommit: true});
     };
 
     handleCommit = () => {
+        this.setState({committing: true});
         Resources.commitAnswers(this.state.answers).then(() => {
-            this.setState({committed: true});
+            this.setState({committed: true, committing: false});
         }).catch((data) => {
-            this.setState({error: 'Could not commit answers.'});
+            this.setState({error: 'Could not commit answers.', committing: false});
         });
     };
 
@@ -84,7 +84,7 @@ class MoreLikeThis extends React.Component<any, any> {
                             >
                                 Opslaan
                                 &nbsp;
-                                <FontAwesome name='chevron-right '/>
+                                {this.state.committing ? <FontAwesome name='spinner' spin/> : <FontAwesome name='chevron-right '/>}
                             </button>
                         </div>
                         <MoreLikeThisCommitModal

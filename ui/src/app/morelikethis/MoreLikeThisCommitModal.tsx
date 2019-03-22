@@ -1,8 +1,8 @@
 import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
-import FontAwesome from "react-fontawesome";
+import {RouteComponentProps, withRouter} from "react-router";
 
-interface MoreLikeThisCommitModalProps {
+type MoreLikeThisCommitModalProps = RouteComponentProps & {
     snippetId: string,
     documentId: string,
     answers: Array<any>,
@@ -15,9 +15,14 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
         this.state = {modal: false};
     }
 
-    onQuery() {
+    onQuery = () => {
         console.log('onQuery');
-    }
+    };
+
+    onSearch = () => {
+        console.log('search');
+        this.props.history.push(`/search/`);
+    };
 
     render() {
         if(!this.props.committed) {
@@ -29,11 +34,11 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                 <Modal isOpen={this.props.committed}>
                     <ModalHeader>Keuzemenu</ModalHeader>
                     <ModalBody>
-                        <FontAwesome name='spinner' spin/>
+                        Uw antwoorden zijn opgeslagen.
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
-                        <Button color="success" onClick={this.onQuery}>Zoek nieuwe documenten</Button>
+                        <Button color="success" onClick={this.onQuery} disabled>Beoordeel meer fragmenten</Button>
+                        <Button color="success" onClick={this.onSearch}>Zoek nieuwe documenten</Button>
                     </ModalFooter>
                 </Modal>
 
@@ -42,4 +47,4 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     }
 }
 
-export default MoreLikeThisCommitModal;
+export default withRouter(MoreLikeThisCommitModal);

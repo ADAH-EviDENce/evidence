@@ -13,6 +13,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
+            // array of snippet ids and relevance
             answers: []
         };
         this.fetchSnippets();
