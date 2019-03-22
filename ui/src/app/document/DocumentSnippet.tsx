@@ -35,7 +35,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
                 className="list-group-item"
             >
                 {moreLikeThis}
-                <p className="small"><strong>Snippet {this.props.id}</strong></p>
+                <p className="small"><strong>Snippet: {this.props.id}</strong></p>
                 <p className="small">{this.props.text}</p>
             </li>
         );

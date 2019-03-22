@@ -1,19 +1,18 @@
 import * as React from "react";
-import Page from "./common/Page";
-import ErrorBox from "./common/ErrorBox";
-import Resources from "./Resources";
-import {Card, CardHeader, Collapse} from "reactstrap";
-import FontAwesome from "react-fontawesome";
-import DocumentSnippetList from "./document/DocumentSnippetList";
-import DocumentSnippet from "./document/DocumentSnippet";
+import Page from "../common/Page";
+import ErrorBox from "../common/ErrorBox";
+import Resources from "../Resources";
+import {Card, CardHeader} from "reactstrap";
+import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 
 class MoreLikeThis extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {};
-    }
 
+        this.fetchSnippets();
+    }
 
     fetchSnippets = () => {
         if(this.state.snippet || this.state.error) {
@@ -28,10 +27,7 @@ class MoreLikeThis extends React.Component<any, any> {
 
     };
 
-
-
     render() {
-        this.fetchSnippets();
 
         let snippetId = this.props.match.params.sid;
         let documentId = this.props.match.params.did;
@@ -44,7 +40,7 @@ class MoreLikeThis extends React.Component<any, any> {
                         <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                         <Card>
                             <CardHeader>
-                                Document {documentId}
+                                Document: {documentId}
                             </CardHeader>
                             <DocumentSnippet
                                     id={snippetId}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Redirect, Route, Switch, withRouter} from "react-router-dom";
 import Search from "./search/Search";
-import MoreLikeThis from "./MoreLikeThis";
+import MoreLikeThis from "./morelikethis/MoreLikeThis";
 
 class Routes extends React.Component<any, any> {
     constructor(props: any, context: any) {
