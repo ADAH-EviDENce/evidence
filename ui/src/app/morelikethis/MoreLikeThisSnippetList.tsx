@@ -31,33 +31,33 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
 
     };
 
-    handleSelect = (id: string, choice: MoreLikeThisOption) => {
+    handleSelect = (id: string, relevant: MoreLikeThisOption) => {
         const answers = this.state.answers;
 
         // TODO: tmp fill all fields:
-        // this.addOrEditChoice(answers, id, choice);
-        this.state.snippets.hits.hits.forEach((s: any) => {answers.push({id: s._id, choice});});
+        // this.addOrEditChoice(answers, id, relevant);
+        this.state.snippets.hits.hits.forEach((s: any) => {answers.push({id: s._id, relevant});});
 
         this.setState(answers, () => {
             if(this.state.answers.length === this.state.snippets.hits.hits.length) {
-                this.props.onAllSnippetsHaveAnswers(this.state.anwers);
+                this.props.onAllSnippetsHaveAnswers(this.state.answers);
             }
         });
     };
 
-    private addOrEditChoice(answers: Array<any>, id: string, choice: MoreLikeThisOption) {
+    private addOrEditChoice(answers: Array<any>, id: string, relevant: MoreLikeThisOption) {
         const answerById = answers.find((a: any) => a.id === id);
         if (answerById) {
-            answerById.choice = choice;
+            answerById.relevant = relevant;
         } else {
-            answers.push({id, choice});
+            answers.push({id, relevant});
         }
     }
 
     private findChoice(id: number) {
         let answer = this.state.answers.find((a: any) => a.id === id);
         if(answer) {
-            return answer.choice;
+            return answer.relevant;
         }
     }
 
@@ -71,7 +71,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 id={s._id}
                 text={s._source.text}
                 onSelect={this.handleSelect}
-                choice={this.findChoice(s._id)}
+                relevant={this.findChoice(s._id)}
             />
         });
     }

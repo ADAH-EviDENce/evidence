@@ -7,8 +7,8 @@ import {MoreLikeThisOption} from "./MoreLikeThisOption";
 interface MoreLikeThisSnippetProps {
     id: string,
     text: string
-    onSelect: ((id: string, choice: MoreLikeThisOption) => void)
-    choice: MoreLikeThisOption
+    onSelect: ((id: string, relevant: MoreLikeThisOption) => void)
+    relevant: MoreLikeThisOption
 }
 
 class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any> {
@@ -40,21 +40,21 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
                     <span>Bevat dit fragment een geweldsincident?</span>
                     <div className="float-right btn-group btn-group-sm" role="group">
                         <button type="button"
-                                className={`btn btn-outline-success ${this.props.choice === MoreLikeThisOption.YES ? "active" : ""}`}
+                                className={`btn btn-outline-success ${this.props.relevant === MoreLikeThisOption.YES ? "active" : ""}`}
                                 onClick={this.onClickYes}>
                             Ja
                             &nbsp;
                             <FontAwesome name='thumbs-o-up'/>
                         </button>
                         <button type="button"
-                                className={`btn btn-outline-danger ${this.props.choice === MoreLikeThisOption.NO ? "active" : ""}`}
+                                className={`btn btn-outline-danger ${this.props.relevant === MoreLikeThisOption.NO ? "active" : ""}`}
                                 onClick={this.onClickNo}>
                             Nee
                             &nbsp;
                             <FontAwesome name='thumbs-o-down'/>
                         </button>
                         <button type="button"
-                                className={`btn btn-outline-secondary ${this.props.choice === MoreLikeThisOption.MAYBE ? "active" : ""}`}
+                                className={`btn btn-outline-secondary ${this.props.relevant === MoreLikeThisOption.MAYBE ? "active" : ""}`}
                                 onClick={this.onClickMaybe}>
                             Blanco
                             &nbsp;

@@ -21,14 +21,14 @@ class SearchBar extends React.Component<any, any> {
                     <div className="input-group mb-3">
                         <input className="form-control"
                                id="main-search-query"
-                               placeholder="Search query"
+                               placeholder="Zoekterm"
                                value={this.state.search}
                                onChange={this.onSearchUpdate}/>
                         <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={this.onClick}>Search documents</button>
+                            <button className="btn btn-outline-secondary" onClick={this.onClick}>Zoek documenten met query</button>
                         </div>
                     </div>
-                    <small id="help" className="form-text text-muted">Example: <code>documents/document/_search</code></small>
+                    <small id="help" className="form-text text-muted">Voorbeeld-query: <code>documents/document/_search</code></small>
                 </div>
             </div>
         );

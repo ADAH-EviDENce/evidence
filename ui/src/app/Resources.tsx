@@ -39,6 +39,14 @@ class Resources {
                 }
             }
         });
+    };
+
+    public static commitAnswers = (answers: Array<any>) => {
+        console.log('commitAnswers', answers);
+        return fetch(ES_HOST + "/assess/", {
+            method: 'POST',
+            body: JSON.stringify(answers)
+        });
     }
 }
 

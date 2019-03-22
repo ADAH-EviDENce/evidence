@@ -7,13 +7,16 @@ import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 import FontAwesome from "react-fontawesome";
 import './MoreLikeThis.css';
+import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
 
 class MoreLikeThis extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
             answers: [],
-            canCommit: false
+            canCommit: false,
+            committed: false,
+            saved: false
         };
 
         this.fetchSnippets();
@@ -33,7 +36,16 @@ class MoreLikeThis extends React.Component<any, any> {
     };
 
     handleAllSnippetsHaveAnswers = (answers: Array<any>) => {
+        console.log('handleAllSnippetsHaveAnswers', answers);
         this.setState({answers, canCommit: true});
+    };
+
+    handleCommit = () => {
+        Resources.commitAnswers(this.state.answers).then(() => {
+            this.setState({committed: true});
+        }).catch((data) => {
+            this.setState({error: 'Could not commit answers.'});
+        });
     };
 
     render() {
@@ -64,12 +76,23 @@ class MoreLikeThis extends React.Component<any, any> {
                             onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
                         />
                         <div className="commit-answers">
-                            <button className="btn btn-success float-right commit-btn" type="submit" disabled={!this.state.canCommit}>
+                            <button
+                                type="submit"
+                                className="btn btn-success float-right commit-btn"
+                                disabled={!this.state.canCommit && !this.state.committed}
+                                onClick={this.handleCommit}
+                            >
                                 Opslaan
                                 &nbsp;
                                 <FontAwesome name='chevron-right '/>
                             </button>
                         </div>
+                        <MoreLikeThisCommitModal
+                            snippetId={snippetId}
+                            documentId={documentId}
+                            answers={this.state.answers}
+                            committed={this.state.committed}
+                        />
                     </div>
                 </div>
             </Page>
