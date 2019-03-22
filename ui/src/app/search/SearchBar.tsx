@@ -10,7 +10,7 @@ class SearchBar extends React.Component<any, any> {
         this.setState({search: e.target.value});
     };
 
-    onClick = (e: React.MouseEvent) => {
+    onClick = () => {
         this.props.onSearch(this.state.search);
     };
 
