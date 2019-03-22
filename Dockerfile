@@ -14,9 +14,14 @@ RUN go install -ldflags="-s" .
 FROM node:11-alpine as buildui
 
 WORKDIR /evidence
-COPY ui .
+COPY ui/package.json .
+COPY ui/package-lock.json .
+COPY ui/tsconfig.json .
+COPY ui/public public
+COPY ui/src src
 
-RUN npm i && npm run build
+RUN npm install
+RUN npm run build
 
 
 FROM debian:buster
