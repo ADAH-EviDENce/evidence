@@ -7,3 +7,5 @@ indexer
 **/_*
 
 __pycache__
+
+ui/node_modules

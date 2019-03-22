@@ -2,11 +2,9 @@
   "name": "here",
   "version": "0.1.0",
   "private": true,
-
   "proxy-es-docker-compose-or-mock": "http://localhost:8080",
   "proxy-es-docker": "http://localhost:9200",
   "proxy": "http://localhost:9200",
-
   "homepage": "/ui",
   "dependencies": {
     "@types/elasticsearch": "^5.0.32",
