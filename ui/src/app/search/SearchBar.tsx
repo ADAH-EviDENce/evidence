@@ -1,17 +1,19 @@
 import * as React from "react";
+import {SearchBtn} from "./SearchBtn";
 
-class SearchBar extends React.Component<any, any> {
+interface SearchBarProps {
+    defaultSearch: string,
+}
+
+class SearchBar extends React.Component<SearchBarProps, any> {
+
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {search: ""};
+        this.state = {search: this.props.defaultSearch};
     }
 
     onSearchUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({search: e.target.value});
-    };
-
-    onClick = () => {
-        this.props.onSearch(this.state.search);
     };
 
     render() {
@@ -25,10 +27,12 @@ class SearchBar extends React.Component<any, any> {
                                value={this.state.search}
                                onChange={this.onSearchUpdate}/>
                         <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={this.onClick}>Zoek documenten</button>
+                            <SearchBtn search={this.state.search}/>
                         </div>
                     </div>
-                    <small id="help" className="form-text text-muted">Voorbeeldzoekterm: <code>documents/document/_search</code></small>
+                    <small id="help"
+                           className="form-text text-muted">Voorbeeldzoekterm: <code>documents/document/_search</code>
+                    </small>
                 </div>
             </div>
         );
