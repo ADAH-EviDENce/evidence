@@ -25,3 +25,5 @@ services:
       - "elasticsearch"
     command: ["/utils/wait-for-it.sh", "elasticsearch:9200", "--",
     "/utils/index.py", "elasticsearch"]
+    volumes:
+      - "$DATA:/data:ro"
