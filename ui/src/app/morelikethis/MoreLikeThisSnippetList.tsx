@@ -5,13 +5,16 @@ import MoreLikeThisSnippet from "./MoreLikeThisSnippet";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
 
 interface MoreLikeThisSnippetListProps {
-    snippetId: string
+    snippetId: string,
+    onAllSnippetsHaveAnswers: ((answers: Array<any>) => void)
 }
 
 class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListProps, any> {
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {answers: []};
+        this.state = {
+            answers: []
+        };
         this.fetchSnippets();
     }
 
@@ -30,14 +33,26 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
 
     handleSelect = (id: string, choice: MoreLikeThisOption) => {
         const answers = this.state.answers;
+
+        // TODO: tmp fill all fields:
+        // this.addOrEditChoice(answers, id, choice);
+        this.state.snippets.hits.hits.forEach((s: any) => {answers.push({id: s._id, choice});});
+
+        this.setState(answers, () => {
+            if(this.state.answers.length === this.state.snippets.hits.hits.length) {
+                this.props.onAllSnippetsHaveAnswers(this.state.anwers);
+            }
+        });
+    };
+
+    private addOrEditChoice(answers: Array<any>, id: string, choice: MoreLikeThisOption) {
         const answerById = answers.find((a: any) => a.id === id);
-        if(answerById) {
+        if (answerById) {
             answerById.choice = choice;
         } else {
             answers.push({id, choice});
         }
-        this.setState(answers);
-    };
+    }
 
     private findChoice(id: number) {
         let answer = this.state.answers.find((a: any) => a.id === id);

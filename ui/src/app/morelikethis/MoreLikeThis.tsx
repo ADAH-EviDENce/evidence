@@ -5,11 +5,16 @@ import Resources from "../Resources";
 import {Card, CardHeader} from "reactstrap";
 import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
+import FontAwesome from "react-fontawesome";
+import './MoreLikeThis.css';
 
 class MoreLikeThis extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {};
+        this.state = {
+            answers: [],
+            canCommit: false
+        };
 
         this.fetchSnippets();
     }
@@ -25,6 +30,10 @@ class MoreLikeThis extends React.Component<any, any> {
             this.setState({error: 'Could not fetch snippet by id.'});
         });
 
+    };
+
+    handleAllSnippetsHaveAnswers = (answers: Array<any>) => {
+        this.setState({answers, canCommit: true});
     };
 
     render() {
@@ -50,7 +59,17 @@ class MoreLikeThis extends React.Component<any, any> {
                             />
                         </Card>
                         <h2>Te beoordelen</h2>
-                        <MoreLikeThisSnippetList snippetId={snippetId}/>
+                        <MoreLikeThisSnippetList
+                            snippetId={snippetId}
+                            onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
+                        />
+                        <div className="commit-answers">
+                            <button className="btn btn-success float-right commit-btn" type="submit" disabled={!this.state.canCommit}>
+                                Opslaan
+                                &nbsp;
+                                <FontAwesome name='chevron-right '/>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </Page>
