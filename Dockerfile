@@ -5,8 +5,9 @@ RUN go get github.com/mattn/go-sqlite3
 
 WORKDIR /go/src/github.com/knaw-huc/evidence-gui
 COPY *.go schema.sql ./
+COPY internal internal
 
-RUN go get -t ./...
+RUN go get -t -v ./...
 RUN go test ./...
 RUN go install -ldflags="-s" .
 
