@@ -10,17 +10,15 @@
 ## Development
 
 ### First time
-
+- Create docker images: `docker build -f Dockerfile .`
 - Install app: `npm i react-scripts && npm install`
 - Install mock server: `cd ./mocks && npm install`
 
 ### Start locally
-- Run `npm start`
-- Run mock server: `cd ./mocks && node app.js`
-- Or run elasticsearch: 
-  - `./start-es.sh`
-  - `cd ../indexer && python3 index.py`
-- Open [http://localhost:3000](http://localhost:3000)
+- Start containers:`DATA=./TargetSize150 docker-compose up`
+- Or start mock server: `cd ./mocks && node app.js`
+- Run: `npm start`
+- Open: [http://localhost:3000](http://localhost:3000)
 
 ## Build
 

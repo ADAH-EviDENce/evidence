@@ -54,7 +54,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         }
     }
 
-    private findChoice(id: number) {
+    private findRelevantById(id: number) {
         let answer = this.state.answers.find((a: any) => a.id === id);
         if(answer) {
             return answer.relevant;
@@ -71,7 +71,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 id={s._id}
                 text={s._source.text}
                 onSelect={this.handleSelect}
-                relevant={this.findChoice(s._id)}
+                relevant={this.findRelevantById(s._id)}
             />
         });
     }
