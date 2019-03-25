@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
-import {AppContext} from "../AppContext";
+import {AppContextConsumer} from "../AppContext";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
     snippetId: string,
@@ -35,9 +35,9 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                     <ModalHeader>Keuzemenu</ModalHeader>
                     <ModalBody>
                         Uw antwoorden zijn opgeslagen.
-                        <AppContext.Consumer>{appContext => appContext && (
-                            <p className="d-none">{appContext.search}</p>
-                        )}</AppContext.Consumer>
+                        <AppContextConsumer>{context =>
+                            <p className="d-none">{context.search}</p>
+                        }</AppContextConsumer>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.onQuery} disabled>Beoordeel meer fragmenten</Button>

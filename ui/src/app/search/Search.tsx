@@ -4,8 +4,8 @@ import Page from "../common/Page";
 import Resources from "../Resources";
 import ErrorBox from "../common/ErrorBox";
 import DocumentList from "../document/DocumentList";
-import {AppContext} from "../AppContext";
 import FontAwesome from "react-fontawesome";
+import {AppContextConsumer} from "../AppContext";
 
 interface SearchProps {
     search: string
@@ -60,9 +60,9 @@ class Search extends React.Component<any, any> {
                 <div className="offset-2 col-8">
                     <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                     <span>
-                        <AppContext.Consumer>{appContext =>
-                            <SearchBar defaultSearch={appContext.search}/>
-                        }</AppContext.Consumer>
+                        <AppContextConsumer>{context =>
+                            <SearchBar defaultSearch={context.search}/>
+                        }</AppContextConsumer>
                         {this.renderDocumentList()}
                     </span>
                 </div>

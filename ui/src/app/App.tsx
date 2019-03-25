@@ -1,33 +1,29 @@
 import './App.css';
 import * as React from "react";
 import Routes from "./Routes";
-import {AppContext} from "./AppContext";
+import {AppContextProvider} from "./AppContext";
 
-class App extends React.Component<any, any> {
+export default class App extends React.Component<any, any> {
+
     readonly state = {
         search: ""
     };
 
-    updateSearch = (s: string) => {
-        this.setState({
-            search: s
-        });
-    };
+    updateSearch = (s: string) => this.setState({search: s});
 
     render() {
         return (
-            <AppContext.Provider
+            <AppContextProvider
                 value={{
                     search: this.state.search,
-                    updateSearch: this.updateSearch
+                    updateSearch: this.updateSearch,
                 }}
             >
                 <div className="app">
                     <Routes/>
                 </div>
-            </AppContext.Provider>
+            </AppContextProvider>
         );
     }
 }
 
-export default App;
