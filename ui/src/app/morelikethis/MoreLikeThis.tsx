@@ -72,7 +72,7 @@ class MoreLikeThis extends React.Component<any, any> {
                                     moreLikeThis={false}
                             />
                         </Card>
-                        <h2>Te beoordelen (#{from + 1} - {from + MORE_LIKE_THIS_SIZE})</h2>
+                        <h2>Te beoordelen (#{from + 1}-{from + MORE_LIKE_THIS_SIZE})</h2>
                         <MoreLikeThisSnippetList
                             snippetId={snippetId}
                             from={from}

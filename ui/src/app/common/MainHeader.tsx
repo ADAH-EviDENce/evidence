@@ -1,4 +1,5 @@
 import * as React from "react";
+import {Link} from "react-router-dom";
 
 class MainHeader extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -11,9 +12,9 @@ class MainHeader extends React.Component<any, any> {
             <div className="main-header">
                 <h1>Evidence</h1>
                 <div className="main-nav text-center">
-                    <a className="nav-item" href="/">home</a>
-                    <a className="nav-item" href="/">over</a>
-                    <a className="nav-item" href="/">link3</a>
+                    <Link className="nav-item" to={"/"}>home</Link>
+                    <Link className="nav-item" to={"/"}>over</Link>
+                    <Link className="nav-item" to={"/"}>link3</Link>
                 </div>
             </div>
         );
