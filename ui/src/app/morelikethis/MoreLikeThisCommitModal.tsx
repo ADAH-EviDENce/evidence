@@ -46,7 +46,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
-                        <Button color="success" onClick={this.onSearch}>Zoek nieuwe documenten</Button>
+                        <Button color="success" onClick={this.onSearch}>Zoek nieuw document</Button>
                     </ModalFooter>
                 </Modal>
 
