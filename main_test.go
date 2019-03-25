@@ -42,7 +42,7 @@ func TestAssessments(t *testing.T) {
 	}
 
 	r := httprouter.New()
-	newServer(db, es.URL, r)
+	newServer(db, "", es.URL, r)
 
 	req := httptest.NewRequest("GET", "/assess",
 		strings.NewReader(`["foo", "bar", "baz"]`))
@@ -91,7 +91,7 @@ func TestESProxy(t *testing.T) {
 	defer es.Close()
 
 	r := httprouter.New()
-	newServer(nil, es.URL, r)
+	newServer(nil, "", es.URL, r)
 
 	req := httptest.NewRequest("GET", "/es/snippets/snippet/_mget", nil)
 

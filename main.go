@@ -11,25 +11,33 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"path"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/knaw-huc/evidence-gui/internal/doc2vec"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/olivere/elastic"
 )
 
 func main() {
-	elasticEndpoint := flag.String("elastic", "http://localhost:9200",
-		"Elasticsearch endpoint")
+	var (
+		dbFile = flag.String("db", "relevance.db",
+			"filename of relevance database")
+		doc2vecFile = flag.String("doc2vec", "",
+			"filename of doc2vec output (CSV)")
+		elasticEndpoint = flag.String("elastic", "http://localhost:9200",
+			"Elasticsearch endpoint")
+	)
 	flag.Parse()
 
-	db, err := sql.Open("sqlite3", "/db/relevance.db")
+	db, err := sql.Open("sqlite3", *dbFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
 	r := httprouter.New()
-	newServer(db, *elasticEndpoint, r)
+	newServer(db, *doc2vecFile, *elasticEndpoint, r)
 
 	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
 	r.ServeFiles("/ui/*filepath", http.Dir("static"))
@@ -40,6 +48,7 @@ func main() {
 // A server encapsulates an assessment database and an Elasticsearch proxy.
 type server struct {
 	db              *sql.DB
+	d2vIndex        *doc2vec.Index
 	elasticEndpoint string
 	elasticProxy    *httputil.ReverseProxy
 
@@ -47,13 +56,21 @@ type server struct {
 	insertAssessment, selectRelevant *sql.Stmt
 }
 
-func newServer(db *sql.DB, elasticEndpoint string, r *httprouter.Router) *server {
+func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httprouter.Router) *server {
 	esURL, err := url.Parse(elasticEndpoint)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	s := &server{db: db, elasticEndpoint: elasticEndpoint}
+
+	// Doc2vec can be disabled for testing.
+	if doc2vecFile != "" {
+		s.d2vIndex, err = doc2vec.NewIndexFromCSV(doc2vecFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	// db may be nil in tests.
 	if db != nil {
@@ -70,6 +87,8 @@ func newServer(db *sql.DB, elasticEndpoint string, r *httprouter.Router) *server
 
 	r.POST("/assess", s.add)
 	r.GET("/assess", s.get)
+
+	r.GET("/doc2vec/:id", s.doc2vecNearest)
 
 	s.elasticProxy = httputil.NewSingleHostReverseProxy(esURL)
 
@@ -191,6 +210,49 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	}
 
 	json.NewEncoder(w).Encode(result)
+}
+
+// MoreLikeThis query in doc2vec space.
+func (s *server) doc2vecNearest(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	id := ps.ByName("id")
+	if !s.validateId(w, r, []string{id}) {
+		return
+	}
+
+	uparams := r.URL.Query()
+	offset := intValue(w, uparams, "from", 0)
+	if offset == -1 {
+		return
+	}
+	size := intValue(w, uparams, "size", 10)
+	if size == -1 {
+		return
+	}
+
+	near, err := s.d2vIndex.Nearest(r.Context(), id, offset, size, nil)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		io.WriteString(w, "error in doc2vec nearest-neighbor search")
+		log.Print(err)
+		return
+	}
+
+	json.NewEncoder(w).Encode(near)
+}
+
+// Returns -1 on error.
+func intValue(w http.ResponseWriter, v url.Values, key string, def int) int {
+	s := v.Get(key)
+	if s == "" {
+		return def
+	}
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "invalid %s parameter: %q", key, s)
+		return -1
+	}
+	return i
 }
 
 // Proxy for Elasticsearch. Only passes through GET requests

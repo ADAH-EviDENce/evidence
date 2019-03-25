@@ -6,10 +6,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: ["./evidence-gui", "-elastic", "http://elasticsearch:9200"]
+    entrypoint: ["./evidence-gui",
+                 "-db", "/db/relevance.db",
+                 "-doc2vec", "/data/doc2vec.csv",
+                 "-elastic", "http://elasticsearch:9200"]
     ports:
       - "8080:8080"
     volumes:
+      - "$DATA:/data:ro"
       - db-volume:/db
 
   elasticsearch:
