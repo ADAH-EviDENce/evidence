@@ -6,6 +6,7 @@ import {MoreLikeThisOption} from "./MoreLikeThisOption";
 
 interface MoreLikeThisSnippetListProps {
     snippetId: string,
+    from: number,
     onAllSnippetsHaveAnswers: ((answers: Array<any>) => void)
 }
 
@@ -24,20 +25,17 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             return;
         }
 
-        Resources.getMoreLikeThisSnippets(this.props.snippetId).then((json) => {
+        Resources.getMoreLikeThisSnippets(this.props.snippetId, this.props.from).then((json) => {
             this.setState({snippets: json});
         }).catch((data) => {
             this.setState({error: 'Could not fetch more like this snippets.'});
         });
-
     };
 
     handleSelect = (id: string, relevant: MoreLikeThisOption) => {
         const answers = this.state.answers;
 
-        // TODO: tmp fill all fields:
-        // this.addOrEditChoice(answers, id, relevant);
-        this.state.snippets.hits.hits.forEach((s: any) => {answers.push({id: s._id, relevant});});
+        this.addOrEditChoice(answers, id, relevant);
 
         this.setState(answers, () => {
             if(this.state.answers.length === this.state.snippets.hits.hits.length) {

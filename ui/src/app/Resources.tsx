@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ASSESS_HOST, ES_HOST} from "../config";
+import {ASSESS_HOST, ES_HOST, MORE_LIKE_THIS_SIZE} from "../config";
 import elasticsearch from 'elasticsearch';
 
 class Resources {
@@ -16,13 +16,19 @@ class Resources {
         return client.mget({body: {docs: docs}});
     };
 
-    public static getMoreLikeThisSnippets = (snippetId: string) => {
+    public static getMoreLikeThisSnippets = (
+        snippetId: string,
+        from: number,
+        size: number = MORE_LIKE_THIS_SIZE
+    ) => {
         const client = new elasticsearch.Client({
-            host: ES_HOST + "/snippets/",
+            host: ES_HOST + "/snippets",
             log: 'error'
         });
         return client.search({
             body: {
+                size: size,
+                from: from,
                 query: {
                     more_like_this: {
                         fields: ["text", "lemma"],

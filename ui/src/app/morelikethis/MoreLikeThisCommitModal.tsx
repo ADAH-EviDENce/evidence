@@ -2,10 +2,12 @@ import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
 import {AppContextConsumer} from "../AppContext";
+import {MORE_LIKE_THIS_SIZE} from "../../config";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
-    snippetId: string,
     documentId: string,
+    snippetId: string,
+    from: number,
     answers: Array<any>,
     committed: boolean
 }
@@ -17,7 +19,10 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     }
 
     onQuery = () => {
-        console.log('onQuery');
+        let sid = this.props.snippetId;
+        let did = this.props.documentId;
+        let nextFrom = this.props.from + MORE_LIKE_THIS_SIZE;
+        this.props.history.push(`/documents/${did}/snippets/${sid}/from/${nextFrom}/`);
     };
 
     onSearch = () => {
@@ -40,7 +45,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                         }</AppContextConsumer>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="success" onClick={this.onQuery} disabled>Beoordeel meer fragmenten</Button>
+                        <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
                         <Button color="success" onClick={this.onSearch}>Zoek nieuwe documenten</Button>
                     </ModalFooter>
                 </Modal>

@@ -16,7 +16,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
     }
 
     handleMoreLikeThis = () => {
-        this.props.history.push(`/documents/${this.props.documentId}/snippets/${this.props.id}/`);
+        this.props.history.push(`/documents/${this.props.documentId}/snippets/${this.props.id}/from/0/`);
     };
 
     render() {

@@ -11,14 +11,15 @@ class Routes extends React.Component<any, any> {
     }
 
     render() {
+        // add pathname as key to force instantiation of new component when path changes
         const pathname = this.props.location.pathname;
 
         return (
             <AppContextConsumer>{context =>
                 <Switch>
-                    <Redirect exact from="/" to="/search/" key={pathname}/>
-                    <Route exact path='/search/' render={() => (<Search search={context.search}/>)}/>
-                    <Route exact path='/documents/:did/snippets/:sid/' component={MoreLikeThis}/>
+                    <Redirect exact from="/" to="/search/"/>
+                    <Route exact path='/search/' render={() => (<Search search={context.search}/>)} key={pathname}/>
+                    <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThis} key={pathname}/>
                 </Switch>
             }</AppContextConsumer>
         );
