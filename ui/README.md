@@ -15,7 +15,10 @@
 - Install mock server: `cd ./mocks && npm install`
 
 ### Start locally
-- Start containers:`DATA=./TargetSize150 docker-compose up`
+- Download and unzip TargetSize150
+- mv TargetSize150 ./data
+- Download 'doc2vec.csv' and store in ./data
+- Start containers:`DATA=./data docker-compose up`
 - Or start mock server: `cd ./mocks && node app.js`
 - Run: `npm start`
 - Open: [http://localhost:3000](http://localhost:3000)
