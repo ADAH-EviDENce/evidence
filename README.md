@@ -2,18 +2,25 @@
 
 ## Deploy locally
 
-### Obtain TargetSize150.zip
-Unzip TargetSize150.zip
+Create single data directory for all models / input data
 
-### Create single data directory for all models / input data
-mv TargetSize150 data
+    mkdir data
 
-### Obtain doc2vec.csv, then store in data directory
-mv doc2vec.csv data/
+Obtain `TargetSize150.zip`, unpack and move into data directory
 
-Run: `DATA=./data docker-compose up --build`
+    unzip -qq TargetSize150.zip && mv TargetSize150/* data && rmdir TargetSize150
 
-## Elastic search example query
+Obtain `doc2vec.csv`, then store in data directory
+
+    mv doc2vec.csv data
+
+## Run
+
+After local deploy (as per above)
+
+    DATA=./data docker-compose up --build
+
+## Elastic search example queries
 List of snippets:
 
     http://localhost:8080/es/snippets/_search
@@ -42,8 +49,12 @@ More like this:
         }
     }'
 
-## Doc2Vec 'More like this' example query
+## Doc2Vec example queries
+
+More like this:
+
     curl http://localhost:8080/doc2vec/$id
 
-### Paging for 'doc2vec' uses 'from' (default 0) and 'size' (default 10)
+Paging in `doc2vec` is done using request parameters `from` (default `0`) and `size` (default `10`)
+
     curl http://localhost:8080/doc2vec/$id?from=3&size=8
