@@ -231,8 +231,8 @@ func (s *server) doc2vecNearest(w http.ResponseWriter, r *http.Request, ps httpr
 
 	near, err := s.d2vIndex.Nearest(r.Context(), id, offset, size, nil)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(w, "error in doc2vec nearest-neighbor search")
+		http.Error(w, "error in doc2vec nearest-neighbor search",
+			http.StatusInternalServerError)
 		log.Print(err)
 		return
 	}
@@ -265,8 +265,7 @@ func (s *server) elasticsearch(w http.ResponseWriter, r *http.Request, ps httpro
 		case "_mget", "_search":
 		default:
 			// Same message that httprouter gives.
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			io.WriteString(w, "Method Not Allowed")
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
 		}
 	}
@@ -290,8 +289,8 @@ func (s *server) validateId(w http.ResponseWriter, r *http.Request, ids []string
 	resp, err := mget.Do(r.Context())
 	if err != nil {
 		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(w, "Error while connecting to Elasticsearch")
+		http.Error(w, "Error while connecting to Elasticsearch",
+			http.StatusInternalServerError)
 		return
 	}
 
