@@ -34,6 +34,23 @@ type Index struct {
 	tree *vp.Tree
 }
 
+// The elements of docs should be of actual type *Document.
+func NewIndex(docs []interface{}) (*Index, error) {
+	byid := make(map[string]*Document)
+
+	for _, elem := range docs {
+		doc := elem.(*Document)
+		byid[doc.id] = doc
+	}
+
+	tree, err := vp.New(nil, distance, docs)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Index{docs: byid, tree: tree}, nil
+}
+
 func NewIndexFromCSV(filename string) (*Index, error) {
 	f, err := os.Open(filename)
 	if err != nil {
@@ -41,9 +58,7 @@ func NewIndexFromCSV(filename string) (*Index, error) {
 	}
 	defer f.Close()
 
-	byid := make(map[string]*Document)
-	docs := make([]interface{}, 0)
-
+	var docs []interface{}
 	r := csv.NewReader(f)
 loop:
 	for {
@@ -65,42 +80,41 @@ loop:
 			vector = append(vector, float32(x))
 		}
 
-		doc := &Document{
+		docs = append(docs, &Document{
 			id:     record[0],
 			vector: vectors.NewNormalized(vector),
-		}
-		byid[doc.id] = doc
-		docs = append(docs, doc)
+		})
 	}
 
-	tree, err := vp.New(nil, distance, docs)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Index{docs: byid, tree: tree}, nil
+	return NewIndex(docs)
 }
 
-// Performs a nearest-neighbors query for the document with the given id.
+// Performs a nearest-neighbors query for the document with id qid.
 // The results offset through offset+size are returned.
-func (idx *Index) Nearest(ctx context.Context, id string, offset, size int, exclude []string) ([]string, error) {
-	doc, ok := idx.docs[id]
+func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int, exclude []string) ([]string, error) {
+	doc, ok := idx.docs[qid]
 	if !ok {
-		return nil, fmt.Errorf("no document with id %q", id)
+		return nil, fmt.Errorf("no document with id %q", qid)
 	}
 
-	excludeSet := make(map[string]struct{})
-	for _, id := range exclude {
-		excludeSet[id] = struct{}{}
+	var pred vp.Predicate
+	if len(exclude) > 0 {
+		excludeSet := make(map[string]struct{})
+		for _, id := range exclude {
+			excludeSet[id] = struct{}{}
+		}
+		pred = func(x interface{}) bool {
+			_, ok := excludeSet[x.(*Document).id]
+			return !ok
+		}
 	}
 
-	near, err := idx.tree.Search(ctx, doc, size+offset, math.Inf(+1), func(x interface{}) bool {
-		_, ok := excludeSet[x.(*Document).id]
-		return !ok
-	})
-	if err != nil {
+	// Request one more neighbor to filter out qid itself.
+	near, err := idx.tree.Search(ctx, doc, 1+size+offset, math.Inf(+1), pred)
+	if err != nil || len(near) == 0 {
 		return nil, err
 	}
+	near = near[1:] // Skip qid.
 
 	offset = min(offset, len(near))
 	end := min(offset+size, len(near))
