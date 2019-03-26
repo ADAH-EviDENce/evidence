@@ -25,8 +25,9 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - "elasticsearch"
-    command: ["/utils/wait-for-it.sh", "elasticsearch:9200", "--",
-    "/utils/index.py", "elasticsearch"]
+    command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
+      "--timeout=0",
+      "--", "/utils/index.py", "elasticsearch"]
     volumes:
       - "$DATA:/data:ro"
 
