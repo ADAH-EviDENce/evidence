@@ -30,7 +30,9 @@ RUN apt-get -y update && apt-get -y install sqlite3
 WORKDIR /evidence
 
 COPY schema.sql .
-RUN sqlite3 relevance.db < schema.sql
+RUN mkdir /db
+RUN sqlite3 /db/relevance.db < schema.sql
+VOLUME /db
 
 COPY --from=buildserver /go/bin/evidence-gui .
 COPY --from=buildui /evidence/build ./static

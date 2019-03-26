@@ -22,7 +22,7 @@ func main() {
 		"Elasticsearch endpoint")
 	flag.Parse()
 
-	db, err := sql.Open("sqlite3", "relevance.db")
+	db, err := sql.Open("sqlite3", "/db/relevance.db")
 	if err != nil {
 		log.Fatal(err)
 	}
