@@ -48,7 +48,6 @@ class Resources {
     };
 
     public static commitAnswers = (answers: Array<any>) => {
-        console.log('commitAnswers', answers);
         return fetch(ASSESS_HOST, {
             method: 'POST',
             headers: {

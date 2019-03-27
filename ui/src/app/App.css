@@ -1,9 +1,6 @@
 h1, h2 {
-    text-align: center;
-}
-
-h2 {
     padding-top: 1em;
+    text-align: center;
 }
 
 .nav-link {
