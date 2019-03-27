@@ -3,6 +3,7 @@ import {Redirect, Route, Switch, withRouter} from "react-router-dom";
 import Search from "./search/Search";
 import MoreLikeThis from "./morelikethis/MoreLikeThis";
 import {AppContextConsumer} from "./AppContext";
+import DocumentPage from "./document/DocumentPage";
 
 class Routes extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -19,6 +20,7 @@ class Routes extends React.Component<any, any> {
                 <Switch>
                     <Redirect exact from="/" to="/search/"/>
                     <Route exact path='/search/' render={() => (<Search search={context.search}/>)} key={pathname}/>
+                    <Route exact path='/documents/:did/' component={DocumentPage} key={pathname}/>
                     <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThis} key={pathname}/>
                 </Switch>
             }</AppContextConsumer>

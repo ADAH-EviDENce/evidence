@@ -3,9 +3,9 @@ import SearchBar from "./SearchBar";
 import Page from "../common/Page";
 import Resources from "../Resources";
 import ErrorBox from "../common/ErrorBox";
-import DocumentList from "../document/DocumentList";
 import FontAwesome from "react-fontawesome";
 import {AppContextConsumer} from "../AppContext";
+import SearchSnippetList from "./SearchSnippetList";
 
 interface SearchProps {
     search: string
@@ -16,7 +16,7 @@ class Search extends React.Component<any, any> {
         super(props, context);
         this.state = {
             search: "",
-            documents: null,
+            snippets: null,
             loading: false
         };
     }
@@ -30,28 +30,22 @@ class Search extends React.Component<any, any> {
     }
 
     handleSearch = (query: string) => {
-        if (this.state.documents) {
-
-        }
-        Resources.getDocuments(query).then((data) => {
-            if (!data.ok) {
-                throw Error("Status " + data.status);
-            }
-            data.json().then((json) => {
-                this.setState({documents: json, loading: false});
-            });
-
+        Resources.searchSnippets(query, 0).then((json) => {
+            this.setState({snippets: json, loading: false});
         }).catch((data) => {
-            this.setState({loading: false, error: 'Could not fetch documents with provided query.'});
+            this.setState({loading: false, error: 'Could not fetch snippets with provided query.'});
         });
     };
 
-    private renderDocumentList() {
+    private renderSnippetList() {
+        if (!this.state.snippets && !this.state.loading) {
+            return null;
+        }
         return this.state.loading
             ?
             <FontAwesome name='spinner' spin/>
             :
-            <DocumentList documents={this.state.documents}/>;
+            <SearchSnippetList snippets={this.state.snippets.hits.hits}/>;
     }
 
     render() {
@@ -63,7 +57,7 @@ class Search extends React.Component<any, any> {
                         <AppContextConsumer>{context =>
                             <SearchBar defaultSearch={context.search}/>
                         }</AppContextConsumer>
-                        {this.renderDocumentList()}
+                        {this.renderSnippetList()}
                     </span>
                 </div>
             </Page>

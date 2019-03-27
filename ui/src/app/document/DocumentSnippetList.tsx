@@ -23,7 +23,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
             return;
         }
 
-        Resources.getDocumentSnippets(this.props.snippetIds).then((json) => {
+        Resources.getSnippetsById(this.props.snippetIds).then((json) => {
             this.setState({snippets: json});
         }).catch((data) => {
             this.setState({error: 'Could not fetch snippets with provided query.'});
@@ -57,9 +57,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
         return (
             <div>
                 <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
-                <ul className="list-group list-group-flush">
-                    {listElements}
-                </ul>
+                {listElements}
             </div>
         );
     }

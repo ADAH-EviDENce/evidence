@@ -9,14 +9,14 @@ export default class App extends React.Component<any, any> {
         search: ""
     };
 
-    updateSearch = (s: string) => this.setState({search: s});
+    updateContext = (c: object) => this.setState(c);
 
     render() {
         return (
             <AppContextProvider
                 value={{
                     search: this.state.search,
-                    updateSearch: this.updateSearch,
+                    updateContext: this.updateContext,
                 }}
             >
                 <div className="app">

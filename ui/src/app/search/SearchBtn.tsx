@@ -6,14 +6,14 @@ interface SearchBtnProps {
 }
 
 export const SearchBtn: React.FunctionComponent<SearchBtnProps> = (props) => {
-    const {updateSearch} = React.useContext(AppContext);
+    const {updateContext} = React.useContext(AppContext);
 
     return (
         <>
             <button className="btn btn-outline-secondary" onClick={() => {
-                updateSearch(props.search)
+                updateContext({search: props.search})
             }}>
-                Zoek documenten
+                Zoek snippets
             </button>
         </>
     );

@@ -2,12 +2,12 @@ import * as React from "react";
 
 type AppContextType = {
     search: string,
-    updateSearch(s: string): void
+    updateContext(c: object): void
 };
 
 export const AppContext = React.createContext<AppContextType>({
     search: "",
-    updateSearch: (s) => {throw new Error('updateSearch() not implemented')}
+    updateContext: (c) => {throw new Error('updateContext() not implemented')}
 });
 
 export const AppContextProvider = AppContext.Provider;

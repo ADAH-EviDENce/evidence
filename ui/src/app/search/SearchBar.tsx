@@ -30,8 +30,11 @@ class SearchBar extends React.Component<SearchBarProps, any> {
                             <SearchBtn search={this.state.search}/>
                         </div>
                     </div>
-                    <small id="help"
-                           className="form-text text-muted">Voorbeeldzoekterm: <code>documents/document/_search</code>
+                    <small
+                        id="help"
+                        className="form-text text-muted"
+                    >
+                        Voorbeeldzoekterm: <code>geweld</code>
                     </small>
                 </div>
             </div>

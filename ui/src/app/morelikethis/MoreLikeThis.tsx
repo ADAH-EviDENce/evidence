@@ -27,7 +27,7 @@ class MoreLikeThis extends React.Component<any, any> {
         if(this.state.snippet || this.state.error) {
             return;
         }
-        Resources.getDocumentSnippets([{_id: this.props.match.params.sid}]).then((json) => {
+        Resources.getSnippetsById([{_id: this.props.match.params.sid}]).then((json) => {
             let docs = json.docs;
             this.setState({snippet: docs ?  docs[0] : null});
         }).catch((data) => {
@@ -59,19 +59,14 @@ class MoreLikeThis extends React.Component<any, any> {
             <Page>
                 <div className="offset-2 col-8">
                     <div className="more-like-this">
-                        <h2>Geselecteerd</h2>
+                        <h2>{documentId}</h2>
                         <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
-                        <Card>
-                            <CardHeader>
-                                Document: {documentId}
-                            </CardHeader>
-                            <DocumentSnippet
+                        <DocumentSnippet
                                     id={snippetId}
                                     documentId={documentId}
                                     text={this.state.snippet ? this.state.snippet._source.text : null}
                                     moreLikeThis={false}
                             />
-                        </Card>
                         <h2>Te beoordelen (#{from + 1}-{from + MORE_LIKE_THIS_SIZE})</h2>
                         <MoreLikeThisSnippetList
                             snippetId={snippetId}

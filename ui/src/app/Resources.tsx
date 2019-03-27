@@ -1,14 +1,43 @@
 import * as React from "react";
-import {ASSESS_HOST, ES_HOST, MORE_LIKE_THIS_SIZE} from "../config";
+import {ASSESS_HOST, ES_HOST, MORE_LIKE_THIS_SIZE, SEARCH_RESULTS_SIZE} from "../config";
 import elasticsearch from 'elasticsearch';
 
 class Resources {
 
-    public static getDocuments = (query: string) => {
-        return fetch(ES_HOST + "/" + query);
+    public static getSnippetsByDocumentId = (documentId: string) => {
+        return fetch(ES_HOST + "/documents/document/" + documentId);
     };
 
-    public static getDocumentSnippets = (docs: Array<any>) => {
+    public static searchSnippets = (
+        query: string,
+        from: number,
+        size: number = SEARCH_RESULTS_SIZE
+    ) => {
+        const client = new elasticsearch.Client({
+            host: ES_HOST + "/snippets",
+            log: 'error'
+        });
+        return client.search({
+            body: {
+                size: size,
+                from: from,
+                query: {
+                    query_string: {query: query}
+                },
+                highlight: {
+                    fields: {
+                        text: {}
+                    },
+                    number_of_fragments: 1,
+                    type: "unified",
+                    fragment_size: 2000
+                }
+            }
+
+        });
+    };
+
+    public static getSnippetsById = (docs: Array<any>) => {
         const client = new elasticsearch.Client({
             host: ES_HOST + "/snippets/snippet",
             log: 'error'
@@ -55,7 +84,8 @@ class Resources {
             },
             body: JSON.stringify(answers)
         });
-    }
+    };
+
 }
 
 export default Resources;

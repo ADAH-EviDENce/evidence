@@ -1,6 +1,8 @@
 import * as React from "react";
 import FontAwesome from "react-fontawesome";
 import {RouteComponentProps, withRouter} from "react-router";
+import {Card, CardBody, CardHeader} from "reactstrap";
+import './DocumentSnippet.css';
 
 type PropsType = RouteComponentProps & {
     id: string,
@@ -31,13 +33,18 @@ class DocumentSnippet extends React.Component<PropsType, any> {
             null;
 
         return (
-            <li
-                className="list-group-item"
-            >
-                {moreLikeThis}
-                <p className="small"><strong>Snippet: {this.props.id.replace(this.props.documentId, '[..]')}</strong></p>
-                <p className="small">{this.props.text}</p>
-            </li>
+            <div className="document-snippet">
+                <Card>
+                    <CardHeader>
+                        {moreLikeThis}
+                        <p className="small">
+                            <strong>Fragment: {this.props.id.replace(this.props.documentId, '[..]')}</strong></p>
+                    </CardHeader>
+                    <CardBody>
+                        <p className="small">{this.props.text}</p>
+                    </CardBody>
+                </Card>
+            </div>
         );
     }
 }
