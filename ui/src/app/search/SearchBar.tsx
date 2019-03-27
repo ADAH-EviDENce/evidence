@@ -34,7 +34,7 @@ class SearchBar extends React.Component<SearchBarProps, any> {
                         id="help"
                         className="form-text text-muted"
                     >
-                        Voorbeeldzoekterm: <code>geweld</code>
+                        Bijvoorbeeld: <code>geweld AND pantser</code>
                     </small>
                 </div>
             </div>

@@ -19,7 +19,7 @@ export class SearchSnippetList extends React.Component<SnippetListProps, any> {
         return (
             <div className="snippet-list">
                 {this.props.snippets.map((s: any, i: number) => {
-                    return <SearchSnippet key={i} id={s._id} text={s.highlight.text[0]}/>
+                    return <SearchSnippet key={i} id={s._id} text={s.highlight ? s.highlight.text[0] : ''}/>
                 })}
             </div>
         );

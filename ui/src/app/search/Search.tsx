@@ -6,6 +6,7 @@ import ErrorBox from "../common/ErrorBox";
 import FontAwesome from "react-fontawesome";
 import {AppContextConsumer} from "../AppContext";
 import SearchSnippetList from "./SearchSnippetList";
+import SearchPagination from "./SearchPagination";
 
 interface SearchProps {
     search: string
@@ -16,6 +17,7 @@ class Search extends React.Component<any, any> {
         super(props, context);
         this.state = {
             search: "",
+            from: 0,
             snippets: null,
             loading: false
         };
@@ -30,7 +32,7 @@ class Search extends React.Component<any, any> {
     }
 
     handleSearch = (query: string) => {
-        Resources.searchSnippets(query, 0).then((json) => {
+        Resources.searchSnippets(query, this.state.from).then((json) => {
             this.setState({snippets: json, loading: false});
         }).catch((data) => {
             this.setState({loading: false, error: 'Could not fetch snippets with provided query.'});
@@ -45,7 +47,21 @@ class Search extends React.Component<any, any> {
             ?
             <FontAwesome name='spinner' spin/>
             :
-            <SearchSnippetList snippets={this.state.snippets.hits.hits}/>;
+            <>
+                <SearchSnippetList snippets={this.state.snippets.hits.hits}/>
+                <SearchPagination
+                    from={this.state.from}
+                    onPrevious={() => this.handlePageChange(-1)}
+                    onNext={() => this.handlePageChange(+1)}
+                />
+            </>;
+    }
+
+    private handlePageChange(delta: number) {
+        this.setState(
+            {from: this.state.from + delta},
+            () => this.handleSearch(this.state.search)
+        );
     }
 
     render() {
