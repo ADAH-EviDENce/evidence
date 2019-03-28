@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"flag"
@@ -237,7 +238,22 @@ func (s *server) doc2vecNearest(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	json.NewEncoder(w).Encode(near)
+	// Simulate Elasticsearch output.
+	resp, err := s.mgetSnippets(r.Context(), w, near, true)
+	if err != nil {
+		return
+	}
+
+	// Set Found to false to suppress it from the output.
+	for i := range resp.Docs {
+		resp.Docs[i].Found = false
+	}
+
+	json.NewEncoder(w).Encode(map[string]map[string]interface{}{
+		"hits": map[string]interface{}{
+			"hits": resp,
+		},
+	})
 }
 
 // Returns -1 on error.
@@ -275,23 +291,9 @@ func (s *server) elasticsearch(w http.ResponseWriter, r *http.Request, ps httpro
 
 // Checks if snippets with the given ids exist in the ES index.
 func (s *server) validateId(w http.ResponseWriter, r *http.Request, ids []string) (valid bool) {
-	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint))
-
-	mget := es.MultiGet()
-	for _, id := range ids {
-		mget.Add(elastic.NewMultiGetItem().
-			Id(id).
-			Index("snippets").
-			Type("snippet").
-			FetchSource(elastic.NewFetchSourceContext(false)))
-	}
-
-	resp, err := mget.Do(r.Context())
+	resp, err := s.mgetSnippets(r.Context(), w, ids, false)
 	if err != nil {
-		log.Print(err)
-		http.Error(w, "Error while connecting to Elasticsearch",
-			http.StatusInternalServerError)
-		return
+		return false
 	}
 
 	for _, doc := range resp.Docs {
@@ -303,4 +305,29 @@ func (s *server) validateId(w http.ResponseWriter, r *http.Request, ids []string
 	}
 
 	return true
+}
+
+func (s *server) mgetSnippets(ctx context.Context, w http.ResponseWriter, ids []string, fetchSource bool) (*elastic.MgetResponse, error) {
+	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint))
+	if err != nil {
+		return nil, err
+	}
+
+	mget := es.MultiGet()
+	for _, id := range ids {
+		mget.Add(elastic.NewMultiGetItem().
+			Id(id).
+			Index("snippets").
+			Type("snippet").
+			FetchSource(elastic.NewFetchSourceContext(fetchSource)))
+	}
+
+	resp, err := mget.Do(ctx)
+	if err != nil {
+		log.Print(err)
+		http.Error(w, "Error while connecting to Elasticsearch",
+			http.StatusInternalServerError)
+	}
+
+	return resp, err
 }
