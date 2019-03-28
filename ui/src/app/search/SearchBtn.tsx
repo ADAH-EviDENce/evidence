@@ -14,15 +14,20 @@ class SearchBtn extends React.Component<any, any> {
         document.addEventListener("keydown", this.handleEnterKeyPress, false);
     }
 
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleEnterKeyPress, false)
+    }
+
     handleEnterKeyPress = (event: KeyboardEvent) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && this.props.location.pathname.startsWith('/search')) {
             event.preventDefault();
             this.setSearch();
         }
     };
 
     setSearch = () => {
-        this.props.history.push(`/search/${this.props.search}/`);
+        const query = this.props.search ? this.props.search + '/' : '';
+        this.props.history.push(`/search/${query}`);
     };
 
     render() {

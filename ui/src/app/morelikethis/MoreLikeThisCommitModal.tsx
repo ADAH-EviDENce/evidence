@@ -26,7 +26,8 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     };
 
     onSearch = () => {
-        this.props.history.push(`/search/${this.context.search}/`);
+        const query = this.context.search ? this.context.search + '/' : '';
+        this.props.history.push(`/search/${query}`);
     };
 
     render() {
