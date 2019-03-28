@@ -14,6 +14,7 @@ interface SearchProps {
 }
 
 class Search extends React.Component<any, any> {
+
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
@@ -34,8 +35,10 @@ class Search extends React.Component<any, any> {
         }
     }
 
+
     handleSearch = (query: string) => {
-        Resources.searchSnippets(query, (this.state.page - 1) * this.state.size, this.state.size).then((json) => {
+        const from = (this.state.page - 1) * this.state.size;
+        Resources.searchSnippets(query, from, this.state.size).then((json) => {
             this.setState({snippets: json, total: json.hits.total, loading: false});
         }).catch((data) => {
             this.setState({loading: false, error: 'Could not fetch snippets with provided query.'});

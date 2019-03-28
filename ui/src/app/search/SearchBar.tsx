@@ -1,5 +1,5 @@
 import * as React from "react";
-import {SearchBtn} from "./SearchBtn";
+import SearchBtn from "./SearchBtn";
 
 interface SearchBarProps {
     defaultSearch: string,

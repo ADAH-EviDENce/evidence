@@ -1,6 +1,6 @@
 import * as React from "react";
 
-type AppContextType = {
+export type AppContextType = {
     search: string,
     updateContext(c: object): void
 };
