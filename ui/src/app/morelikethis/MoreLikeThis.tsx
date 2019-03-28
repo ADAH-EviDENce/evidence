@@ -8,7 +8,7 @@ import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 import FontAwesome from "react-fontawesome";
 import './MoreLikeThis.css';
 import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
-import {MORE_LIKE_THIS_SIZE} from "../../config";
+import config from "../../config";
 import ReadableId from "../common/ReadableId";
 
 class MoreLikeThis extends React.Component<any, any> {
@@ -68,7 +68,7 @@ class MoreLikeThis extends React.Component<any, any> {
                                     text={this.state.snippet ? this.state.snippet._source.text : null}
                                     moreLikeThis={false}
                             />
-                        <h2>Te beoordelen (#{from + 1}-{from + MORE_LIKE_THIS_SIZE})</h2>
+                        <h2>Te beoordelen (#{from + 1}-{from + config.MORE_LIKE_THIS_SIZE})</h2>
                         <MoreLikeThisSnippetList
                             snippetId={snippetId}
                             from={from}

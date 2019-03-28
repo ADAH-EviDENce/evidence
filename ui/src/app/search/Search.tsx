@@ -7,7 +7,7 @@ import FontAwesome from "react-fontawesome";
 import {AppContextConsumer} from "../AppContext";
 import SearchSnippetList from "./SearchSnippetList";
 import SearchPagination from "./SearchPagination";
-import {SEARCH_RESULTS_SIZE} from "../../config";
+import config from "../../config";
 
 interface SearchProps {
     search: string
@@ -20,7 +20,7 @@ class Search extends React.Component<any, any> {
         this.state = {
             search: "",
             page: 1,
-            size: SEARCH_RESULTS_SIZE,
+            size: config.SEARCH_RESULTS_SIZE,
             snippets: null,
             total: 0,
             loading: false

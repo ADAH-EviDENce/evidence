@@ -2,7 +2,7 @@ import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
 import {AppContextConsumer} from "../AppContext";
-import {MORE_LIKE_THIS_SIZE} from "../../config";
+import config from "../../config";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
     documentId: string,
@@ -21,7 +21,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     onQuery = () => {
         let sid = this.props.snippetId;
         let did = this.props.documentId;
-        let nextFrom = this.props.from + MORE_LIKE_THIS_SIZE;
+        let nextFrom = this.props.from + config.MORE_LIKE_THIS_SIZE;
         this.props.history.push(`/documents/${did}/snippets/${sid}/from/${nextFrom}/`);
     };
 

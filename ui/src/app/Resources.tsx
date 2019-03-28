@@ -1,11 +1,14 @@
 import * as React from "react";
-import {ASSESS_HOST, ES_HOST, MORE_LIKE_THIS_SIZE, SEARCH_RESULTS_SIZE} from "../config";
 import elasticsearch from 'elasticsearch';
+import config from "../config";
 
 class Resources {
 
+    // doc2vec:
+    // <host>/doc2vec/{id}?from={from}&size={size}
+
     public static getSnippetsByDocumentId = (documentId: string) => {
-        return fetch(ES_HOST + "/documents/document/" + documentId);
+        return fetch(config.ES_HOST + "/documents/document/" + documentId);
     };
 
     public static searchSnippets = (
@@ -14,7 +17,7 @@ class Resources {
         size: number
     ) => {
         const client = new elasticsearch.Client({
-            host: ES_HOST + "/snippets",
+            host: config.ES_HOST + "/snippets",
             log: 'error'
         });
         return client.search({
@@ -39,7 +42,7 @@ class Resources {
 
     public static getSnippetsById = (docs: Array<any>) => {
         const client = new elasticsearch.Client({
-            host: ES_HOST + "/snippets/snippet",
+            host: config.ES_HOST + "/snippets/snippet",
             log: 'error'
         });
         return client.mget({body: {docs: docs}});
@@ -48,10 +51,10 @@ class Resources {
     public static getMoreLikeThisSnippets = (
         snippetId: string,
         from: number,
-        size: number = MORE_LIKE_THIS_SIZE
+        size: number = config.MORE_LIKE_THIS_SIZE
     ) => {
         const client = new elasticsearch.Client({
-            host: ES_HOST + "/snippets",
+            host: config.ES_HOST + "/snippets",
             log: 'error'
         });
         return client.search({
@@ -77,7 +80,7 @@ class Resources {
     };
 
     public static commitAnswers = (answers: Array<any>) => {
-        return fetch(ASSESS_HOST, {
+        return fetch(config.ASSESS_HOST, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

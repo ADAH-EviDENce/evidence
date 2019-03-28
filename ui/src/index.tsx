@@ -5,10 +5,10 @@ import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter} from "react-router-dom";
-import {BASENAME} from "./config";
+import config from "./config";
 
 let browserRouter =
-    <BrowserRouter basename={BASENAME}>
+    <BrowserRouter basename={config.BASENAME}>
         <App/>
     </BrowserRouter>;
 
