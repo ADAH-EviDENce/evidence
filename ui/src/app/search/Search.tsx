@@ -4,14 +4,11 @@ import Page from "../common/Page";
 import Resources from "../Resources";
 import ErrorBox from "../common/ErrorBox";
 import FontAwesome from "react-fontawesome";
-import {AppContextConsumer} from "../AppContext";
+import {AppContext} from "../AppContext";
 import SearchSnippetList from "./SearchSnippetList";
 import SearchPagination from "./SearchPagination";
 import config from "../../config";
-
-interface SearchProps {
-    search: string
-}
+import {withRouter} from "react-router";
 
 class Search extends React.Component<any, any> {
 
@@ -25,16 +22,30 @@ class Search extends React.Component<any, any> {
             total: 0,
             loading: false
         };
+        this.updateContext();
     }
 
-    componentWillReceiveProps(nextProps: SearchProps) {
-        if (nextProps.search !== this.state.search) {
-            this.setState({search: nextProps.search, page: 1, loading: true}, () => {
-                this.handleSearch(nextProps.search);
-            });
+    /**
+     * 1. Update context, 2. Handle search
+     * (See componentWillReceiveProps)
+     */
+    private updateContext() {
+        let search = this.props.match.params.search;
+        this.context.updateContext({search});
+    }
+
+    componentWillReceiveProps(nextProps: any) {
+        const newSearch = nextProps.match.params.search;
+        if (newSearch !== this.state.search) {
+            if(newSearch) {
+                this.setState({search: newSearch, page: 1, loading: true}, () => {
+                    this.handleSearch(newSearch);
+                });
+            } else {
+                this.setState({search: newSearch, page: 1, loading: false});
+            }
         }
     }
-
 
     handleSearch = (query: string) => {
         const from = (this.state.page - 1) * this.state.size;
@@ -78,9 +89,7 @@ class Search extends React.Component<any, any> {
                 <div className="offset-2 col-8">
                     <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                     <span>
-                        <AppContextConsumer>{context =>
-                            <SearchBar defaultSearch={context.search}/>
-                        }</AppContextConsumer>
+                        <SearchBar defaultSearch={this.state.search}/>
                         {this.renderSnippetList()}
                     </span>
                 </div>
@@ -88,5 +97,6 @@ class Search extends React.Component<any, any> {
         );
     }
 }
+Search.contextType = AppContext;
 
-export default Search;
+export default withRouter(Search);

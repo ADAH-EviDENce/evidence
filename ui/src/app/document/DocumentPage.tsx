@@ -21,7 +21,6 @@ class DocumentPage extends React.Component<any, any> {
                 throw Error("Status " + data.status);
             }
             data.json().then((json) => {
-                console.log(json);
                 this.setState({snippets: json, loading: false});
             });
         }).catch((data) => {

@@ -1,10 +1,5 @@
 import * as React from "react";
-import {AppContext, AppContextConsumer, AppContextType} from "../AppContext";
-
-interface SearchBtnProps {
-    search: string
-}
-
+import {withRouter} from "react-router";
 
 class SearchBtn extends React.Component<any, any> {
 
@@ -22,28 +17,24 @@ class SearchBtn extends React.Component<any, any> {
     handleEnterKeyPress = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            this.setSearch(this.context);
+            this.setSearch();
         }
     };
 
-    setSearch = (consumer: AppContextType) => {
-        consumer.updateContext({search: this.props.search});
+    setSearch = () => {
+        this.props.history.push(`/search/${this.props.search}/`);
     };
 
     render() {
         return (
-            <AppContextConsumer>{consumer =>
                 <button className="btn btn-outline-secondary" onClick={() => {
-                    this.setSearch(consumer);
+                    this.setSearch();
                 }}>
-                    Zoek snippets
+                    Zoek fragmenten
                 </button>
-            }</AppContextConsumer>
         );
 
     }
 }
 
-SearchBtn.contextType = AppContext;
-
-export default SearchBtn;
+export default withRouter(SearchBtn);

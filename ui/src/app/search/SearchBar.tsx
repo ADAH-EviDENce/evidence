@@ -9,7 +9,16 @@ class SearchBar extends React.Component<SearchBarProps, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {search: this.props.defaultSearch};
+        this.state = {
+            search: this.props.defaultSearch
+        };
+    }
+
+    componentWillReceiveProps(nextProps: SearchBarProps) {
+        const newSearch = nextProps.defaultSearch;
+        if (newSearch && newSearch !== this.state.search) {
+            this.setState({search: newSearch});
+        }
     }
 
     onSearchUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {

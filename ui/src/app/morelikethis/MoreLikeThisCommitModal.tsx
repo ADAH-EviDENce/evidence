@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
-import {AppContextConsumer} from "../AppContext";
+import {AppContext, AppContextConsumer} from "../AppContext";
 import config from "../../config";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
@@ -26,7 +26,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     };
 
     onSearch = () => {
-        this.props.history.push(`/search/`);
+        this.props.history.push(`/search/${this.context.search}/`);
     };
 
     render() {
@@ -54,5 +54,6 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
         );
     }
 }
+MoreLikeThisCommitModal.contextType = AppContext;
 
 export default withRouter(MoreLikeThisCommitModal);

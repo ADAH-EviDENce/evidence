@@ -19,7 +19,8 @@ class Routes extends React.Component<any, any> {
             <AppContextConsumer>{context =>
                 <Switch>
                     <Redirect exact from="/" to="/search/"/>
-                    <Route exact path='/search/' render={() => (<Search search={context.search}/>)} key={pathname}/>
+                    <Route exact path='/search/' component={Search} key={pathname}/>
+                    <Route exact path='/search/:search/' component={Search} key={pathname}/>
                     <Route exact path='/documents/:did/' component={DocumentPage} key={pathname}/>
                     <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThis} key={pathname}/>
                 </Switch>
