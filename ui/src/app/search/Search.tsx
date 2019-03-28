@@ -60,16 +60,17 @@ class Search extends React.Component<any, any> {
         if (!this.state.snippets && !this.state.loading) {
             return null;
         }
+        const lastPage = Math.ceil(this.state.total/this.state.size);
         return this.state.loading
             ?
             <FontAwesome name='spinner' spin/>
             :
             <>
-                <p>{this.state.total} resultaten gevonden</p>
+                <p>{this.state.total} resultaten (pagina {this.state.page} van {lastPage})</p>
                 <SearchSnippetList snippets={this.state.snippets.hits.hits}/>
                 <SearchPagination
                     page={this.state.page}
-                    lastPage={Math.ceil(this.state.total/this.state.size)}
+                    lastPage={lastPage}
                     onPrevious={() => this.handlePageChange(-1)}
                     onNext={() => this.handlePageChange(+1)}
                 />
