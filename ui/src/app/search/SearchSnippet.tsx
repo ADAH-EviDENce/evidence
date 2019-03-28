@@ -30,8 +30,8 @@ export class DocumentSnippet extends React.Component<SearchSnippetProps, any> {
                     <FontAwesome name='chevron-right '/>
                 </Link>
 
-                <p className="small"><strong>Snippet: {this.props.id}</strong></p>
-                <p className="small highlighted" dangerouslySetInnerHTML={{ __html: this.props.text }} />
+                <p className="small"><strong>{this.props.id}</strong></p>
+                <p className="small" dangerouslySetInnerHTML={{ __html: this.props.text }} />
             </li>
         );
     }

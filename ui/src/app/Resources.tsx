@@ -11,7 +11,7 @@ class Resources {
     public static searchSnippets = (
         query: string,
         from: number,
-        size: number = SEARCH_RESULTS_SIZE
+        size: number
     ) => {
         const client = new elasticsearch.Client({
             host: ES_HOST + "/snippets",
