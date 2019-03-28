@@ -3,6 +3,7 @@ import './SearchPagination.css';
 
 interface SearchPaginationProps {
     page: number,
+    lastPage: number,
     onPrevious: Function,
     onNext: Function
 }
@@ -14,15 +15,18 @@ class SearchPagination extends React.Component<SearchPaginationProps, any> {
     }
 
     render() {
+        const onFirstPage = this.props.page <= 1;
+        const onLastPage = this.props.page >= this.props.lastPage;
+
         return (
             <div className="search-pagination">
                 <nav>
                     <ul className="pagination">
                         <li className="page-item">
                             <button
-                                className="page-link disabled"
+                                className={`page-link ${onFirstPage ? "disabled" : ""}`}
                                 onClick={() => this.props.onPrevious()}
-                                disabled={this.props.page <= 0}
+                                disabled={onFirstPage}
                             >
                                 Vorige
                             </button>
@@ -32,13 +36,14 @@ class SearchPagination extends React.Component<SearchPaginationProps, any> {
                                 className="page-link"
                                 disabled={true}
                             >
-                                {this.props.page + 1}
+                                {this.props.page}
                             </button>
                         </li>
                         <li className="page-item">
                             <button
-                                className="page-link"
+                                className={`page-link ${onLastPage ? "disabled" : ""}`}
                                 onClick={() => this.props.onNext()}
+                                disabled={onLastPage}
                             >
                                 Volgende
                             </button>

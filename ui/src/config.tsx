@@ -5,7 +5,7 @@ export const ASSESS_HOST = "http://localhost:3000/assess";
 /**
  * Number of snippets per page of search results
  */
-export const SEARCH_RESULTS_SIZE = 3;
+export const SEARCH_RESULTS_SIZE = 20;
 
 /**
  * Number of items to rate

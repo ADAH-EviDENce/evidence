@@ -18,9 +18,10 @@ class Search extends React.Component<any, any> {
         super(props, context);
         this.state = {
             search: "",
-            page: 0,
+            page: 1,
             size: SEARCH_RESULTS_SIZE,
             snippets: null,
+            total: 0,
             loading: false
         };
     }
@@ -34,8 +35,8 @@ class Search extends React.Component<any, any> {
     }
 
     handleSearch = (query: string) => {
-        Resources.searchSnippets(query, this.state.page * this.state.size, this.state.size).then((json) => {
-            this.setState({snippets: json, loading: false});
+        Resources.searchSnippets(query, (this.state.page - 1) * this.state.size, this.state.size).then((json) => {
+            this.setState({snippets: json, total: json.hits.total, loading: false});
         }).catch((data) => {
             this.setState({loading: false, error: 'Could not fetch snippets with provided query.'});
         });
@@ -50,9 +51,11 @@ class Search extends React.Component<any, any> {
             <FontAwesome name='spinner' spin/>
             :
             <>
+                <p>{this.state.total} resultaten gevonden</p>
                 <SearchSnippetList snippets={this.state.snippets.hits.hits}/>
                 <SearchPagination
                     page={this.state.page}
+                    lastPage={Math.ceil(this.state.total/this.state.size)}
                     onPrevious={() => this.handlePageChange(-1)}
                     onNext={() => this.handlePageChange(+1)}
                 />
