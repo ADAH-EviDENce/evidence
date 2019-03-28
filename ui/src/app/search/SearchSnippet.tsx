@@ -3,6 +3,7 @@ import FontAwesome from "react-fontawesome";
 import {RouteComponentProps, withRouter} from "react-router";
 import './SearchSnippet.css';
 import {Link} from "react-router-dom";
+import ReadableId from "../common/ReadableId";
 
 type SearchSnippetProps = RouteComponentProps & {
     id: string,
@@ -30,8 +31,8 @@ export class DocumentSnippet extends React.Component<SearchSnippetProps, any> {
                     <FontAwesome name='chevron-right '/>
                 </Link>
 
-                <p className="small"><strong>{this.props.id}</strong></p>
-                <p className="small" dangerouslySetInnerHTML={{ __html: this.props.text }} />
+                <p className="small snippet-title"><strong><ReadableId id={this.props.id}/></strong></p>
+                <p className="small snippet-text" dangerouslySetInnerHTML={{ __html: this.props.text }} />
             </li>
         );
     }

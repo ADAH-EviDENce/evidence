@@ -3,6 +3,7 @@ import {Card, CardBody, CardFooter, CardHeader} from "reactstrap";
 import './MoreLikeThisSnippet.css';
 import FontAwesome from "react-fontawesome";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
+import ReadableId from "../common/ReadableId";
 
 interface MoreLikeThisSnippetProps {
     id: string,
@@ -33,7 +34,7 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
         return (
             <Card className="more-like-this-snippet">
                 <CardBody>
-                    <span className="small"><strong>Snippet: {this.props.id}</strong></span>
+                    <span className="small"><strong><ReadableId id={this.props.id}/></strong></span>
                     <p className="small snippet-text">{this.props.text}</p>
                 </CardBody>
                 <CardFooter>

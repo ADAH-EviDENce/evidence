@@ -9,6 +9,7 @@ import FontAwesome from "react-fontawesome";
 import './MoreLikeThis.css';
 import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
 import {MORE_LIKE_THIS_SIZE} from "../../config";
+import ReadableId from "../common/ReadableId";
 
 class MoreLikeThis extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -59,7 +60,7 @@ class MoreLikeThis extends React.Component<any, any> {
             <Page>
                 <div className="offset-2 col-8">
                     <div className="more-like-this">
-                        <h2>{documentId}</h2>
+                        <h2><ReadableId id={documentId} /></h2>
                         <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                         <DocumentSnippet
                                     id={snippetId}

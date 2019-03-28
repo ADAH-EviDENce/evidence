@@ -3,6 +3,7 @@ import FontAwesome from "react-fontawesome";
 import {RouteComponentProps, withRouter} from "react-router";
 import {Card, CardBody, CardHeader} from "reactstrap";
 import './DocumentSnippet.css';
+import ReadableId from "../common/ReadableId";
 
 type PropsType = RouteComponentProps & {
     id: string,
@@ -38,7 +39,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
                     <CardHeader>
                         {moreLikeThis}
                         <p className="small">
-                            <strong>Fragment: {this.props.id.replace(this.props.documentId, '[..]')}</strong></p>
+                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId} /></strong></p>
                     </CardHeader>
                     <CardBody>
                         <p className="small">{this.props.text}</p>

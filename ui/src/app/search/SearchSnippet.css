@@ -4,3 +4,7 @@
     background-color: #e6faff;
     padding: 2px;
 }
+
+.snippet-title {
+    word-break: break-all;
+}

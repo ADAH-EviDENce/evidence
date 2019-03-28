@@ -3,6 +3,7 @@ import Resources from "../Resources";
 import Page from "../common/Page";
 import ErrorBox from "../common/ErrorBox";
 import DocumentSnippetList from "./DocumentSnippetList";
+import ReadableId from "../common/ReadableId";
 
 class DocumentPage extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -47,7 +48,7 @@ class DocumentPage extends React.Component<any, any> {
             <Page>
                 <div className="offset-2 col-8">
                     <div className="document-page">
-                        <h2>{this.props.match.params.did}</h2>
+                        <h2><ReadableId id={this.props.match.params.did}/></h2>
                         <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                         {this.renderDocument()}
                     </div>

@@ -11,7 +11,6 @@ export class SearchSnippetList extends React.Component<SnippetListProps, any> {
         this.state = {};
     }
 
-
     render() {
         if (!this.props.snippets) {
             return null;
