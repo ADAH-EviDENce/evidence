@@ -5,12 +5,14 @@ import config from "../config";
 export type AppContextType = {
     search: string,
     moreLikeThisType: MoreLikeThisType,
+    moreLikeThisSize: number,
     updateContext(c: object): void
 };
 
 export const initAppContext = {
     search: "",
     moreLikeThisType: config.MORE_LIKE_THIS_TYPE,
+    moreLikeThisSize: config.MORE_LIKE_THIS_SIZE,
     updateContext: (c: object) => {throw new Error('updateContext() not implemented')}
 };
 

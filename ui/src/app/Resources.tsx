@@ -48,7 +48,7 @@ class Resources {
     public static getMoreLikeThisSnippetsFromES = (
         snippetId: string,
         from: number,
-        size: number = config.MORE_LIKE_THIS_SIZE
+        size: number
     ) => {
         const client = new elasticsearch.Client({
             host: config.ES_HOST + "/snippets",
@@ -79,7 +79,7 @@ class Resources {
     public static getMoreLikeThisSnippetsFromDoc2Vec = (
         snippetId: string,
         from: number,
-        size: number = config.MORE_LIKE_THIS_SIZE
+        size: number
     ) => {
         return fetch(`${config.DOC2VEC_HOST}/${snippetId}?from=${from}&size=${size}`);
     };

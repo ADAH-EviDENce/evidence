@@ -13,7 +13,7 @@ class Page extends React.Component<any, any> {
     render() {
         return (
             <Fragment>
-                <div className="container">
+                <div className="container page-container">
                     <div className="row page-header">
                         <div className="col-12">
                             <MainHeader/>

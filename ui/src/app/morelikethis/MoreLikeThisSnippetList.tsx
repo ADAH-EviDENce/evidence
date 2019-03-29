@@ -35,7 +35,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     };
 
     private fetchFromES() {
-        Resources.getMoreLikeThisSnippetsFromES(this.props.snippetId, this.props.from).then((json) => {
+        Resources.getMoreLikeThisSnippetsFromES(this.props.snippetId, this.props.from, this.context.moreLikeThisSize).then((json) => {
             this.setState({snippets: json});
         }).catch((data) => {
             this.setState({error: 'Could not fetch more like this snippets from elasticsearch.'});
@@ -43,7 +43,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     }
 
     private fetchFromDoc2Vec() {
-        Resources.getMoreLikeThisSnippetsFromDoc2Vec(this.props.snippetId, this.props.from).then((data) => {
+        Resources.getMoreLikeThisSnippetsFromDoc2Vec(this.props.snippetId, this.props.from, this.context.moreLikeThisSize).then((data) => {
             if (!data.ok) {
                 throw Error("Status " + data.status);
             }

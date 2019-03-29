@@ -1,3 +1,7 @@
 .page-header, .page-body {
     margin-top: 1em;
 }
+
+.page-container {
+    margin-bottom: 1em;
+}
