@@ -1,5 +1,6 @@
 import * as React from "react";
 import {MoreLikeThisType} from "./configuring/MoreLikeThisType";
+import config from "../config";
 
 export type AppContextType = {
     search: string,
@@ -7,11 +8,10 @@ export type AppContextType = {
     updateContext(c: object): void
 };
 
-export const AppContext = React.createContext<AppContextType>({
+export const initAppContext = {
     search: "",
-    moreLikeThisType: MoreLikeThisType.ES,
-    updateContext: (c) => {throw new Error('updateContext() not implemented')}
-});
+    moreLikeThisType: config.MORE_LIKE_THIS_TYPE,
+    updateContext: (c: object) => {throw new Error('updateContext() not implemented')}
+};
 
-export const AppContextProvider = AppContext.Provider;
-export const AppContextConsumer = AppContext.Consumer;
+export const AppContext = React.createContext<AppContextType>(initAppContext);

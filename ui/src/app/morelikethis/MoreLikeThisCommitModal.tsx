@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
-import {AppContext, AppContextConsumer} from "../AppContext";
+import {AppContext} from "../AppContext";
 import config from "../../config";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
@@ -31,7 +31,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     };
 
     render() {
-        if(!this.props.committed) {
+        if (!this.props.committed) {
             return null;
         }
 
@@ -41,9 +41,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                     <ModalHeader>Keuzemenu</ModalHeader>
                     <ModalBody>
                         Uw antwoorden zijn opgeslagen.
-                        <AppContextConsumer>{context =>
-                            <p className="d-none">{context.search}</p>
-                        }</AppContextConsumer>
+                        <p className="d-none">{this.context.search}</p>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
@@ -55,6 +53,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
         );
     }
 }
+
 MoreLikeThisCommitModal.contextType = AppContext;
 
 export default withRouter(MoreLikeThisCommitModal);

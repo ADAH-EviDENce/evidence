@@ -1,31 +1,26 @@
 import './App.css';
 import * as React from "react";
 import Routes from "./Routes";
-import {AppContextProvider} from "./AppContext";
-import config from "../config";
+import {AppContext, initAppContext} from "./AppContext";
 
 export default class App extends React.Component<any, any> {
 
-    readonly state = {
-        search: "",
-        moreLikeThisType: config.MORE_LIKE_THIS_TYPE
-    };
-
     updateContext = (c: object) => this.setState(c);
+
+    /**
+     * use copy of initAppContext but with an implementation of updateContext
+     */
+    readonly state = Object.assign({}, initAppContext, {updateContext: this.updateContext});
 
     render() {
         return (
-            <AppContextProvider
-                value={{
-                    search: this.state.search,
-                    moreLikeThisType: this.state.moreLikeThisType,
-                    updateContext: this.updateContext
-                }}
+            <AppContext.Provider
+                value={Object.assign({}, this.state)}
             >
                 <div className="app">
                     <Routes/>
                 </div>
-            </AppContextProvider>
+            </AppContext.Provider>
         );
     }
 }

@@ -14,7 +14,7 @@ class ConfigPage extends React.Component<any, any> {
             <Page>
                 <h2>Instellingen</h2>
                 <div className="alert alert-info" role="alert">
-                    Wijzingen aan de onderstaande instellingen worden alleen in de browser opgeslagen. Configureer opnieuw bij herladen van pagina.
+                    Wijzigingen aan de onderstaande instellingen worden alleen in de browser opgeslagen. Configureer opnieuw bij herladen van pagina.
                 </div>
                 <ul className="list-group">
                     <li className="list-group-item">
@@ -36,7 +36,6 @@ class ConfigPage extends React.Component<any, any> {
                         </div>
                         <span className="align-middle"><em>'More like this'</em>-methode:</span>
                     </li>
-
                 </ul>
             </Page>
         );

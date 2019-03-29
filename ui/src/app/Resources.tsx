@@ -76,7 +76,6 @@ class Resources {
         });
     };
 
-    // http://localhost:8080/doc2vec/$id?from=3&size=8
     public static getMoreLikeThisSnippetsFromDoc2Vec = (
         snippetId: string,
         from: number,
