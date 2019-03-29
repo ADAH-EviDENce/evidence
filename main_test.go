@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
@@ -27,7 +26,7 @@ func TestAssessments(t *testing.T) {
 	}
 	defer os.RemoveAll(tempdir)
 
-	db, err := sql.Open("sqlite3", filepath.Join(tempdir, "relevance.db"))
+	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
 		t.Fatal(err)
 	}
