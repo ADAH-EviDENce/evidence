@@ -21,7 +21,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     onQuery = () => {
         let sid = this.props.snippetId;
         let did = this.props.documentId;
-        let nextFrom = this.props.from + config.MORE_LIKE_THIS_SIZE;
+        let nextFrom = this.props.from + this.context.moreLikeThisSize;
         this.props.history.push(`/documents/${did}/snippets/${sid}/from/${nextFrom}/`);
     };
 

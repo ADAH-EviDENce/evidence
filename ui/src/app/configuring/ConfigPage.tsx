@@ -46,7 +46,7 @@ class ConfigPage extends React.Component<any, any> {
                                     className="form-control"
                                     id="more-like-this-size"
                                     value={this.context.moreLikeThisSize}
-                                    onChange={(e) => this.context.updateContext({moreLikeThisSize: e.target.value})}/>
+                                    onChange={(e) => this.context.updateContext({moreLikeThisSize: parseInt(e.target.value) || 0})}/>
                             </div>
                         </div>
                     </li>

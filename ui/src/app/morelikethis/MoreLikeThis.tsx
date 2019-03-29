@@ -9,6 +9,7 @@ import './MoreLikeThis.css';
 import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
 import config from "../../config";
 import ReadableId from "../common/ReadableId";
+import {AppContext} from "../AppContext";
 
 class MoreLikeThis extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -67,7 +68,7 @@ class MoreLikeThis extends React.Component<any, any> {
                         text={this.state.snippet ? this.state.snippet._source.text : null}
                         moreLikeThis={false}
                     />
-                    <h2>Te beoordelen (#{from + 1}-{from + config.MORE_LIKE_THIS_SIZE})</h2>
+                    <h2>Te beoordelen (#{from + 1}-{from + parseInt(this.context.moreLikeThisSize)})</h2>
                     <MoreLikeThisSnippetList
                         snippetId={snippetId}
                         from={from}
@@ -98,5 +99,6 @@ class MoreLikeThis extends React.Component<any, any> {
         );
     }
 }
+MoreLikeThis.contextType = AppContext;
 
 export default MoreLikeThis;
