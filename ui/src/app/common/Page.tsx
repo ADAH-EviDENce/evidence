@@ -20,7 +20,9 @@ class Page extends React.Component<any, any> {
                         </div>
                     </div>
                     <div className="rows page-body">
-                        {this.props.children}
+                        <div className="offset-2 col-8">
+                            {this.props.children}
+                        </div>
                     </div>
                 </div>
             </Fragment>

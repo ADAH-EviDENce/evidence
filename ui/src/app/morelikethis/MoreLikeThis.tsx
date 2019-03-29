@@ -58,43 +58,41 @@ class MoreLikeThis extends React.Component<any, any> {
 
         return (
             <Page>
-                <div className="offset-2 col-8">
-                    <div className="more-like-this">
-                        <h2><ReadableId id={documentId}/></h2>
-                        <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
-                        <DocumentSnippet
-                            id={snippetId}
-                            documentId={documentId}
-                            text={this.state.snippet ? this.state.snippet._source.text : null}
-                            moreLikeThis={false}
-                        />
-                        <h2>Te beoordelen (#{from + 1}-{from + config.MORE_LIKE_THIS_SIZE})</h2>
-                        <MoreLikeThisSnippetList
-                            snippetId={snippetId}
-                            from={from}
-                            onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
-                        />
-                        <div className="commit-answers">
-                            <button
-                                type="submit"
-                                className="btn btn-success float-right commit-btn"
-                                disabled={!this.state.canCommit && !this.state.committed}
-                                onClick={this.handleCommit}
-                            >
-                                Opslaan
-                                &nbsp;
-                                {this.state.committing ? <FontAwesome name='spinner' spin/> :
-                                    <FontAwesome name='chevron-right '/>}
-                            </button>
-                        </div>
-                        <MoreLikeThisCommitModal
-                            documentId={documentId}
-                            snippetId={snippetId}
-                            from={from}
-                            answers={this.state.answers}
-                            committed={this.state.committed}
-                        />
+                <div className="more-like-this">
+                    <h2><ReadableId id={documentId}/></h2>
+                    <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                    <DocumentSnippet
+                        id={snippetId}
+                        documentId={documentId}
+                        text={this.state.snippet ? this.state.snippet._source.text : null}
+                        moreLikeThis={false}
+                    />
+                    <h2>Te beoordelen (#{from + 1}-{from + config.MORE_LIKE_THIS_SIZE})</h2>
+                    <MoreLikeThisSnippetList
+                        snippetId={snippetId}
+                        from={from}
+                        onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
+                    />
+                    <div className="commit-answers">
+                        <button
+                            type="submit"
+                            className="btn btn-success float-right commit-btn"
+                            disabled={!this.state.canCommit && !this.state.committed}
+                            onClick={this.handleCommit}
+                        >
+                            Opslaan
+                            &nbsp;
+                            {this.state.committing ? <FontAwesome name='spinner' spin/> :
+                                <FontAwesome name='chevron-right '/>}
+                        </button>
                     </div>
+                    <MoreLikeThisCommitModal
+                        documentId={documentId}
+                        snippetId={snippetId}
+                        from={from}
+                        answers={this.state.answers}
+                        committed={this.state.committed}
+                    />
                 </div>
             </Page>
         );

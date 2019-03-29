@@ -3,7 +3,8 @@ import Resources from "../Resources";
 import ErrorBox from "../common/ErrorBox";
 import MoreLikeThisSnippet from "./MoreLikeThisSnippet";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
-import config from "../../config";
+import {AppContext} from "../AppContext";
+import {MoreLikeThisType} from "../configuring/MoreLikeThisType";
 
 interface MoreLikeThisSnippetListProps {
     snippetId: string,
@@ -26,9 +27,9 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             return;
         }
 
-        if (config.MORE_LIKE_THIS_TYPE === 'es') {
+        if (this.context.moreLikeThisType === MoreLikeThisType.ES) {
             this.fetchFromES();
-        } else if (config.MORE_LIKE_THIS_TYPE === 'doc2vec') {
+        } else if (this.context.moreLikeThisType === MoreLikeThisType.DOC2VEC) {
             this.fetchFromDoc2Vec();
         }
     };
@@ -108,5 +109,6 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         );
     }
 }
+MoreLikeThisSnippetList.contextType = AppContext;
 
 export default MoreLikeThisSnippetList;

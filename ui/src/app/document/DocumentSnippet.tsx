@@ -4,6 +4,7 @@ import {RouteComponentProps, withRouter} from "react-router";
 import {Card, CardBody, CardHeader} from "reactstrap";
 import './DocumentSnippet.css';
 import ReadableId from "../common/ReadableId";
+import {AppContext} from "../AppContext";
 
 type PropsType = RouteComponentProps & {
     id: string,
@@ -26,7 +27,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
         let moreLikeThis = this.props.moreLikeThis
             ?
             <button className="btn btn-primary btn-sm float-right" onClick={this.handleMoreLikeThis}>
-                <span>More like this</span>
+                <span>More like this ({this.context.moreLikeThisType})</span>
                 &nbsp;
                 <FontAwesome name='chevron-right '/>
             </button>
@@ -49,5 +50,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
         );
     }
 }
+DocumentSnippet.contextType = AppContext;
+
 
 export default withRouter(DocumentSnippet);

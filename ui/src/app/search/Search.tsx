@@ -37,7 +37,7 @@ class Search extends React.Component<any, any> {
     componentWillReceiveProps(nextProps: any) {
         const newSearch = nextProps.match.params.search;
         if (newSearch !== this.state.search) {
-            if(newSearch) {
+            if (newSearch) {
                 this.setState({search: newSearch, page: 1, loading: true}, () => {
                     this.handleSearch(newSearch);
                 });
@@ -60,7 +60,7 @@ class Search extends React.Component<any, any> {
         if (!this.state.snippets && !this.state.loading) {
             return null;
         }
-        const lastPage = Math.ceil(this.state.total/this.state.size);
+        const lastPage = Math.ceil(this.state.total / this.state.size);
         return this.state.loading
             ?
             <FontAwesome name='spinner' spin/>
@@ -87,17 +87,16 @@ class Search extends React.Component<any, any> {
     render() {
         return (
             <Page>
-                <div className="offset-2 col-8">
-                    <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
-                    <span>
-                        <SearchBar defaultSearch={this.state.search}/>
-                        {this.renderSnippetList()}
-                    </span>
-                </div>
+                <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                <span>
+                    <SearchBar defaultSearch={this.state.search}/>
+                    {this.renderSnippetList()}
+                </span>
             </Page>
         );
     }
 }
+
 Search.contextType = AppContext;
 
 export default withRouter(Search);
