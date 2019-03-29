@@ -3,6 +3,7 @@ import Resources from "../Resources";
 import ErrorBox from "../common/ErrorBox";
 import MoreLikeThisSnippet from "./MoreLikeThisSnippet";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
+import config from "../../config";
 
 interface MoreLikeThisSnippetListProps {
     snippetId: string,
@@ -25,12 +26,33 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             return;
         }
 
-        Resources.getMoreLikeThisSnippets(this.props.snippetId, this.props.from).then((json) => {
+        if (config.MORE_LIKE_THIS_TYPE === 'es') {
+            this.fetchFromES();
+        } else if (config.MORE_LIKE_THIS_TYPE === 'doc2vec') {
+            this.fetchFromDoc2Vec();
+        }
+    };
+
+    private fetchFromES() {
+        Resources.getMoreLikeThisSnippetsFromES(this.props.snippetId, this.props.from).then((json) => {
             this.setState({snippets: json});
         }).catch((data) => {
-            this.setState({error: 'Could not fetch more like this snippets.'});
+            this.setState({error: 'Could not fetch more like this snippets from elasticsearch.'});
         });
-    };
+    }
+
+    private fetchFromDoc2Vec() {
+        Resources.getMoreLikeThisSnippetsFromDoc2Vec(this.props.snippetId, this.props.from).then((data) => {
+            if (!data.ok) {
+                throw Error("Status " + data.status);
+            }
+            data.json().then((json) => {
+                this.setState({snippets: json, loading: false});
+            });
+        }).catch((data) => {
+            this.setState({loading: false, error: 'Could not fetch more like this snippets from doc2vec.'});
+        });
+    }
 
     handleSelect = (id: string, relevant: MoreLikeThisOption) => {
         const answers = this.state.answers;
@@ -38,7 +60,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         this.addOrEditChoice(answers, id, relevant);
 
         this.setState(answers, () => {
-            if(this.state.answers.length === this.state.snippets.hits.hits.length) {
+            if (this.state.answers.length === this.state.snippets.hits.hits.length) {
                 this.props.onAllSnippetsHaveAnswers(this.state.answers);
             }
         });
@@ -55,7 +77,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
 
     private findRelevantById(id: number) {
         let answer = this.state.answers.find((a: any) => a.id === id);
-        if(answer) {
+        if (answer) {
             return answer.relevant;
         }
     }

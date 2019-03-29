@@ -4,9 +4,6 @@ import config from "../config";
 
 class Resources {
 
-    // doc2vec:
-    // <host>/doc2vec/{id}?from={from}&size={size}
-
     public static getSnippetsByDocumentId = (documentId: string) => {
         return fetch(config.ES_HOST + "/documents/document/" + documentId);
     };
@@ -40,7 +37,7 @@ class Resources {
         });
     };
 
-    public static getSnippetsById = (docs: Array<any>) => {
+    public static getSnippetsByIds = (docs: Array<any>) => {
         const client = new elasticsearch.Client({
             host: config.ES_HOST + "/snippets/snippet",
             log: 'error'
@@ -48,7 +45,7 @@ class Resources {
         return client.mget({body: {docs: docs}});
     };
 
-    public static getMoreLikeThisSnippets = (
+    public static getMoreLikeThisSnippetsFromES = (
         snippetId: string,
         from: number,
         size: number = config.MORE_LIKE_THIS_SIZE
@@ -77,6 +74,15 @@ class Resources {
                 }
             }
         });
+    };
+
+    // http://localhost:8080/doc2vec/$id?from=3&size=8
+    public static getMoreLikeThisSnippetsFromDoc2Vec = (
+        snippetId: string,
+        from: number,
+        size: number = config.MORE_LIKE_THIS_SIZE
+    ) => {
+        return fetch(`${config.DOC2VEC_HOST}/${snippetId}?from=${from}&size=${size}`);
     };
 
     public static commitAnswers = (answers: Array<any>) => {

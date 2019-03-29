@@ -23,7 +23,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
             return;
         }
 
-        Resources.getSnippetsById(this.props.snippetIds).then((json) => {
+        Resources.getSnippetsByIds(this.props.snippetIds).then((json) => {
             this.setState({snippets: json});
         }).catch((data) => {
             this.setState({error: 'Could not fetch snippets with provided query.'});

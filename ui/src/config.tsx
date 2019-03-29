@@ -15,9 +15,13 @@ const config = process.env.REACT_APP_STAGE === 'prod'
     : dev;
 
 export default {
+
     // Common config values:
+    MORE_LIKE_THIS_TYPE: 'es', // es | doc2vec
     BASENAME: '/ui',
     ES_HOST: config.HOST + '/es',
+    DOC2VEC_HOST: config.HOST + '/doc2vec',
     ASSESS_HOST: config.HOST + '/assess',
+
     ...config
 };

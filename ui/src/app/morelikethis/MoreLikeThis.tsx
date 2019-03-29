@@ -2,7 +2,6 @@ import * as React from "react";
 import Page from "../common/Page";
 import ErrorBox from "../common/ErrorBox";
 import Resources from "../Resources";
-import {Card, CardHeader, ModalBody} from "reactstrap";
 import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 import FontAwesome from "react-fontawesome";
@@ -25,12 +24,13 @@ class MoreLikeThis extends React.Component<any, any> {
     }
 
     fetchSnippets = () => {
-        if(this.state.snippet || this.state.error) {
+        if (this.state.snippet || this.state.error) {
             return;
         }
-        Resources.getSnippetsById([{_id: this.props.match.params.sid}]).then((json) => {
+
+        Resources.getSnippetsByIds([{_id: this.props.match.params.sid}]).then((json) => {
             let docs = json.docs;
-            this.setState({snippet: docs ?  docs[0] : null});
+            this.setState({snippet: docs ? docs[0] : null});
         }).catch((data) => {
             this.setState({error: 'Could not fetch snippet by id.'});
         });
@@ -60,14 +60,14 @@ class MoreLikeThis extends React.Component<any, any> {
             <Page>
                 <div className="offset-2 col-8">
                     <div className="more-like-this">
-                        <h2><ReadableId id={documentId} /></h2>
+                        <h2><ReadableId id={documentId}/></h2>
                         <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
                         <DocumentSnippet
-                                    id={snippetId}
-                                    documentId={documentId}
-                                    text={this.state.snippet ? this.state.snippet._source.text : null}
-                                    moreLikeThis={false}
-                            />
+                            id={snippetId}
+                            documentId={documentId}
+                            text={this.state.snippet ? this.state.snippet._source.text : null}
+                            moreLikeThis={false}
+                        />
                         <h2>Te beoordelen (#{from + 1}-{from + config.MORE_LIKE_THIS_SIZE})</h2>
                         <MoreLikeThisSnippetList
                             snippetId={snippetId}
@@ -83,7 +83,8 @@ class MoreLikeThis extends React.Component<any, any> {
                             >
                                 Opslaan
                                 &nbsp;
-                                {this.state.committing ? <FontAwesome name='spinner' spin/> : <FontAwesome name='chevron-right '/>}
+                                {this.state.committing ? <FontAwesome name='spinner' spin/> :
+                                    <FontAwesome name='chevron-right '/>}
                             </button>
                         </div>
                         <MoreLikeThisCommitModal
