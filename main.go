@@ -251,7 +251,7 @@ func (s *server) doc2vecNearest(w http.ResponseWriter, r *http.Request, ps httpr
 
 	json.NewEncoder(w).Encode(map[string]map[string]interface{}{
 		"hits": map[string]interface{}{
-			"hits": resp,
+			"hits": resp.Docs,
 		},
 	})
 }
