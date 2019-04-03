@@ -151,8 +151,8 @@ func TestUI(t *testing.T) {
 	}
 	defer os.RemoveAll(tempdir)
 
-	staticDir := filepath.Join(tempdir, "static")
-	err = os.Mkdir(staticDir, 0755)
+	uiDir := filepath.Join(tempdir, "ui")
+	err = os.MkdirAll(filepath.Join(uiDir, "static"), 0755)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -160,9 +160,10 @@ func TestUI(t *testing.T) {
 	hello := "<html>Hello, world!</html>"
 	for _, f := range []struct{ name, content string }{
 		{"index.html", hello},
+		{"static/empty", ""},
 		{"../forbidden", "I should not be seen"},
 	} {
-		err = ioutil.WriteFile(filepath.Join(staticDir, f.name),
+		err = ioutil.WriteFile(filepath.Join(uiDir, f.name),
 			[]byte(f.content), 0644)
 		if err != nil {
 			t.Fatal(err)
@@ -171,9 +172,9 @@ func TestUI(t *testing.T) {
 
 	r := httprouter.New()
 	s := newServer(nil, "", "", r)
-	s.staticDir = staticDir
+	s.uiDir = uiDir
 
-	req := httptest.NewRequest("GET", "/ui/index.html", nil)
+	req := httptest.NewRequest("GET", "/ui/", nil)
 	w := httptest.NewRecorder()
 	w.Body = new(bytes.Buffer)
 	r.ServeHTTP(w, req)
@@ -182,15 +183,30 @@ func TestUI(t *testing.T) {
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.Equal(t, hello, w.Body.String())
 
-	// A file outside static/ should not be read, even if it exists.
+	req = httptest.NewRequest("GET", "/ui/static/empty", nil)
+	w = httptest.NewRecorder()
+	w.Body = new(bytes.Buffer)
+	r.ServeHTTP(w, req)
+	resp = w.Result()
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, "", w.Body.String())
+
+	req = httptest.NewRequest("GET", "/ui/static/nonexistent", nil)
+	w = httptest.NewRecorder()
+	w.Body = new(bytes.Buffer)
+	r.ServeHTTP(w, req)
+	resp = w.Result()
+
+	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
+
+	// A file outside ui/ should not be read, even if it exists.
 	// We should get index.html instead.
 	req = httptest.NewRequest("GET", "/ui/../forbidden", nil)
 	w = httptest.NewRecorder()
 	w.Body = new(bytes.Buffer)
 	r.ServeHTTP(w, req)
 	resp = w.Result()
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
-	assert.Equal(t, hello, w.Body.String())
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 }

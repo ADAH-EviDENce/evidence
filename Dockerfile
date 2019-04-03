@@ -36,7 +36,7 @@ RUN sqlite3 /db/relevance.db < schema.sql
 VOLUME /db
 
 COPY --from=buildserver /go/bin/evidence-gui .
-COPY --from=buildui /evidence/build ./static
+COPY --from=buildui /evidence/build ./ui
 
 EXPOSE 8080
 
