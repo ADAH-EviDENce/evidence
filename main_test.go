@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strings"
 	"testing"
 
@@ -19,12 +18,6 @@ import (
 func TestAssessments(t *testing.T) {
 	es := mockElastic()
 	defer es.Close()
-
-	tempdir, err := ioutil.TempDir("", "evidence-gui-test")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(tempdir)
 
 	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
