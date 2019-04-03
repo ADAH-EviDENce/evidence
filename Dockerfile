@@ -38,4 +38,4 @@ RUN sqlite3 empty.db < schema.sql
 
 EXPOSE 8080
 
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["./evidence-gui"]
