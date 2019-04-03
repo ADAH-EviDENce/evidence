@@ -6,15 +6,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: ["./evidence-gui",
-                 "-db", "/db/relevance.db",
-                 "-doc2vec", "/data/doc2vec.csv",
-                 "-elastic", "http://elasticsearch:9200"]
     ports:
       - "8080:8080"
     volumes:
       - ./data:/data:ro
-      - db-volume:/db
+      - ./db:/db
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
@@ -34,7 +30,3 @@ services:
       "--", "/utils/index.py", "elasticsearch"]
     volumes:
       - ./data:/data:ro
-
-volumes:
-  data:
-  db-volume:

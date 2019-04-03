@@ -29,15 +29,13 @@ FROM debian:buster
 RUN apt-get -y update && apt-get -y install sqlite3
 
 WORKDIR /evidence
+COPY --from=buildserver /go/bin/evidence-gui ./
+COPY --from=buildui /evidence/build ./ui
+COPY start.sh .
 
 COPY schema.sql .
-RUN mkdir /db
-RUN sqlite3 /db/relevance.db < schema.sql
-VOLUME /db
-
-COPY --from=buildserver /go/bin/evidence-gui .
-COPY --from=buildui /evidence/build ./ui
+RUN sqlite3 empty.db < schema.sql
 
 EXPOSE 8080
 
-ENTRYPOINT ["./evidence-gui"]
+ENTRYPOINT ["./start.sh"]
