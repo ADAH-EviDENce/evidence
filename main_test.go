@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -8,6 +9,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -139,4 +142,55 @@ func mget(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 
 	io.WriteString(w, "]}")
+}
+
+func TestUI(t *testing.T) {
+	tempdir, err := ioutil.TempDir("", "evidence-test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tempdir)
+
+	staticDir := filepath.Join(tempdir, "static")
+	err = os.Mkdir(staticDir, 0755)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	hello := "<html>Hello, world!</html>"
+	for _, f := range []struct{ name, content string }{
+		{"index.html", hello},
+		{"../forbidden", "I should not be seen"},
+	} {
+		err = ioutil.WriteFile(filepath.Join(staticDir, f.name),
+			[]byte(f.content), 0644)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	r := httprouter.New()
+	s := newServer(nil, "", "", r)
+	s.staticDir = staticDir
+
+	req := httptest.NewRequest("GET", "/ui/index.html", nil)
+	w := httptest.NewRecorder()
+	w.Body = new(bytes.Buffer)
+	r.ServeHTTP(w, req)
+	resp := w.Result()
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, hello, w.Body.String())
+
+	// A file outside static/ should not be read, even if it exists.
+	// We should get index.html instead.
+	req = httptest.NewRequest("GET", "/ui/../forbidden", nil)
+	w = httptest.NewRecorder()
+	w.Body = new(bytes.Buffer)
+	r.ServeHTTP(w, req)
+	resp = w.Result()
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, hello, w.Body.String())
 }

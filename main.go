@@ -11,8 +11,11 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/knaw-huc/evidence-gui/internal/doc2vec"
@@ -40,9 +43,6 @@ func main() {
 	r := httprouter.New()
 	newServer(db, *doc2vecFile, *elasticEndpoint, r)
 
-	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
-	r.ServeFiles("/ui/*filepath", http.Dir("static"))
-
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
@@ -52,6 +52,7 @@ type server struct {
 	d2vIndex        *doc2vec.Index
 	elasticEndpoint string
 	elasticProxy    *httputil.ReverseProxy
+	staticDir       string // Directory containing static files. Defaults to "static".
 
 	// Prepared statements.
 	insertAssessment, selectRelevant *sql.Stmt
@@ -86,6 +87,8 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 		}
 	}
 
+	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
+
 	r.POST("/assess", s.add)
 	r.GET("/assess", s.get)
 
@@ -96,7 +99,42 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.GET("/es/*path", s.elasticsearch)
 	r.POST("/es/*path", s.elasticsearch)
 
+	r.GET("/ui/*path", s.ui)
+
 	return s
+}
+
+// Serve UI components. Any path that does not resolve to a file inside s.staticDir
+// serves index.html instead, so the React router can take care of it.
+//
+// Roughly equivalent to the .htaccess rules
+//
+//	RewriteCond %{REQUEST_FILENAME} !-f
+//	RewriteRule ^ index.html [QSA,L]
+func (s *server) ui(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	path := httprouter.CleanPath(ps.ByName("path"))
+	if path == "/" {
+		path = "index.html"
+	}
+
+	staticDir := s.staticDir
+	if staticDir == "" {
+		staticDir = "static"
+	}
+
+	f, err := os.Open(filepath.Join(staticDir, path))
+	if os.IsNotExist(err) {
+		f, err = os.Open(filepath.Join(staticDir, "index.html"))
+	}
+	if err != nil {
+		http.Error(w, "internal error", http.StatusInternalServerError)
+		log.Print(err)
+		return
+	}
+	defer f.Close()
+
+	http.ServeContent(w, r, path, time.Time{}, f)
+	return
 }
 
 type assessment struct {
