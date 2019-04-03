@@ -1,6 +1,6 @@
 # Evidence
 
-## Deploy locally
+## Local setup
 
 Create single data directory for all models / input data
 
@@ -16,9 +16,9 @@ Obtain `doc2vec.csv`, then store in data directory
 
 ## Run
 
-After local deploy (as per above)
+After local deploy (requires ./data setup as per "Local setup" instructions)
 
-    DATA=./data docker-compose up --build
+    docker-compose up --build
 
 ## Elastic search example queries
 List of snippets:

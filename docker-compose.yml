@@ -13,7 +13,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "$DATA:/data:ro"
+      - ./data:/data:ro
       - db-volume:/db
 
   elasticsearch:
@@ -33,7 +33,8 @@ services:
       "--timeout=0",
       "--", "/utils/index.py", "elasticsearch"]
     volumes:
-      - "$DATA:/data:ro"
+      - ./data:/data:ro
 
 volumes:
+  data:
   db-volume:
