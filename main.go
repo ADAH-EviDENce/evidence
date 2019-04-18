@@ -80,7 +80,7 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	// db may be nil in tests.
 	if db != nil {
 		var err error
-		s.insertAssessment, err = db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
+		s.insertAssessment, err = db.Prepare(`INSERT INTO assessments (id, relevant) VALUES (?, ?)`)
 		if err != nil {
 			panic(err)
 		}
