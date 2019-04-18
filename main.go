@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"encoding/csv"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -93,6 +94,7 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
 
 	r.POST("/assess", s.add)
+	r.GET("/export", s.export)
 	r.GET("/assess", s.get)
 
 	r.GET("/doc2vec/:id", s.doc2vecNearest)
@@ -158,18 +160,14 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	}
 
 	tx, err := s.db.Begin()
-	defer func() {
-		if err != nil {
-			http.Error(w, "database error", http.StatusInternalServerError)
-			log.Printf("%v; rolling back", err)
-			if tx != nil {
-				tx.Rollback()
-			}
-		}
-	}()
 	if err != nil {
 		return
 	}
+	defer func() {
+		if err != nil {
+			rollback(w, tx, err)
+		}
+	}()
 
 	insert := tx.Stmt(s.insertAssessment)
 
@@ -195,6 +193,48 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	if err != nil {
 		return
 	}
+}
+
+// Exports the entire assessments table in CSV format.
+func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			rollback(w, tx, err)
+		}
+	}()
+
+	rows, err := tx.Query("SELECT * FROM assessments")
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	cw := csv.NewWriter(w)
+	w.Header().Set("Content-Type", "text/csv")
+
+	for rows.Next() {
+		var (
+			id       string
+			relevant sql.NullBool
+		)
+		rows.Scan(&id, &relevant)
+
+		row := [2]string{id, stringOfBool(relevant)}
+		// No error checking here. What can go wrong is a connection error,
+		// which we can't report to the client.
+		cw.Write(row[:])
+	}
+	cw.Flush()
+
+	if err = rows.Err(); err != nil {
+		return
+	}
+
+	tx.Commit()
 }
 
 // Reads identifiers (JSON list of strings) from body, writes assessments for
@@ -225,14 +265,7 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 			return
 		}
 
-		var rel string
-		switch {
-		case relevant.Bool:
-			rel = "yes"
-		case relevant.Valid && !relevant.Bool:
-			rel = "no"
-		}
-		result = append(result, assessment{Id: id, Relevant: rel})
+		result = append(result, assessment{Id: id, Relevant: stringOfBool(relevant)})
 	}
 
 	json.NewEncoder(w).Encode(result)
@@ -355,4 +388,22 @@ func (s *server) mgetSnippets(ctx context.Context, w http.ResponseWriter, ids []
 	}
 
 	return resp, err
+}
+
+func rollback(w http.ResponseWriter, tx *sql.Tx, err error) {
+	// We always report "database error", regardless of the actual error.
+	http.Error(w, "database error", http.StatusInternalServerError)
+	log.Printf("%v; rolling back", err)
+	tx.Rollback()
+}
+
+func stringOfBool(b sql.NullBool) string {
+	switch {
+	case !b.Valid:
+		return ""
+	case b.Bool:
+		return "yes"
+	default:
+		return "no"
+	}
 }
