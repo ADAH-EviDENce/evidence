@@ -22,18 +22,12 @@ func TestAssessments(t *testing.T) {
 	es := mockElastic()
 	defer es.Close()
 
-	db, err := sql.Open("sqlite3", ":memory:")
-	if err != nil {
-		t.Fatal(err)
-	}
+	db := newDatabase(t)
 	defer db.Close()
 
-	schema, err := ioutil.ReadFile("schema.sql")
-	if err == nil {
-		_, err = db.Exec(string(schema))
-	}
+	_, err := db.Exec(`INSERT INTO users (username) VALUES ('test')`)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("SQL: %v", err)
 	}
 
 	r := httprouter.New()
@@ -58,6 +52,7 @@ func TestAssessments(t *testing.T) {
 			{"id": "bar", "relevant": "no"},
 			{"id": "baz", "relevant": ""}
 		]`))
+	req.Header.Set("Authorization", "Username test")
 
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -84,7 +79,7 @@ func TestAssessments(t *testing.T) {
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
-	assert.Equal(t, "foo,yes\nbar,no\nbaz,\n", w.Body.String())
+	assert.Equal(t, "foo,yes,test\nbar,no,test\nbaz,,test\n", w.Body.String())
 }
 
 func TestESProxy(t *testing.T) {
@@ -215,4 +210,21 @@ func TestUI(t *testing.T) {
 	resp = w.Result()
 
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+}
+
+func newDatabase(t *testing.T) *sql.DB {
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	schema, err := ioutil.ReadFile("schema.sql")
+	if err == nil {
+		_, err = db.Exec(string(schema))
+	}
+	if err != nil {
+		t.Fatalf("SQL: %v", err)
+	}
+
+	return db
 }
