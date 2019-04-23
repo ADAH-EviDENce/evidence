@@ -53,9 +53,6 @@ type server struct {
 	elasticEndpoint string
 	elasticProxy    *httputil.ReverseProxy
 	uiDir           string // Directory containing ui files. Defaults to "ui".
-
-	// Prepared statements.
-	insertAssessment, selectRelevant *sql.Stmt
 }
 
 func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httprouter.Router) *server {
@@ -78,23 +75,9 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 		}
 	}
 
-	// db may be nil in tests.
-	if db != nil {
-		var err error
-		s.insertAssessment, err = db.Prepare(`INSERT INTO assessments VALUES (?, ?)`)
-		if err != nil {
-			panic(err)
-		}
-		s.selectRelevant, err = db.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
-		if err != nil {
-			panic(err)
-		}
-	}
-
 	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
 
 	r.POST("/assess", s.add)
-	r.GET("/export", s.export)
 	r.GET("/assess", s.get)
 
 	r.GET("/doc2vec/:id", s.doc2vecNearest)
@@ -104,7 +87,12 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.GET("/es/*path", s.elasticsearch)
 	r.POST("/es/*path", s.elasticsearch)
 
+	r.GET("/export", s.export)
+
 	r.GET("/ui/*path", s.ui)
+
+	r.GET("/users", s.listUsers)
+	r.POST("/users", s.addUser)
 
 	return s
 }
@@ -132,11 +120,17 @@ type assessment struct {
 }
 
 func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	username, err := getUsername(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	var assessments []assessment
 
 	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields()
-	err := dec.Decode(&assessments)
+	err = dec.Decode(&assessments)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -169,7 +163,17 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		}
 	}()
 
-	insert := tx.Stmt(s.insertAssessment)
+	var userid int
+	row := tx.QueryRow(`SELECT userid FROM users WHERE username = ?`, username)
+	if err = row.Scan(&userid); err != nil {
+		return
+	}
+
+	insert, err := tx.Prepare(
+		`INSERT INTO assessments (id, relevant, userid) VALUES (?, ?, ?)`)
+	if err != nil {
+		return
+	}
 
 	for _, a := range assessments {
 		relevant := sql.NullBool{Bool: false, Valid: false}
@@ -183,7 +187,7 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		case "":
 		}
 
-		_, err = insert.Exec(a.Id, relevant)
+		_, err = insert.Exec(a.Id, relevant, userid)
 		if err != nil {
 			return
 		}
@@ -207,7 +211,8 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		}
 	}()
 
-	rows, err := tx.Query("SELECT * FROM assessments")
+	rows, err := tx.Query(`SELECT id, relevant, username
+		FROM assessments a JOIN users ON a.userid`)
 	if err != nil {
 		return
 	}
@@ -220,10 +225,11 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		var (
 			id       string
 			relevant sql.NullBool
+			username string
 		)
-		rows.Scan(&id, &relevant)
+		rows.Scan(&id, &relevant, &username)
 
-		row := [2]string{id, stringOfBool(relevant)}
+		row := [3]string{id, stringOfBool(relevant), username}
 		// No error checking here. What can go wrong is a connection error,
 		// which we can't report to the client.
 		cw.Write(row[:])
@@ -251,12 +257,30 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		return
 	}
 
+	tx, err := s.db.Begin()
+	if err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+
+	defer func() {
+		if err != nil {
+			rollback(w, tx, err)
+		}
+	}()
+
+	selectRelevant, err := tx.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
+	if err != nil {
+		return
+	}
+
 	result := make([]assessment, 0)
 	for _, id := range ids {
 		var relevant sql.NullBool
-		err = s.selectRelevant.QueryRow(id).Scan(&relevant)
+		err = selectRelevant.QueryRow(id).Scan(&relevant)
 		if err == sql.ErrNoRows {
 			// For id not in database, we skip it in the output.
+			err = nil
 			continue
 		}
 		if err != nil {
@@ -267,6 +291,8 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 
 		result = append(result, assessment{Id: id, Relevant: stringOfBool(relevant)})
 	}
+
+	tx.Commit()
 
 	json.NewEncoder(w).Encode(result)
 }
