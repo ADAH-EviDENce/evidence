@@ -87,6 +87,8 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 
 	r.GET("/export", s.export)
 
+	r.GET("/purge", s.purge)
+
 	r.GET("/ui/*path", s.ui)
 
 	r.GET("/users", s.listUsers)

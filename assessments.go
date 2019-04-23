@@ -196,6 +196,15 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	json.NewEncoder(w).Encode(result)
 }
 
+func (s *server) purge(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	log.Print("purge")
+	_, err := s.db.Exec(`DELETE FROM assessments`)
+	if err != nil {
+		http.Error(w, "database error", http.StatusInternalServerError)
+		log.Print(err)
+	}
+}
+
 func stringOfBool(b sql.NullBool) string {
 	switch {
 	case !b.Valid:

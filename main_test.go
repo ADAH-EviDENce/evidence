@@ -80,6 +80,11 @@ func TestAssessments(t *testing.T) {
 	r.ServeHTTP(w, req)
 	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
 	assert.Equal(t, "foo,yes,test\nbar,no,test\nbaz,,test\n", w.Body.String())
+
+	req = httptest.NewRequest("GET", "/purge", nil)
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Result().StatusCode)
 }
 
 func TestESProxy(t *testing.T) {
