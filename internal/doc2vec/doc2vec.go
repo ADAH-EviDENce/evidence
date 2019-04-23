@@ -90,23 +90,16 @@ loop:
 }
 
 // Performs a nearest-neighbors query for the document with id qid.
-// The results offset through offset+size are returned.
-func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int, exclude []string) ([]string, error) {
+// The results at offset through offset+size are returned.
+func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int, exclude map[string]struct{}) ([]string, error) {
 	doc, ok := idx.docs[qid]
 	if !ok {
 		return nil, fmt.Errorf("no document with id %q", qid)
 	}
 
-	var pred vp.Predicate
-	if len(exclude) > 0 {
-		excludeSet := make(map[string]struct{})
-		for _, id := range exclude {
-			excludeSet[id] = struct{}{}
-		}
-		pred = func(x interface{}) bool {
-			_, ok := excludeSet[x.(*Document).id]
-			return !ok
-		}
+	pred := func(x interface{}) bool {
+		_, ok := exclude[x.(*Document).id]
+		return !ok
 	}
 
 	// Request one more neighbor to filter out qid itself.

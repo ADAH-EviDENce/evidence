@@ -78,7 +78,7 @@ func (s *searcher) search(n *node) {
 		} else if d < s.result[0].Dist {
 			s.result[0] = Result{Point: n.center, Dist: d}
 			heap.Fix(&s.result, 0)
-			s.radius = d
+			s.radius = s.result[0].Dist
 		}
 	}
 
