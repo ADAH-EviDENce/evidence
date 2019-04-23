@@ -79,6 +79,12 @@ func TestAssessments(t *testing.T) {
 		{"baz", ""},
 		// no value for quux
 	}, assess)
+
+	req = httptest.NewRequest("GET", "/export", nil)
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
+	assert.Equal(t, "foo,yes\nbar,no\nbaz,\n", w.Body.String())
 }
 
 func TestESProxy(t *testing.T) {
