@@ -72,6 +72,7 @@ func TestAssessments(t *testing.T) {
 	}, assess)
 
 	req = httptest.NewRequest("GET", "/purge", nil)
+	req.Header.Set("Authorization", "Username test")
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Result().StatusCode)
