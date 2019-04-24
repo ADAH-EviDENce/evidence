@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/stretchr/testify/assert"
@@ -22,13 +23,8 @@ func TestAssessments(t *testing.T) {
 	es := mockElastic()
 	defer es.Close()
 
-	db := newDatabase(t)
+	db := newDatabase(t, "test")
 	defer db.Close()
-
-	_, err := db.Exec(`INSERT INTO users (username) VALUES ('test')`)
-	if err != nil {
-		t.Fatalf("SQL: %v", err)
-	}
 
 	r := httprouter.New()
 	newServer(db, "", es.URL, r)
@@ -74,12 +70,6 @@ func TestAssessments(t *testing.T) {
 		{"baz", ""},
 		// no value for quux
 	}, assess)
-
-	req = httptest.NewRequest("GET", "/export", nil)
-	w = httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
-	assert.Equal(t, "foo,yes,test\nbar,no,test\nbaz,,test\n", w.Body.String())
 
 	req = httptest.NewRequest("GET", "/purge", nil)
 	w = httptest.NewRecorder()
@@ -150,6 +140,42 @@ func mget(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	io.WriteString(w, "]}")
 }
 
+func TestExport(t *testing.T) {
+	db := newDatabase(t, "test")
+	defer db.Close()
+
+	r := httprouter.New()
+	s := newServer(db, "", "", r)
+
+	ts := "Mon Jan 2 15:04:05 -0700 MST 2006"
+
+	assess := []assessment{
+		{"foo", "yes"},
+		{"bar", "no"},
+		{"baz", ""},
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		t.Fatal(err)
+	}
+	timestamp, _ := time.Parse(ts, ts)
+	s.addAssessments(tx, assess, timestamp, 1)
+	tx.Commit()
+
+	req := httptest.NewRequest("GET", "/export", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
+
+	expect := fmt.Sprintf("foo,yes,test,%s\nbar,no,test,%s\nbaz,,test,%s\n", ts, ts, ts)
+	expect = `foo,yes,test,2006-01-02T15:04:05-07:00
+bar,no,test,2006-01-02T15:04:05-07:00
+baz,,test,2006-01-02T15:04:05-07:00
+`
+	assert.Equal(t, expect, w.Body.String())
+}
+
 func TestUI(t *testing.T) {
 	tempdir, err := ioutil.TempDir("", "evidence-test")
 	if err != nil {
@@ -217,7 +243,8 @@ func TestUI(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 }
 
-func newDatabase(t *testing.T) *sql.DB {
+// NewDatabase creates a new in-memory SQLite database with the given users.
+func newDatabase(t *testing.T, users ...string) *sql.DB {
 	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
 		t.Fatal(err)
@@ -229,6 +256,13 @@ func newDatabase(t *testing.T) *sql.DB {
 	}
 	if err != nil {
 		t.Fatalf("SQL: %v", err)
+	}
+
+	for _, user := range users {
+		_, err := db.Exec(`INSERT INTO users (username) VALUES (?)`, user)
+		if err != nil {
+			t.Fatalf("SQL: %v", err)
+		}
 	}
 
 	return db

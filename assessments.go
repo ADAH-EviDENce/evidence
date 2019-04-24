@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/mattn/go-sqlite3"
@@ -68,13 +69,25 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		return
 	}
 
-	insert, err := tx.Prepare(
-		`INSERT INTO assessments (id, relevant, userid) VALUES (?, ?, ?)`)
+	err = s.addAssessments(tx, assessments, time.Now(), userid)
 	if err != nil {
 		return
 	}
 
-	for _, a := range assessments {
+	err = tx.Commit()
+	return
+}
+
+// Add assessments with timestamp t and the given user id.
+// Does not commit or roll back tx.
+func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, userid int) (err error) {
+	insert, err := tx.Prepare(fmt.Sprintf(
+		`INSERT INTO assessments (id, relevant, userid, timestamp) VALUES (?, ?, ?, ?)`))
+	if err != nil {
+		return
+	}
+
+	for _, a := range assess {
 		relevant := sql.NullBool{Bool: false, Valid: false}
 
 		switch a.Relevant {
@@ -86,16 +99,13 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		case "":
 		}
 
-		_, err = insert.Exec(a.Id, relevant, userid)
+		_, err = insert.Exec(a.Id, relevant, userid, t)
 		if err != nil {
 			return
 		}
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		return
-	}
+	return
 }
 
 // Exports the entire assessments table in CSV format.
@@ -110,7 +120,7 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		}
 	}()
 
-	rows, err := tx.Query(`SELECT id, relevant, username
+	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
 		FROM assessments a JOIN users ON a.userid`)
 	if err != nil {
 		return
@@ -122,13 +132,15 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 
 	for rows.Next() {
 		var (
-			id       string
-			relevant sql.NullBool
-			username string
+			id        string
+			relevant  sql.NullBool
+			timestamp time.Time
+			username  string
 		)
-		rows.Scan(&id, &relevant, &username)
+		rows.Scan(&id, &relevant, &username, &timestamp)
 
-		row := [3]string{id, stringOfBool(relevant), username}
+		t, _ := timestamp.MarshalText()
+		row := [...]string{id, stringOfBool(relevant), username, string(t)}
 		// No error checking here. What can go wrong is a connection error,
 		// which we can't report to the client.
 		cw.Write(row[:])
