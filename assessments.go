@@ -209,8 +209,14 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 }
 
 func (s *server) purge(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	log.Print("purge")
-	_, err := s.db.Exec(`DELETE FROM assessments`)
+	username, err := getUsername(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	log.Printf("purge by %s", username)
+	_, err = s.db.Exec(`DELETE FROM assessments`)
 	if err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		log.Print(err)
