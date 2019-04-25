@@ -1,7 +1,7 @@
 import {MoreLikeThisType} from "./app/configuring/MoreLikeThisType";
 
 const prod = {
-    HOST:  'http://localhost:8080',
+    HOST: process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : 'http://localhost:8080',
     SEARCH_RESULTS_SIZE: 10,
     MORE_LIKE_THIS_SIZE: 10
 };

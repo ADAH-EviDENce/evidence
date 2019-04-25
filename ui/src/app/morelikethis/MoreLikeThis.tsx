@@ -66,7 +66,7 @@ class MoreLikeThis extends React.Component<any, any> {
                     disabled={(!this.state.canCommit && !this.state.committed) || !this.context.user}
                     onClick={this.handleCommit}
                 >
-                    Opslaan
+                    Opslaan ({this.context.user})
                     &nbsp;
                     {this.state.committing
                         ? <FontAwesome name='spinner' spin/>
