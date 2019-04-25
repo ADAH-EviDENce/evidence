@@ -15,7 +15,7 @@ class ConfirmModal extends React.Component<ConfirmModalProps, any> {
 
     render() {
         return (
-            <div className="more-like-this-commit-modal">
+            <div className="confirm-modal">
                 <Modal isOpen={this.props.isOpen}>
                     <ModalBody>
                         Weet u het zeker?

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Redirect, Route, Switch, withRouter} from "react-router-dom";
 import Search from "./search/Search";
-import MoreLikeThis from "./morelikethis/MoreLikeThis";
+import MoreLikeThisPage from "./morelikethis/MoreLikeThisPage";
 import DocumentPage from "./document/DocumentPage";
 import ConfigPage from "./configuring/ConfigPage";
 import UserPage from "./user/UserPage";
@@ -23,7 +23,7 @@ class Routes extends React.Component<any, any> {
                 <Route exact path='/config/' component={ConfigPage} key={pathname}/>
                 <Route exact path='/data/' component={DataPage} key={pathname}/>
                 <Route exact path='/documents/:did/' component={DocumentPage} key={pathname}/>
-                <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThis} key={pathname}/>
+                <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThisPage} key={pathname}/>
                 <Route exact path='/search/' component={Search} key={pathname}/>
                 <Route exact path='/search/:search/' component={Search} key={pathname}/>
                 <Route exact path='/user/' component={UserPage} key={pathname}/>

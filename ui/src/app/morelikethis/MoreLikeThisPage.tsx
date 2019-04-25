@@ -5,13 +5,13 @@ import Resources from "../Resources";
 import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 import FontAwesome from "react-fontawesome";
-import './MoreLikeThis.css';
+import './MoreLikeThisPage.css';
 import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
 import {Link} from "react-router-dom";
 
-class MoreLikeThis extends React.Component<any, any> {
+class MoreLikeThisPage extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
@@ -119,6 +119,6 @@ class MoreLikeThis extends React.Component<any, any> {
 
 }
 
-MoreLikeThis.contextType = AppContext;
+MoreLikeThisPage.contextType = AppContext;
 
-export default MoreLikeThis;
+export default MoreLikeThisPage;

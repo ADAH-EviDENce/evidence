@@ -32,26 +32,43 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         } else if (this.context.moreLikeThisType === MoreLikeThisType.DOC2VEC) {
             this.fetchFromDoc2Vec();
         }
+
     };
 
     private fetchFromES() {
-        Resources.getMoreLikeThisSnippetsFromES(this.props.snippetId, this.props.from, this.context.moreLikeThisSize).then((json) => {
-            this.setState({snippets: json});
+        Resources.getMoreLikeThisSnippetsFromES(
+            this.props.snippetId,
+            this.props.from,
+            this.context.moreLikeThisSize
+        ).then((json) => {
+            this.handleNewSnippets(json);
         }).catch((data) => {
             this.setState({error: 'Could not fetch more like this snippets from elasticsearch.'});
         });
     }
 
+    private handleNewSnippets(snippets: any) {
+        const answers :any[] = [];
+        snippets.hits.hits.forEach((s: any) => {
+            answers.push({id: s._id, relevant: MoreLikeThisOption.MAYBE});
+        });
+        this.setState({snippets, answers}, () => this.props.onAllSnippetsHaveAnswers(this.state.answers));
+    }
+
     private fetchFromDoc2Vec() {
-        Resources.getMoreLikeThisSnippetsFromDoc2Vec(this.props.snippetId, this.props.from, this.context.moreLikeThisSize).then((data) => {
+        Resources.getMoreLikeThisSnippetsFromDoc2Vec(
+            this.props.snippetId,
+            this.props.from,
+            this.context.moreLikeThisSize
+        ).then((data) => {
             if (!data.ok) {
                 throw Error("Status " + data.status);
             }
             data.json().then((json) => {
-                this.setState({snippets: json, loading: false});
+                this.handleNewSnippets(json);
             });
         }).catch((data) => {
-            this.setState({loading: false, error: 'Could not fetch more like this snippets from doc2vec.'});
+            this.setState({error: 'Could not fetch more like this snippets from doc2vec.'});
         });
     }
 
