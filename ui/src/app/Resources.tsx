@@ -95,8 +95,23 @@ class Resources {
         });
     };
 
-    static getUsers() {
+    public static getUsers() {
         return fetch(config.USERS_HOST);
+    }
+
+    public static getExport() {
+        return fetch(config.EXPORT_HOST)
+            .then(function(data) {
+                return data.text()
+            });
+    }
+
+    public static purgeDatabase(user: string) {
+        return fetch(config.PURGE_HOST, {
+            headers: {
+                "Authorization": `Username ${user}`
+            }
+        });
     }
 }
 

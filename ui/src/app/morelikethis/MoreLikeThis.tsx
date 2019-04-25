@@ -1,6 +1,6 @@
 import * as React from "react";
 import Page from "../common/Page";
-import ErrorBox from "../common/ErrorBox";
+import InfoBox from "../common/InfoBox";
 import Resources from "../Resources";
 import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
@@ -94,7 +94,7 @@ class MoreLikeThis extends React.Component<any, any> {
             <Page>
                 <div className="more-like-this">
                     <h2><ReadableId id={documentId}/></h2>
-                    <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                    <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                     <DocumentSnippet
                         id={snippetId}
                         documentId={documentId}

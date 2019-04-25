@@ -2,7 +2,7 @@ import * as React from "react";
 import SearchBar from "./SearchBar";
 import Page from "../common/Page";
 import Resources from "../Resources";
-import ErrorBox from "../common/ErrorBox";
+import InfoBox from "../common/InfoBox";
 import FontAwesome from "react-fontawesome";
 import {AppContext} from "../AppContext";
 import SearchSnippetList from "./SearchSnippetList";
@@ -87,7 +87,7 @@ class Search extends React.Component<any, any> {
     render() {
         return (
             <Page>
-                <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <span>
                     <SearchBar defaultSearch={this.state.search}/>
                     {this.renderSnippetList()}

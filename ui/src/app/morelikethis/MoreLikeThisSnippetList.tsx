@@ -1,6 +1,6 @@
 import * as React from "react";
 import Resources from "../Resources";
-import ErrorBox from "../common/ErrorBox";
+import InfoBox from "../common/InfoBox";
 import MoreLikeThisSnippet from "./MoreLikeThisSnippet";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
 import {AppContext} from "../AppContext";
@@ -101,7 +101,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     render() {
         return (
             <div className="more-like-this-snippet-list">
-                <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <div>
                     {this.renderSnippets()}
                 </div>

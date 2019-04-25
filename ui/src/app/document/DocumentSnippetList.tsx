@@ -1,7 +1,7 @@
 import * as React from "react";
 import FontAwesome from "react-fontawesome";
 import Resources from "../Resources";
-import ErrorBox from "../common/ErrorBox";
+import InfoBox from "../common/InfoBox";
 import DocumentSnippet from "./DocumentSnippet";
 
 interface DocumentSnippetListProps {
@@ -56,7 +56,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
 
         return (
             <div>
-                <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 {listElements}
             </div>
         );

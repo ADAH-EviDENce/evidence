@@ -2,7 +2,7 @@ import React from "react";
 import Resources from "../Resources";
 import FontAwesome from "react-fontawesome";
 import Page from "../common/Page";
-import ErrorBox from "../common/ErrorBox";
+import InfoBox from "../common/InfoBox";
 import {AppContext} from "../AppContext";
 
 export default class UserPage extends React.Component<any, any> {
@@ -34,7 +34,7 @@ export default class UserPage extends React.Component<any, any> {
         return (
             <Page>
                 <h2>Selecteer gebruiker</h2>
-                <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 {this.state.loading ?
                     <FontAwesome name='spinner' spin/>
                     :

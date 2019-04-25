@@ -1,7 +1,7 @@
 import * as React from "react";
 import Resources from "../Resources";
 import Page from "../common/Page";
-import ErrorBox from "../common/ErrorBox";
+import InfoBox from "../common/InfoBox";
 import DocumentSnippetList from "./DocumentSnippetList";
 import ReadableId from "../common/ReadableId";
 
@@ -47,7 +47,7 @@ class DocumentPage extends React.Component<any, any> {
             <Page>
                 <div className="document-page">
                     <h2><ReadableId id={this.props.match.params.did}/></h2>
-                    <ErrorBox error={this.state.error} onClose={() => this.setState({error: null})}/>
+                    <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                     {this.renderDocument()}
                 </div>
             </Page>
