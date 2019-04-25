@@ -121,7 +121,7 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	}()
 
 	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
-		FROM assessments a JOIN users ON a.userid`)
+		FROM assessments a JOIN users u ON a.userid = u.userid`)
 	if err != nil {
 		return
 	}
