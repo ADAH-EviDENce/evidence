@@ -5,7 +5,7 @@ import Page from "../common/Page";
 import ErrorBox from "../common/ErrorBox";
 import {AppContext} from "../AppContext";
 
-export default class User extends React.Component<any, any> {
+export default class UserPage extends React.Component<any, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -68,4 +68,4 @@ export default class User extends React.Component<any, any> {
     }
 }
 
-User.contextType = AppContext;
+UserPage.contextType = AppContext;

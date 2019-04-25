@@ -4,7 +4,8 @@ import Search from "./search/Search";
 import MoreLikeThis from "./morelikethis/MoreLikeThis";
 import DocumentPage from "./document/DocumentPage";
 import ConfigPage from "./configuring/ConfigPage";
-import User from "./user/User";
+import UserPage from "./user/UserPage";
+import DataPage from "./data/DataPage";
 
 class Routes extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -19,12 +20,13 @@ class Routes extends React.Component<any, any> {
         return (
             <Switch>
                 <Redirect exact from="/" to="/user/"/>
-                <Route exact path='/user/' component={User} key={pathname}/>
-                <Route exact path='/search/' component={Search} key={pathname}/>
-                <Route exact path='/search/:search/' component={Search} key={pathname}/>
+                <Route exact path='/config/' component={ConfigPage} key={pathname}/>
+                <Route exact path='/data/' component={DataPage} key={pathname}/>
                 <Route exact path='/documents/:did/' component={DocumentPage} key={pathname}/>
                 <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThis} key={pathname}/>
-                <Route exact path='/config/' component={ConfigPage} key={pathname}/>
+                <Route exact path='/search/' component={Search} key={pathname}/>
+                <Route exact path='/search/:search/' component={Search} key={pathname}/>
+                <Route exact path='/user/' component={UserPage} key={pathname}/>
             </Switch>
         );
     }
