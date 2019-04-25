@@ -169,12 +169,13 @@ func TestExport(t *testing.T) {
 	r.ServeHTTP(w, req)
 	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
 
-	expect := fmt.Sprintf("foo,yes,test,%s\nbar,no,test,%s\nbaz,,test,%s\n", ts, ts, ts)
-	expect = `foo,yes,test,2006-01-02T15:04:05-07:00
-bar,no,test,2006-01-02T15:04:05-07:00
-baz,,test,2006-01-02T15:04:05-07:00
-`
-	assert.Equal(t, expect, w.Body.String())
+	expect := []string{
+		`bar,no,test,2006-01-02T15:04:05-07:00`,
+		`baz,,test,2006-01-02T15:04:05-07:00`,
+		`foo,yes,test,2006-01-02T15:04:05-07:00`,
+	}
+
+	assert.Equal(t, expect, strings.Fields(w.Body.String()))
 }
 
 func TestUI(t *testing.T) {
