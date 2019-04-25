@@ -27,7 +27,9 @@ func (s *server) addUser(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		return
 	}
 
-	_, err = s.db.Exec(`INSERT INTO users (username) VALUES (?)`, username)
+	// The conversion to string makes sure the username is stored as TEXT, not BLOB;
+	// see https://www.sqlite.org/datatype3.html.
+	_, err = s.db.Exec(`INSERT INTO users (username) VALUES (?)`, string(username))
 	if e, ok := err.(sqlite3.Error); ok && e.ExtendedCode == sqlite3.ErrConstraintUnique {
 		http.Error(w, fmt.Sprintf("duplicate username %q", username), http.StatusConflict)
 		return
