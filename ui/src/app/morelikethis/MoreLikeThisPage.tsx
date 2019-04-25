@@ -56,6 +56,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
             <h2>Te beoordelen (#{from + 1}-{from + parseInt(this.context.moreLikeThisSize)})</h2>
             <MoreLikeThisSnippetList
                 snippetId={snippetId}
+                docId={documentId}
                 from={from}
                 onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
             />

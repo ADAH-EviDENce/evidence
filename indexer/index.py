@@ -19,6 +19,8 @@ def natural_key(s):
 
 es = elasticsearch.Elasticsearch(*sys.argv[1:])
 
+es.indices.delete(['documents', 'snippets'])
+
 # Documents are lists of snippets.
 es.indices.create('documents', ignore=400, body={
     "mappings": {
@@ -45,6 +47,9 @@ es.indices.create('snippets', ignore=400, body={
                 "lemma": {
                     "type": "text",
                     "analyzer": "simple",
+                },
+                "document": {
+                    "type": "keyword",
                 },
             },
         },
@@ -75,7 +80,7 @@ for d in os.listdir('data/text_preserve_paragraph'):
                             name + '_lemma.txt')
         lemma = open(path).read()
 
-        json.dump({'text': texts[i], 'lemma': lemma}, data)
+        json.dump({'text': texts[i], 'lemma': lemma, 'document': d}, data)
         data.write('\n')
 
     snippets = [name[len(d)+1:] if name.startswith(d) else name

@@ -47,6 +47,7 @@ class Resources {
 
     public static getMoreLikeThisSnippetsFromES = (
         snippetId: string,
+        docId: string, // document id of the snippet
         from: number,
         size: number
     ) => {
@@ -59,17 +60,25 @@ class Resources {
                 size: size,
                 from: from,
                 query: {
-                    more_like_this: {
-                        fields: ["text", "lemma"],
-                        boost_terms: 1,
-                        max_query_terms: 150,
-                        min_doc_freq: 1,
-                        min_term_freq: 1,
-                        like: [{
-                            _index: "snippets",
-                            _type: "snippet",
-                            _id: snippetId
-                        }]
+                    bool: {
+                        must: {
+                            more_like_this: {
+                                fields: ["text", "lemma"],
+                                boost_terms: 1,
+                                max_query_terms: 150,
+                                min_doc_freq: 1,
+                                min_term_freq: 1,
+                                like: [{
+                                    _index: "snippets",
+                                    _type: "snippet",
+                                    _id: snippetId
+                                }]
+                            }
+                        },
+                        // Filter out snippets from the current document.
+                        must_not: {
+                            match: {term: {document: docId}}
+                        }
                     }
                 }
             }
