@@ -15,6 +15,7 @@ class MainHeader extends React.Component<any, any> {
                 <div className="main-nav text-center">
                     <Link className="nav-item" to={"/search/"}>zoeken</Link>
                     <Link className="nav-item" to={"/config/"}>instellingen</Link>
+                    <Link className="nav-item" to={"/user/"}>gebruiker</Link>
                 </div>
             </div>
         );

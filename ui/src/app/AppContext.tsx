@@ -11,6 +11,7 @@ export type AppContextType = {
 
 export const initAppContext = {
     search: "",
+    user: null,
     moreLikeThisType: config.MORE_LIKE_THIS_TYPE,
     moreLikeThisSize: config.MORE_LIKE_THIS_SIZE,
     updateContext: (c: object) => {throw new Error('updateContext() not implemented')}

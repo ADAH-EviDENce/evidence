@@ -7,9 +7,9 @@ import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
 import FontAwesome from "react-fontawesome";
 import './MoreLikeThis.css';
 import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
-import config from "../../config";
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
+import {Link} from "react-router-dom";
 
 class MoreLikeThis extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -44,12 +44,45 @@ class MoreLikeThis extends React.Component<any, any> {
 
     handleCommit = () => {
         this.setState({committing: true});
-        Resources.commitAnswers(this.state.answers).then(() => {
+        Resources.commitAnswers(this.state.answers, this.context.user).then(() => {
             this.setState({committed: true, committing: false});
         }).catch((data) => {
             this.setState({error: 'Could not commit answers.', committing: false});
         });
     };
+
+    private renderScoreForm(from: number, snippetId: string, documentId: string) {
+        return <>
+            <h2>Te beoordelen (#{from + 1}-{from + parseInt(this.context.moreLikeThisSize)})</h2>
+            <MoreLikeThisSnippetList
+                snippetId={snippetId}
+                from={from}
+                onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
+            />
+            <div className="commit-answers">
+                <button
+                    type="submit"
+                    className="btn btn-success float-right commit-btn"
+                    disabled={(!this.state.canCommit && !this.state.committed) || !this.context.user}
+                    onClick={this.handleCommit}
+                >
+                    Opslaan
+                    &nbsp;
+                    {this.state.committing
+                        ? <FontAwesome name='spinner' spin/>
+                        : <FontAwesome name='chevron-right '/>
+                    }
+                </button>
+            </div>
+            <MoreLikeThisCommitModal
+                documentId={documentId}
+                snippetId={snippetId}
+                from={from}
+                answers={this.state.answers}
+                committed={this.state.committed}
+            />
+        </>;
+    }
 
     render() {
 
@@ -68,37 +101,24 @@ class MoreLikeThis extends React.Component<any, any> {
                         text={this.state.snippet ? this.state.snippet._source.text : null}
                         moreLikeThis={false}
                     />
-                    <h2>Te beoordelen (#{from + 1}-{from + parseInt(this.context.moreLikeThisSize)})</h2>
-                    <MoreLikeThisSnippetList
-                        snippetId={snippetId}
-                        from={from}
-                        onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
-                    />
-                    <div className="commit-answers">
-                        <button
-                            type="submit"
-                            className="btn btn-success float-right commit-btn"
-                            disabled={!this.state.canCommit && !this.state.committed}
-                            onClick={this.handleCommit}
-                        >
-                            Opslaan
+
+                    {this.context.user
+                        ?
+                        this.renderScoreForm(from, snippetId, documentId)
+                        :
+                        <div className="alert alert-info">
+                            <i className="fa fa-bell-o" aria-hidden="true"/>
                             &nbsp;
-                            {this.state.committing ? <FontAwesome name='spinner' spin/> :
-                                <FontAwesome name='chevron-right '/>}
-                        </button>
-                    </div>
-                    <MoreLikeThisCommitModal
-                        documentId={documentId}
-                        snippetId={snippetId}
-                        from={from}
-                        answers={this.state.answers}
-                        committed={this.state.committed}
-                    />
+                            <Link to="/user/">Selecteer</Link> eerst een gebruiker om op te kunnen beoordelen.
+                        </div>
+                    }
                 </div>
             </Page>
         );
     }
+
 }
+
 MoreLikeThis.contextType = AppContext;
 
 export default MoreLikeThis;

@@ -84,16 +84,20 @@ class Resources {
         return fetch(`${config.DOC2VEC_HOST}/${snippetId}?from=${from}&size=${size}`);
     };
 
-    public static commitAnswers = (answers: Array<any>) => {
+    public static commitAnswers = (answers: Array<any>, user: string) => {
         return fetch(config.ASSESS_HOST, {
             method: 'POST',
             headers: {
+                "Authorization": `Username ${user}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(answers)
         });
     };
 
+    static getUsers() {
+        return fetch(config.USERS_HOST);
+    }
 }
 
 export default Resources;

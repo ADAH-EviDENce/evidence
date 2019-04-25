@@ -24,6 +24,9 @@ export default {
     ES_HOST: config.HOST + '/es',
     DOC2VEC_HOST: config.HOST + '/doc2vec',
     ASSESS_HOST: config.HOST + '/assess',
+    USERS_HOST: config.HOST + '/users',
+    EXPORT_HOST: config.HOST + '/export',
+    PURGE_HOST: config.HOST + '/purge',
 
     ...config
 };

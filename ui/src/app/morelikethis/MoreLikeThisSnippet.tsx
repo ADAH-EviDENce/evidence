@@ -43,23 +43,23 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
                         <button type="button"
                                 className={`btn btn-outline-success ${this.props.relevant === MoreLikeThisOption.YES ? "active" : ""}`}
                                 onClick={this.onClickYes}>
-                            Ja
+                            <FontAwesome name='check-circle-o'/>
                             &nbsp;
-                            <FontAwesome name='thumbs-o-up'/>
+                            Ja
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-danger ${this.props.relevant === MoreLikeThisOption.NO ? "active" : ""}`}
                                 onClick={this.onClickNo}>
-                            Nee
+                            <FontAwesome name='times-circle-o'/>
                             &nbsp;
-                            <FontAwesome name='thumbs-o-down'/>
+                            Nee
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-secondary ${this.props.relevant === MoreLikeThisOption.MAYBE ? "active" : ""}`}
                                 onClick={this.onClickMaybe}>
-                            Blanco
+                            <FontAwesome name='question-circle-o'/>
                             &nbsp;
-                            <FontAwesome name='question '/>
+                            Blanco
                         </button>
                     </div>
                 </CardFooter>

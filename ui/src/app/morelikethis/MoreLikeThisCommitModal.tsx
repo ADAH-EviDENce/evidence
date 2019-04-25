@@ -41,7 +41,6 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                     <ModalHeader>Keuzemenu</ModalHeader>
                     <ModalBody>
                         Uw antwoorden zijn opgeslagen.
-                        <p className="d-none">{this.context.search}</p>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
