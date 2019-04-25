@@ -19,10 +19,10 @@ def natural_key(s):
 
 es = elasticsearch.Elasticsearch(*sys.argv[1:])
 
-es.indices.delete(['documents', 'snippets'])
+es.indices.delete(['documents', 'snippets'], ignore=404)
 
 # Documents are lists of snippets.
-es.indices.create('documents', ignore=400, body={
+es.indices.create('documents', body={
     "mappings": {
         "document": {
             "properties": {
@@ -36,7 +36,7 @@ es.indices.create('documents', ignore=400, body={
 
 # Snippets contain the actual text, in fields text and lemmata.
 # The analyzer is "simple" because the texts are pre-tokenized.
-es.indices.create('snippets', ignore=400, body={
+es.indices.create('snippets', body={
     "mappings": {
         "snippet": {
             "properties": {
