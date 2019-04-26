@@ -64,7 +64,7 @@ func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	var (
 		username  string
-		usernames []string
+		usernames = make([]string, 0)
 	)
 	for rows.Next() {
 		rows.Scan(&username)
