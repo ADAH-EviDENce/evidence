@@ -77,7 +77,7 @@ class Resources {
                         },
                         // Filter out snippets from the current document.
                         must_not: {
-                            match: {term: {document: docId}}
+                            term: {document: docId}
                         }
                     }
                 }
