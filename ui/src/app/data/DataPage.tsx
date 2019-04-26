@@ -30,7 +30,7 @@ export default class DataPage extends React.Component<any, any> {
         Resources.purgeDatabase(this.context.user).then(() => {
             this.setState({purging: false, info: 'Database is geleegd.'});
         }).catch(() => {
-            this.setState({error: 'Could not purge database.'});
+            this.setState({purging: false, error: 'Could not purge database.'});
         });
     };
 
