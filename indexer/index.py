@@ -5,6 +5,7 @@ from io import StringIO
 import os
 import re
 import sys
+import time
 
 import elasticsearch
 
@@ -19,7 +20,7 @@ def natural_key(s):
 
 es = elasticsearch.Elasticsearch(*sys.argv[1:])
 
-es.indices.delete(['documents', 'snippets'], ignore=404)
+es.indices.delete('_all')
 
 # Documents are lists of snippets.
 es.indices.create('documents', body={
