@@ -44,3 +44,18 @@ func TestAddUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, []string{"test1"}, usernames)
 }
+
+func TestListUsersEmpty(t *testing.T) {
+	db := newDatabase(t)
+	defer db.Close()
+
+	r := httprouter.New()
+	newServer(db, "", "", r)
+
+	req := httptest.NewRequest("GET", "/users", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	resp := w.Result()
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, "[]", strings.TrimSpace(w.Body.String()))
+}
