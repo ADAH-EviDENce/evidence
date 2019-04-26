@@ -48,7 +48,7 @@ func TestAssessments(t *testing.T) {
 			{"id": "bar", "relevant": "no"},
 			{"id": "baz", "relevant": ""}
 		]`))
-	req.Header.Set("Authorization", "Username test")
+	req.Header.Set("X-User", "test")
 
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -72,7 +72,7 @@ func TestAssessments(t *testing.T) {
 	}, assess)
 
 	req = httptest.NewRequest("GET", "/purge", nil)
-	req.Header.Set("Authorization", "Username test")
+	req.Header.Set("X-User", "test")
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Result().StatusCode)

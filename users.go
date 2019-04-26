@@ -81,17 +81,12 @@ func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter
 }
 
 func getUsername(r *http.Request) (username string, err error) {
-	// For the moment, we have a custom "authorization" header that contains just
-	// "Username <username>". We can upgrade this to Basic-Auth or something fancy later.
-	auth := r.Header.Get("Authorization")
-	if auth == "" {
+	// For the moment, we have a custom "authorization" header that contains
+	// just the username. We can upgrade this to Basic-Auth or something fancy
+	// later.
+	username = r.Header.Get("X-User")
+	if username == "" {
 		err = errors.New("no username provided")
-		return
-	}
-
-	_, err = fmt.Sscanf(auth, "Username %s\n", &username)
-	if err != nil {
-		err = errors.New("invalid Authorization header")
 	}
 	return
 }
