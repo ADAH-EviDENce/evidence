@@ -45,7 +45,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         ).then((json) => {
             this.handleNewSnippets(json);
         }).catch((data) => {
-            this.setState({error: 'Could not fetch more like this snippets from elasticsearch.'});
+            this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit ElasticSearch.'});
         });
     }
 
@@ -70,7 +70,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 this.handleNewSnippets(json);
             });
         }).catch((data) => {
-            this.setState({error: 'Could not fetch more like this snippets from doc2vec.'});
+            this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit doc2vec.'});
         });
     }
 

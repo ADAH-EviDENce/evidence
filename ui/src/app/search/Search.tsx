@@ -52,7 +52,7 @@ class Search extends React.Component<any, any> {
         Resources.searchSnippets(query, from, this.state.size).then((json) => {
             this.setState({snippets: json, total: json.hits.total, loading: false});
         }).catch((data) => {
-            this.setState({loading: false, error: 'Could not fetch snippets with provided query.'});
+            this.setState({loading: false, error: 'Er konden geen fragmenten gevonden worden op basis van de opgegeven zoektermen.'});
         });
     };
 

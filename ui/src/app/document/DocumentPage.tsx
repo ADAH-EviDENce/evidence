@@ -24,7 +24,7 @@ class DocumentPage extends React.Component<any, any> {
                 this.setState({snippets: json, loading: false});
             });
         }).catch((data) => {
-            this.setState({loading: false, error: 'Could not fetch documents with provided query.'});
+            this.setState({loading: false, error: 'Er konden geen documenten gevonden worden op basis van de opgegeven zoektermen.'});
         });
 
     };

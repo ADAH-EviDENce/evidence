@@ -33,7 +33,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
             let docs = json.docs;
             this.setState({snippet: docs ? docs[0] : null});
         }).catch((data) => {
-            this.setState({error: 'Could not fetch snippet by id.'});
+            this.setState({error: 'De fragmenten konden niet worden gevonden op basis van ID.'});
         });
 
     };
@@ -47,7 +47,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
         Resources.commitAnswers(this.state.answers, this.context.user).then(() => {
             this.setState({committed: true, committing: false});
         }).catch((data) => {
-            this.setState({error: 'Could not commit answers.', committing: false});
+            this.setState({error: 'De antwoorden konden niet worden opgeslagen.', committing: false});
         });
     };
 

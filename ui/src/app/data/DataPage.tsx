@@ -22,7 +22,7 @@ export default class DataPage extends React.Component<any, any> {
             const csv = new Blob([data], {type: "text/csv;charset=utf-8"});
             FileSaver.saveAs(csv, exportFilename);
         }).catch(() => {
-            this.setState({error: 'Could not fetch csv.'});
+            this.setState({error: 'Het csv-bestand kon niet opgehaald worden.'});
         });
     };
 
@@ -30,7 +30,7 @@ export default class DataPage extends React.Component<any, any> {
         Resources.purgeDatabase(this.context.user).then(() => {
             this.setState({purging: false, info: 'Database is geleegd.'});
         }).catch(() => {
-            this.setState({purging: false, error: 'Could not purge database.'});
+            this.setState({purging: false, error: 'De database kon niet geleegd worden.'});
         });
     };
 

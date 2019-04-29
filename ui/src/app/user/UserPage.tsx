@@ -27,11 +27,11 @@ class UserPage extends React.Component<any, any> {
                 if (json && json.length > 0) {
                     this.setState({loading: false, users: json});
                 } else {
-                    this.setState({loading: false, error: "No users found"});
+                    this.setState({loading: false, error: 'Geen gebruikers gevonden.'});
                 }
             });
         }).catch(() => {
-            this.setState({loading: false, error: 'Could not fetch users.'});
+            this.setState({loading: false, error: 'Er trad een fout op bij het ophalen van de gebruikers.'});
         });
     }
 
