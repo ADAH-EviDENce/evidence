@@ -107,11 +107,11 @@ class MoreLikeThisPage extends React.Component<any, any> {
                         ?
                         this.renderScoreForm(from, snippetId, documentId)
                         :
-                        <div className="alert alert-info">
-                            <i className="fa fa-bell-o" aria-hidden="true"/>
-                            &nbsp;
-                            <Link to="/user/">Selecteer</Link> eerst een gebruiker om op te kunnen beoordelen.
-                        </div>
+                        <InfoBox
+                            msg={<><Link to="/user/">Selecteer</Link> eerst een gebruiker om op te kunnen
+                                beoordelen.</>}
+                            type='info'
+                        />
                     }
                 </div>
             </Page>
