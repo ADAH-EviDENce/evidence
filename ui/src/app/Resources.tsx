@@ -97,7 +97,7 @@ class Resources {
         return fetch(config.ASSESS_HOST, {
             method: 'POST',
             headers: {
-                "Authorization": `Username ${user}`,
+                "X-User": user,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(answers)
@@ -118,7 +118,7 @@ class Resources {
     public static purgeDatabase(user: string) {
         return fetch(config.PURGE_HOST, {
             headers: {
-                "Authorization": `Username ${user}`
+                "X-User": user
             }
         });
     }
