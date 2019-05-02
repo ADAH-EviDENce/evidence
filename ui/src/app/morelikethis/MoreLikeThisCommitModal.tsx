@@ -3,6 +3,7 @@ import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
 import {AppContext} from "../AppContext";
 import config from "../../config";
+import ReadableId from "../common/ReadableId";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
     documentId: string,
@@ -25,6 +26,10 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
         this.props.history.push(`/documents/${did}/snippets/${sid}/from/${nextFrom}/`);
     };
 
+    onDocument = () => {
+        this.props.history.push(`/documents/${this.props.documentId}/`);
+    };
+
     onSearch = () => {
         const query = this.context.search ? this.context.search + '/' : '';
         this.props.history.push(`/search/${query}`);
@@ -44,6 +49,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
+                        <Button color="success" onClick={this.onDocument}>Terug naar document</Button>
                         <Button color="success" onClick={this.onSearch}>Zoek nieuw document</Button>
                     </ModalFooter>
                 </Modal>

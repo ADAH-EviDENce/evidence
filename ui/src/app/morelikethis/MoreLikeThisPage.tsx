@@ -32,9 +32,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
         Resources.getSnippetsByIds([{_id: this.props.match.params.sid}]).then((json) => {
             let docs = json.docs;
             this.setState({snippet: docs ? docs[0] : null});
-        }).catch((data) => {
-            this.setState({error: 'De fragmenten konden niet worden gevonden op basis van ID.'});
-        });
+        }).catch(() => this.setState({error: 'De fragmenten konden niet worden gevonden op basis van ID.'}));
 
     };
 
@@ -46,9 +44,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
         this.setState({savingAnswers: true});
         Resources.commitAnswers(this.state.answers, this.context.user).then(() => {
             this.setState({answersSaved: true, savingAnswers: false});
-        }).catch((data) => {
-            this.setState({error: 'De antwoorden konden niet worden opgeslagen.', savingAnswers: false});
-        });
+        }).catch(() => this.setState({error: 'De antwoorden konden niet worden opgeslagen.', savingAnswers: false}));
     };
 
     private renderScoreForm(from: number, snippetId: string, documentId: string) {
@@ -115,9 +111,8 @@ class MoreLikeThisPage extends React.Component<any, any> {
                         this.renderScoreForm(from, snippetId, documentId)
                         :
                         <InfoBox
-                            msg={<><Link to="/user/">Selecteer</Link> eerst een gebruiker om op te kunnen
-                                beoordelen.</>}
                             type='info'
+                            msg={<><Link to="/user/">Selecteer</Link> eerst een gebruiker om op te kunnen beoordelen.</>}
                         />
                     }
                 </div>
