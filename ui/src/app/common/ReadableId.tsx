@@ -1,8 +1,9 @@
 import * as React from "react";
 
 interface ReadableIdProps {
-  id: string
-  toRemove?: string
+    id: string,
+    toRemove?: string,
+    lowercase?: boolean
 }
 
 class ReadableId extends React.Component<ReadableIdProps, any> {
@@ -14,11 +15,18 @@ class ReadableId extends React.Component<ReadableIdProps, any> {
     render() {
         const toDisplay = this.props.toRemove
             ?
-            this.props.id.replace(this.props.toRemove, '[..]')
+            this.props.id.replace(this.props.toRemove, '')
             :
             this.props.id;
 
-        const readable = toDisplay.replace(/_/g, ' ');
+        let readable = toDisplay.replace(/_/g, ' ');
+
+        readable = readable.trim();
+
+        if(this.props.lowercase) {
+            readable = readable.toLowerCase();
+        }
+
         return (
             <span className="readable-id">{readable}</span>
         );

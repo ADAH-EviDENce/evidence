@@ -39,8 +39,8 @@ class DocumentSnippet extends React.Component<PropsType, any> {
                 <Card>
                     <CardHeader>
                         {moreLikeThis}
-                        <p className="small">
-                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId} /></strong></p>
+                        <span className="small">
+                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId} /></strong></span>
                     </CardHeader>
                     <CardBody>
                         <p className="small">{this.props.text}</p>

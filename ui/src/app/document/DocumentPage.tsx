@@ -4,6 +4,7 @@ import Page from "../common/Page";
 import InfoBox from "../common/InfoBox";
 import DocumentSnippetList from "./DocumentSnippetList";
 import ReadableId from "../common/ReadableId";
+import {AppContext} from "../AppContext";
 
 class DocumentPage extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -24,7 +25,10 @@ class DocumentPage extends React.Component<any, any> {
                 this.setState({snippets: json, loading: false});
             });
         }).catch((data) => {
-            this.setState({loading: false, error: 'Er konden geen documenten gevonden worden op basis van de opgegeven zoektermen.'});
+            this.setState({
+                loading: false,
+                error: 'Er konden geen documenten gevonden worden op basis van de opgegeven zoektermen.'
+            });
         });
 
     };
@@ -43,10 +47,19 @@ class DocumentPage extends React.Component<any, any> {
     }
 
     render() {
+        const documentId = this.props.match.params.did;
+        const breadcrumbTrail = [
+            {text: "zoeken", path: "/search/"},
+            {text: this.context.search, path: `/search/${this.context.search}/`},
+            {text: <ReadableId id={documentId} lowercase/>, path: `/documents/${documentId}/`},
+        ];
+
         return (
-            <Page>
+            <Page
+                breadcrumbTrail={breadcrumbTrail}
+            >
                 <div className="document-page">
-                    <h2><ReadableId id={this.props.match.params.did}/></h2>
+                    <h2><ReadableId id={documentId}/></h2>
                     <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                     {this.renderDocument()}
                 </div>
@@ -54,5 +67,8 @@ class DocumentPage extends React.Component<any, any> {
         );
     }
 }
+
+DocumentPage.contextType = AppContext;
+
 
 export default DocumentPage;

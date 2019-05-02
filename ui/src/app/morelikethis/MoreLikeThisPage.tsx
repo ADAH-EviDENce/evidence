@@ -16,9 +16,9 @@ class MoreLikeThisPage extends React.Component<any, any> {
         super(props, context);
         this.state = {
             answers: [],
-            canCommit: false,
-            committing: false,
-            committed: false
+            answersSet: false,
+            savingAnswers: false,
+            answersSaved: false
         };
 
         this.fetchSnippets();
@@ -39,15 +39,15 @@ class MoreLikeThisPage extends React.Component<any, any> {
     };
 
     handleAllSnippetsHaveAnswers = (answers: Array<any>) => {
-        this.setState({answers, canCommit: true});
+        this.setState({answers, answersSet: true});
     };
 
     handleCommit = () => {
-        this.setState({committing: true});
+        this.setState({savingAnswers: true});
         Resources.commitAnswers(this.state.answers, this.context.user).then(() => {
-            this.setState({committed: true, committing: false});
+            this.setState({answersSaved: true, savingAnswers: false});
         }).catch((data) => {
-            this.setState({error: 'De antwoorden konden niet worden opgeslagen.', committing: false});
+            this.setState({error: 'De antwoorden konden niet worden opgeslagen.', savingAnswers: false});
         });
     };
 
@@ -64,12 +64,12 @@ class MoreLikeThisPage extends React.Component<any, any> {
                 <button
                     type="submit"
                     className="btn btn-success float-right commit-btn"
-                    disabled={(!this.state.canCommit && !this.state.committed) || !this.context.user}
+                    disabled={(!this.state.answersSet && !this.state.answersSaved) || !this.context.user}
                     onClick={this.handleCommit}
                 >
                     Opslaan ({this.context.user})
                     &nbsp;
-                    {this.state.committing
+                    {this.state.savingAnswers
                         ? <FontAwesome name='spinner' spin/>
                         : <FontAwesome name='chevron-right '/>
                     }
@@ -80,7 +80,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
                 snippetId={snippetId}
                 from={from}
                 answers={this.state.answers}
-                committed={this.state.committed}
+                committed={this.state.answersSaved}
             />
         </>;
     }
@@ -92,7 +92,14 @@ class MoreLikeThisPage extends React.Component<any, any> {
         let from = parseInt(this.props.match.params.from);
 
         return (
-            <Page>
+            <Page
+                breadcrumbTrail={[
+                    { text: "zoeken", path: "/search/"},
+                    { text: this.context.search, path: `/search/${this.context.search}/`},
+                    { text: <ReadableId id={documentId} lowercase />, path: `/documents/${documentId}/`},
+                    { text: <ReadableId id={snippetId} toRemove={documentId} lowercase />, path: `/documents/${documentId}/snippets/${snippetId}/`},
+                ]}
+            >
                 <div className="more-like-this">
                     <h2><ReadableId id={documentId}/></h2>
                     <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
