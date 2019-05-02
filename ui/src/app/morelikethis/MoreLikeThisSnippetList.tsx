@@ -110,7 +110,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             return <MoreLikeThisSnippet
                 key={i}
                 id={s._id}
-                text={s._source.text}
+                text={s._source ? s._source.text : '-'}
                 onSelect={this.handleSelect}
                 relevant={this.findRelevantById(s._id)}
             />

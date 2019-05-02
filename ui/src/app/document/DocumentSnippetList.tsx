@@ -37,7 +37,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
                 return <DocumentSnippet
                     key={i}
                     id={s._id}
-                    text={s._source.text}
+                    text={s._source ? s._source.text : '-'}
                     documentId={this.props.documentId}
                     moreLikeThis={true}
                 />
