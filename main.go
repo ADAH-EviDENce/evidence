@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -241,13 +242,18 @@ func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string
 	}
 
 	var objmap map[string]*json.RawMessage
+
+	if resp.Docs == nil || len(resp.Docs) != 1 || resp.Docs[0].Source == nil {
+		return "", errors.New("Unrecognized response from elastic")
+	}
+
 	err = json.Unmarshal(*resp.Docs[0].Source, &objmap)
 	if err != nil {
 		return "", err
 	}
 
 	var text string
-	json.Unmarshal(*objmap["text"], &text)
+	err = json.Unmarshal(*objmap["text"], &text)
 	return text, err
 }
 

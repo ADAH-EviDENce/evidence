@@ -142,7 +142,7 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		text, err := s.getSource(r.Context(), w, id)
 		if err != nil {
 			log.Printf("Failed to get source for %q: %v\n", id, err)
-			text = "<could not get source>"
+			text = ""
 		}
 
 		t, _ := timestamp.MarshalText()
