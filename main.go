@@ -233,6 +233,24 @@ func (s *server) mgetSnippets(ctx context.Context, w http.ResponseWriter, ids []
 	return resp, err
 }
 
+func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string) (string, error) {
+	resp, err := s.mgetSnippets(ctx, w, []string{id}, true)
+
+	if err != nil {
+		return "", err
+	}
+
+	var objmap map[string]*json.RawMessage
+	err = json.Unmarshal(*resp.Docs[0].Source, &objmap)
+	if err != nil {
+		return "", err
+	}
+
+	var text string
+	json.Unmarshal(*objmap["text"], &text)
+	return text, err
+}
+
 func rollback(w http.ResponseWriter, tx *sql.Tx, err error) {
 	// We always report "database error", regardless of the actual error.
 	http.Error(w, "database error", http.StatusInternalServerError)
