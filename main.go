@@ -241,12 +241,11 @@ func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string
 		return "", err
 	}
 
-	var objmap map[string]*json.RawMessage
-
 	if resp.Docs == nil || len(resp.Docs) != 1 || resp.Docs[0].Source == nil {
 		return "", errors.New("Unrecognized response from elastic")
 	}
 
+	var objmap map[string]*json.RawMessage
 	err = json.Unmarshal(*resp.Docs[0].Source, &objmap)
 	if err != nil {
 		return "", err
