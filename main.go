@@ -234,26 +234,25 @@ func (s *server) mgetSnippets(ctx context.Context, w http.ResponseWriter, ids []
 	return resp, err
 }
 
-func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string) (string, error) {
+func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string) (src string, err error) {
 	resp, err := s.mgetSnippets(ctx, w, []string{id}, true)
-
 	if err != nil {
-		return "", err
+		return
 	}
 
 	if resp.Docs == nil || len(resp.Docs) != 1 || resp.Docs[0].Source == nil {
-		return "", errors.New("Unrecognized response from elastic")
+		err = errors.New("Unrecognized response from elastic")
+		return
 	}
 
 	var objmap map[string]*json.RawMessage
 	err = json.Unmarshal(resp.Docs[0].Source, &objmap)
 	if err != nil {
-		return "", err
+		return
 	}
 
-	var text string
-	err = json.Unmarshal(*objmap["text"], &text)
-	return text, err
+	err = json.Unmarshal(*objmap["text"], &src)
+	return
 }
 
 func rollback(w http.ResponseWriter, tx *sql.Tx, err error) {
