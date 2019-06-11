@@ -240,7 +240,7 @@ func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string
 		return
 	}
 
-	if resp.Docs == nil || len(resp.Docs) != 1 || resp.Docs[0].Source == nil {
+	if len(resp.Docs) != 1 || resp.Docs[0].Source == nil {
 		err = errors.New("Unrecognized response from elastic")
 		return
 	}
