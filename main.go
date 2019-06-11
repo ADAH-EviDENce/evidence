@@ -246,7 +246,7 @@ func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string
 	}
 
 	var objmap map[string]*json.RawMessage
-	err = json.Unmarshal(resp.Docs[0].Source, &objmap)
+	err = json.Unmarshal(*resp.Docs[0].Source, &objmap)
 	if err != nil {
 		return
 	}
