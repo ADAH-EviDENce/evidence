@@ -58,3 +58,10 @@ More like this:
 Paging in `doc2vec` is done using request parameters `from` (default `0`) and `size` (default `10`)
 
     curl http://localhost:8080/doc2vec/$id?from=3&size=8
+
+## Legal matters
+
+Copyright 2016-2019 Koninklijke Nederlandse Academie van Wetenschappen
+
+Distributed under the terms of the GNU General Public License, version 3.
+See the file LICENSE for details.
