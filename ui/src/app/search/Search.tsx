@@ -9,7 +9,6 @@ import SearchSnippetList from "./SearchSnippetList";
 import SearchPagination from "./SearchPagination";
 import config from "../../config";
 import {withRouter} from "react-router";
-import ReadableId from "../common/ReadableId";
 
 class Search extends React.Component<any, any> {
 
