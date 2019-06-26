@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -231,6 +232,27 @@ func (s *server) mgetSnippets(ctx context.Context, w http.ResponseWriter, ids []
 	}
 
 	return resp, err
+}
+
+func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string) (src string, err error) {
+	resp, err := s.mgetSnippets(ctx, w, []string{id}, true)
+	if err != nil {
+		return
+	}
+
+	if len(resp.Docs) != 1 || resp.Docs[0].Source == nil {
+		err = errors.New("Unrecognized response from elastic")
+		return
+	}
+
+	var objmap map[string]*json.RawMessage
+	err = json.Unmarshal(*resp.Docs[0].Source, &objmap)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(*objmap["text"], &src)
+	return
 }
 
 func rollback(w http.ResponseWriter, tx *sql.Tx, err error) {

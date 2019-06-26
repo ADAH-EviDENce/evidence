@@ -1,17 +1,22 @@
+# Build server (backend) image.
 FROM golang:1.12-stretch as buildserver
 
-# go-sqlite3 is expensive to compile, so make sure it's cached.
-RUN go get github.com/mattn/go-sqlite3
+WORKDIR /build
 
-WORKDIR /go/src/github.com/knaw-huc/evidence-gui
+# Download dependencies in a separate step from the actual build,
+# so they remain cached when the sources change
+# (https://container-solutions.com/faster-builds-in-docker-with-go-1-11/).
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY *.go schema.sql ./
 COPY internal internal
 
-RUN go get -t -v ./...
 RUN go test ./...
-RUN go install -ldflags="-s" .
+RUN go build -ldflags="-s" .
 
 
+# Build UI (frontend) image.
 FROM node:11-alpine as buildui
 
 WORKDIR /evidence
@@ -25,11 +30,12 @@ RUN npm install
 RUN npm run build
 
 
+# Combine server and UI into a deployable image.
 FROM debian:buster
 RUN apt-get -y update && apt-get -y install sqlite3
 
 WORKDIR /evidence
-COPY --from=buildserver /go/bin/evidence-gui ./
+COPY --from=buildserver /build/evidence-gui ./
 COPY --from=buildui /evidence/build ./ui
 COPY start.sh .
 

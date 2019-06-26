@@ -139,8 +139,14 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		)
 		rows.Scan(&id, &relevant, &username, &timestamp)
 
+		text, err := s.getSource(r.Context(), w, id)
+		if err != nil {
+			log.Printf("Failed to get source for %q: %v\n", id, err)
+			text = ""
+		}
+
 		t, _ := timestamp.MarshalText()
-		row := [...]string{id, stringOfBool(relevant), username, string(t)}
+		row := [...]string{id, stringOfBool(relevant), username, string(t), text}
 		// No error checking here. What can go wrong is a connection error,
 		// which we can't report to the client.
 		cw.Write(row[:])
