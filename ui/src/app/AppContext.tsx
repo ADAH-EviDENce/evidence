@@ -6,6 +6,7 @@ export type AppContextType = {
     search: string,
     moreLikeThisType: MoreLikeThisType,
     moreLikeThisSize: number,
+    useRocchio: boolean,
     updateContext(c: object): void
 };
 
@@ -14,6 +15,7 @@ export const initAppContext = {
     user: null,
     moreLikeThisType: config.MORE_LIKE_THIS_TYPE,
     moreLikeThisSize: config.MORE_LIKE_THIS_SIZE,
+    useRocchio: config.USE_ROCCHIO,
     updateContext: (c: object) => {throw new Error('updateContext() not implemented')}
 };
 

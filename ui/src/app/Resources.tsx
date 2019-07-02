@@ -85,6 +85,14 @@ class Resources {
         });
     };
 
+    public static getSnippetsFromESUsingRocchio = (
+        snippetId: string,
+        from: number,
+        size: number
+    ) => {
+        return fetch(`${config.ES_ROCCHIO_HOST}/${snippetId}?from=${from}&size=${size}`);
+    };
+
     public static getMoreLikeThisSnippetsFromDoc2Vec = (
         snippetId: string,
         from: number,

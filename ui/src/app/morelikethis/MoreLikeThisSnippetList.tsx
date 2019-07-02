@@ -29,24 +29,38 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         }
 
         if (this.context.moreLikeThisType === MoreLikeThisType.ES) {
-            this.fetchFromES();
+            this.fetchFromES(this.context.moreLikeThisSize, this.context.useRocchio);
         } else if (this.context.moreLikeThisType === MoreLikeThisType.DOC2VEC) {
-            this.fetchFromDoc2Vec();
+            this.fetchFromDoc2Vec(this.context.moreLikeThisSize);
         }
 
     };
 
-    private fetchFromES() {
-        Resources.getMoreLikeThisSnippetsFromES(
-            this.props.snippetId,
-            this.props.docId,
-            this.props.from,
-            this.context.moreLikeThisSize
-        ).then((json) => {
-            this.handleNewSnippets(json);
-        }).catch((data) => {
-            this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit ElasticSearch.'});
-        });
+    private fetchFromES(size: number, useRocchio: boolean) {
+        if (useRocchio) {
+            Resources.getSnippetsFromESUsingRocchio(
+                this.props.snippetId,
+                this.props.from,
+                size
+            ).then( (data) => {
+                data.json().then( (json) => {
+                    this.handleNewSnippets(json)
+                })
+            }).catch( (data) => {
+                this.setState({error: 'Fout bij ophalen ElasticSearch fragmenten met Rocchio.'})
+            });
+        } else {
+            Resources.getMoreLikeThisSnippetsFromES(
+                this.props.snippetId,
+                this.props.docId,
+                this.props.from,
+                size
+            ).then((json) => {
+                this.handleNewSnippets(json);
+            }).catch((data) => {
+                this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit ElasticSearch.'});
+            });
+        }
     }
 
     private handleNewSnippets(snippets: any) {
@@ -57,11 +71,11 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         this.setState({snippets, answers}, () => this.props.onAllSnippetsHaveAnswers(this.state.answers));
     }
 
-    private fetchFromDoc2Vec() {
+    private fetchFromDoc2Vec(size: number) {
         Resources.getMoreLikeThisSnippetsFromDoc2Vec(
             this.props.snippetId,
             this.props.from,
-            this.context.moreLikeThisSize
+            size
         ).then((data) => {
             if (!data.ok) {
                 throw Error("Status " + data.status);

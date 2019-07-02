@@ -38,6 +38,19 @@ class ConfigPage extends React.Component<any, any> {
                         </div>
                         <span className="align-middle"><em>'More like this'</em>-methode:</span>
                     </li>
+                    <li className="list-group-item">
+                        <div className="form-group row form-group-config">
+                            <label htmlFor="use-rocchio" className="col-sm-10 col-form-label" >Weeg geannoteerde fragmenten mee tijdens zoeken (<a href="https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html">Rocchio algoritme</a>)</label>
+                            <div className="col-sm-2">
+                                <input type="checkbox"
+                                    className="form-check-input"
+                                    id="use-rocchio"
+                                    checked={this.context.useRocchio}
+                                    onChange={(e) => this.context.updateContext({useRocchio: e.target.checked})}
+                                />
+                            </div>
+                        </div>
+                    </li>
                     <li className="list-group-item float-right">
                         <div className="form-group row form-group-config">
                             <label htmlFor="more-like-this-size" className="col-sm-10 col-form-label">Aantal fragmenten per <em>'more like this'</em>-pagina:</label>
