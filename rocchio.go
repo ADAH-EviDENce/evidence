@@ -35,13 +35,22 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		return
 	}
 
+	offset := intValue(w, r.Form, "from", 0)
+	if offset == -1 {
+		return
+	}
+	size := intValue(w, r.Form, "size", 10)
+	if size == -1 {
+		return
+	}
+
 	es, q, err := s.rocchioMoreLikeThis(r.Context(), id, queryWeight, posWeight, negWeight)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	search := es.Search("snippets").Type("snippet").Query(q)
+	search := es.Search("snippets").Type("snippet").From(offset).Size(size).Query(q)
 	result, err := search.Do(r.Context())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
