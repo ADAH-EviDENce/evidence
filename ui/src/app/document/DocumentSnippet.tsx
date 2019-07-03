@@ -40,7 +40,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
                     <CardHeader>
                         {moreLikeThis}
                         <span className="small">
-                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId} /></strong></span>
+                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId}/></strong></span>
                     </CardHeader>
                     <CardBody>
                         <p className="small">{this.props.text}</p>
@@ -50,6 +50,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
         );
     }
 }
+
 DocumentSnippet.contextType = AppContext;
 
 

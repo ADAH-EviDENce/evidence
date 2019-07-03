@@ -67,35 +67,32 @@ class ConfigPage extends React.Component<any, any> {
                 </Alert>
                 <ListGroup>
                     <ListGroupItem>
-                        <Container>
-                            <Row>
-                                <Col>
-                                <span
-                                    className="align-middle align-content-center"><em>'More like this'</em>-methode:</span>
-                                </Col>
-                                <Col>
-                                    <ButtonGroup size='sm' className="float-right">
-                                        {doc2vecButton}
-                                        {elasticButton}
-                                    </ButtonGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <FormGroup check>
-                                        <Input type="checkbox" name="check" id="use-rocchio-check"
-                                               defaultChecked={this.context.useRocchio}
-                                               onChange={this.updateUseRocchio}
-                                        />
-                                        <Label for="use-rocchio-check" check>
-                                            Weeg geannoteerde fragmenten mee tijdens zoeken (<a
-                                            href="https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html">Rocchio
-                                            algoritme</a>)
-                                        </Label>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Container>
+                        <Row>
+                            <Col><Label for='more-like-this-buttons'><em>'More like this'</em>-methode:</Label></Col>
+                            <Col>
+                                <ButtonGroup id='more-like-this-buttons' size='sm' className="float-right">
+                                    {doc2vecButton}
+                                    {elasticButton}
+                                </ButtonGroup>
+                            </Col>
+                        </Row>
+                    </ListGroupItem>
+                    <ListGroupItem>
+                        <Row>
+                            <Col>
+                                <FormGroup check>
+                                    <Input type="checkbox" name="check" id="use-rocchio-check"
+                                           defaultChecked={this.context.useRocchio}
+                                           onChange={this.updateUseRocchio}
+                                    />
+                                    <Label for="use-rocchio-check" check>
+                                        Weeg geannoteerde fragmenten mee tijdens zoeken (<a
+                                        href="https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html">Rocchio
+                                        algoritme</a>)
+                                    </Label>
+                                </FormGroup>
+                            </Col>
+                        </Row>
                     </ListGroupItem>
                     <ListGroupItem>
                         <FormGroup>
