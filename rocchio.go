@@ -68,6 +68,13 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	}
 	q.Should(expand)
 
+	// The docId is used to exclude snippets. Expected usage is to pass the
+	// document id that corresponds to the requested snippet.
+	docId := r.Form.Get("docId")
+	if docId != "" {
+		q.MustNot(elastic.NewTermQuery("document", docId))
+	}
+
 	search := es.Search("snippets").Type("snippet").From(offset).Size(size).Query(q)
 	result, err := search.Do(r.Context())
 	if err != nil {
