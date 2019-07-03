@@ -61,12 +61,15 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 	q := elastic.NewBoolQuery().
 		Must(elastic.NewMoreLikeThisQuery().Ids(id).Boost(queryWeight))
-	expand, err := s.rocchioExpand(r.Context(), es, q, ids, npos, posWeight, negWeight)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+
+	if len(ids) > 0 {
+		expand, err := s.rocchioExpand(r.Context(), es, q, ids, npos, posWeight, negWeight)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		q.Should(expand)
 	}
-	q.Should(expand)
 
 	// The docId is used to exclude snippets. Expected usage is to pass the
 	// document id that corresponds to the requested snippet.
