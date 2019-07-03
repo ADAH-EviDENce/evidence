@@ -40,6 +40,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         if (useRocchio) {
             Resources.getSnippetsFromESUsingRocchio(
                 this.props.snippetId,
+                this.props.docId,
                 this.props.from,
                 size
             ).then( (data) => {
@@ -74,6 +75,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     private fetchFromDoc2Vec(size: number) {
         Resources.getMoreLikeThisSnippetsFromDoc2Vec(
             this.props.snippetId,
+            this.props.docId,
             this.props.from,
             size
         ).then((data) => {

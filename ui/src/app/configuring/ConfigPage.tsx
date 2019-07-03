@@ -3,51 +3,37 @@ import Page from "../common/Page";
 import {AppContext} from "../AppContext";
 import {MoreLikeThisType} from "./MoreLikeThisType";
 import './ConfigPage.css';
-import {
-    Alert,
-    Button,
-    ButtonGroup,
-    Col,
-    Container,
-    FormGroup,
-    Input,
-    Label,
-    ListGroup,
-    ListGroupItem,
-    Row
-} from "reactstrap";
+import {Alert, Button, ButtonGroup, Col, FormGroup, Input, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
 
 class ConfigPage extends React.Component<any, any> {
-    private updateUseRocchio: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    private updateSize: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    private useElastic: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    private useDoc2Vec: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    static contextType = AppContext;
+    context!: React.ContextType<typeof AppContext>;
 
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {};
-
-        this.updateUseRocchio = (e: React.ChangeEvent<HTMLInputElement>) => {
-            this.context.updateContext({useRocchio: e.target.checked})
-        };
-
-        this.updateSize = (e: React.ChangeEvent<HTMLInputElement>) => {
-            var newSize = parseInt(e.target.value) || 0;
-            this.context.updateContext({moreLikeThisSize: newSize})
-        }
-
-        this.useElastic = (e: React.MouseEvent) => {
-            this.context.updateContext({moreLikeThisType: MoreLikeThisType.ES})
-        }
-
-        this.useDoc2Vec = (e: React.MouseEvent) => {
-            this.context.updateContext({moreLikeThisType: MoreLikeThisType.DOC2VEC})
-        }
     }
 
+    private updateUseRocchio = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.context.updateContext({useRocchio: e.target.checked})
+    };
+
+    private updateSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+        var newSize = parseInt(e.target.value) || 0;
+        this.context.updateContext({moreLikeThisSize: newSize})
+    };
+
+    private useElastic = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        this.context.updateContext({moreLikeThisType: MoreLikeThisType.ES})
+    };
+
+    private useDoc2Vec = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        this.context.updateContext({moreLikeThisType: MoreLikeThisType.DOC2VEC})
+    };
+
     render() {
-        let doc2vecButton
-        let elasticButton
+        let doc2vecButton;
+        let elasticButton;
 
         if (this.context.moreLikeThisType == MoreLikeThisType.DOC2VEC) {
             doc2vecButton = <Button color='info'>Doc2Vec</Button>
@@ -114,7 +100,5 @@ class ConfigPage extends React.Component<any, any> {
         );
     }
 }
-
-ConfigPage.contextType = AppContext;
 
 export default ConfigPage;

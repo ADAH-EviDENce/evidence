@@ -87,18 +87,20 @@ class Resources {
 
     public static getSnippetsFromESUsingRocchio = (
         snippetId: string,
+        docId: string,
         from: number,
         size: number
     ) => {
-        return fetch(`${config.ES_ROCCHIO_HOST}/${snippetId}?from=${from}&size=${size}`);
+        return fetch(`${config.ES_ROCCHIO_HOST}/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
     };
 
     public static getMoreLikeThisSnippetsFromDoc2Vec = (
         snippetId: string,
+        docId: string,
         from: number,
         size: number
     ) => {
-        return fetch(`${config.DOC2VEC_HOST}/${snippetId}?from=${from}&size=${size}`);
+        return fetch(`${config.DOC2VEC_HOST}/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
     };
 
     public static commitAnswers = (answers: Array<any>, user: string) => {
