@@ -17,6 +17,9 @@ import {
 } from "reactstrap";
 
 class ConfigPage extends React.Component<any, any> {
+    static contextType = AppContext;
+    context!: React.ContextType<typeof AppContext>;
+
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {};
@@ -108,7 +111,5 @@ class ConfigPage extends React.Component<any, any> {
         );
     }
 }
-
-ConfigPage.contextType = AppContext;
 
 export default ConfigPage;
