@@ -3,18 +3,7 @@ import Page from "../common/Page";
 import {AppContext} from "../AppContext";
 import {MoreLikeThisType} from "./MoreLikeThisType";
 import './ConfigPage.css';
-import {
-    Alert,
-    Button,
-    ButtonGroup,
-    Col,
-    FormGroup,
-    Input,
-    Label,
-    ListGroup,
-    ListGroupItem,
-    Row
-} from "reactstrap";
+import {Alert, Button, ButtonGroup, Col, FormGroup, Input, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
 
 class ConfigPage extends React.Component<any, any> {
     static contextType = AppContext;
@@ -40,11 +29,11 @@ class ConfigPage extends React.Component<any, any> {
 
     private useDoc2Vec = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         this.context.updateContext({moreLikeThisType: MoreLikeThisType.DOC2VEC})
-    }
+    };
 
     render() {
-        let doc2vecButton
-        let elasticButton
+        let doc2vecButton;
+        let elasticButton;
 
         if (this.context.moreLikeThisType == MoreLikeThisType.DOC2VEC) {
             doc2vecButton = <Button color='info'>Doc2Vec</Button>
