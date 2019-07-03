@@ -20,8 +20,8 @@ import {
 class ConfigPage extends React.Component<any, any> {
     private updateUseRocchio: (e: React.ChangeEvent<HTMLInputElement>) => void;
     private updateSize: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    private useElastic: (e: React.MouseEvent) => void;
-    private useDoc2Vec: (e: React.MouseEvent) => void;
+    private useElastic: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    private useDoc2Vec: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
     constructor(props: any, context: any) {
         super(props, context);
