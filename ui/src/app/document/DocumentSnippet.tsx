@@ -1,7 +1,7 @@
 import * as React from "react";
 import FontAwesome from "react-fontawesome";
 import {RouteComponentProps, withRouter} from "react-router";
-import {Card, CardBody, CardHeader} from "reactstrap";
+import {Badge, Button, Card, CardBody, CardHeader} from "reactstrap";
 import './DocumentSnippet.css';
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
@@ -26,11 +26,12 @@ class DocumentSnippet extends React.Component<PropsType, any> {
     render() {
         let moreLikeThis = this.props.moreLikeThis
             ?
-            <button className="btn btn-primary btn-sm float-right" onClick={this.handleMoreLikeThis}>
-                <span>More like this ({this.context.moreLikeThisType})</span>
+            <Button color="primary" size="sm" className='float-right' onClick={this.handleMoreLikeThis}>
+                More like this using&nbsp;<Badge color="success" pill>{this.context.moreLikeThisType}</Badge>
+                {this.context.useRocchio && <Badge color="warning" pill>+rocchio</Badge>}
                 &nbsp;
                 <FontAwesome name='chevron-right '/>
-            </button>
+            </Button>
             :
             null;
 
@@ -40,7 +41,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
                     <CardHeader>
                         {moreLikeThis}
                         <span className="small">
-                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId} /></strong></span>
+                            <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId}/></strong></span>
                     </CardHeader>
                     <CardBody>
                         <p className="small">{this.props.text}</p>
@@ -50,6 +51,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
         );
     }
 }
+
 DocumentSnippet.contextType = AppContext;
 
 
