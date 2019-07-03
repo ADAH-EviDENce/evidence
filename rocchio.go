@@ -12,6 +12,9 @@ import (
 	"github.com/olivere/elastic"
 )
 
+// Rocchio relevance feedback algorithm. This performs a MoreLikeThis-style
+// query based on the document with id qid, weights a (query), b (positive
+// expansion) and c (negative expansion).
 func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id := ps.ByName("id")
 	if !s.validateId(w, r, []string{id}) {
@@ -44,11 +47,26 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		return
 	}
 
-	es, q, err := s.rocchioMoreLikeThis(r.Context(), id, queryWeight, posWeight, negWeight)
+	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	ids, npos, err := s.getAssessed()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	q := elastic.NewBoolQuery().
+		Must(elastic.NewMoreLikeThisQuery().Ids(id).Boost(queryWeight))
+	expand, err := s.rocchioExpand(r.Context(), es, q, ids, npos, posWeight, negWeight)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q.Should(expand)
 
 	search := es.Search("snippets").Type("snippet").From(offset).Size(size).Query(q)
 	result, err := search.Do(r.Context())
@@ -72,37 +90,25 @@ func formWeight(r *http.Request, name string, def float64) (float64, error) {
 	}
 }
 
-// Rocchio relevance feedback algorithm. This performs a MoreLikeThis-style
-// query based on the document with id qid, weights a (query), b (positive
-// expansion) and c (negative expansion).
-func (s *server) rocchioMoreLikeThis(ctx context.Context, qid string, a, b, c float64) (es *elastic.Client, q elastic.Query, err error) {
+// Gets the identifiers of assessed snippets from the database.
+func (s *server) getAssessed() (ids []string, npos int, err error) {
 	tx, err := s.db.Begin()
-	if err != nil {
-		return nil, nil, err
-	}
-	defer tx.Commit()
-
-	ids := []string{qid}
-	ids, err = s.byAssessment(tx, true, ids)
 	if err != nil {
 		return
 	}
-	npos := len(ids)
+	defer tx.Commit()
+
+	ids, err = s.byAssessment(tx, true, nil)
+	if err != nil {
+		return
+	}
+	npos = len(ids)
 	ids, err = s.byAssessment(tx, false, ids)
 	if err != nil {
 		return
 	}
 
-	posWeight := b
-	if npos > 0 {
-		posWeight /= float64(npos)
-	}
-	negWeight := c
-	if len(ids) > npos {
-		negWeight /= float64(len(ids) - npos)
-	}
-
-	return s.makeRocchioQuery(ctx, ids, npos, a, posWeight, negWeight)
+	return
 }
 
 func (s *server) byAssessment(tx *sql.Tx, value bool, buf []string) (ids []string, err error) {
@@ -124,11 +130,10 @@ func (s *server) byAssessment(tx *sql.Tx, value bool, buf []string) (ids []strin
 	return
 }
 
-// MakeRocchioQuery constructs a query based on the positive and negative
-// samples (document identifers) ids[:npos] and ids[npos:],
-// with the given weights.
-func (s *server) makeRocchioQuery(ctx context.Context, ids []string, npos int, queryWeight, posWeight, negWeight float64) (*elastic.Client, elastic.Query, error) {
-	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint))
+// Rocchio expansion of the query q based on terms in the positive and negative
+// samples (document identifers) ids[:npos] and ids[npos:], with the given weights.
+func (s *server) rocchioExpand(ctx context.Context, es *elastic.Client, q elastic.Query,
+	ids []string, npos int, posWeight, negWeight float64) (eq elastic.Query, err error) {
 
 	mtv := es.MultiTermVectors().Index("snippets").Type("snippet")
 	mtv.Ids(ids)
@@ -138,32 +143,26 @@ func (s *server) makeRocchioQuery(ctx context.Context, ids []string, npos int, q
 
 	resp, err := mtv.Do(ctx)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
-	type termInField struct{ term, field string }
-	terms := make(map[termInField]float64)
+	eq = elastic.NewBoostingQuery().
+		Positive(termsQuery(resp.Docs[:npos])).Boost(posWeight).
+		Negative(termsQuery(resp.Docs[npos:])).NegativeBoost(negWeight)
+	return
+}
 
-	for i, doc := range resp.Docs {
-		weight := queryWeight
-		if i > 0 {
-			weight = posWeight
-		}
-		if i >= npos+1 {
-			weight = -negWeight
-		}
+func termsQuery(docs []*elastic.TermvectorsResponse) *elastic.BoolQuery {
+	q := elastic.NewBoolQuery()
 
+	for _, doc := range docs {
 		for field, fieldinfo := range doc.TermVectors {
-			for term, terminfo := range fieldinfo.Terms {
+			for term, _ := range fieldinfo.Terms {
 				// TODO Take into account DocFreq? What does the Score field contain?
-				terms[termInField{term, field}] += weight * float64(terminfo.TermFreq)
+				q.Should(elastic.NewTermQuery(field, term))
 			}
 		}
 	}
 
-	q := elastic.NewBoolQuery()
-	for t, boost := range terms {
-		q.Should(elastic.NewTermQuery(t.field, t.term).Boost(boost))
-	}
-	return es, q, nil
+	return q
 }
