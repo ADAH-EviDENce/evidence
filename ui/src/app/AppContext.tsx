@@ -4,6 +4,7 @@ import config from "../config";
 
 export type AppContextType = {
     search: string,
+    user: string,
     moreLikeThisType: MoreLikeThisType,
     moreLikeThisSize: number,
     useRocchio: boolean,
@@ -12,7 +13,7 @@ export type AppContextType = {
 
 export const initAppContext = {
     search: "",
-    user: null,
+    user: "",
     moreLikeThisType: config.MORE_LIKE_THIS_TYPE,
     moreLikeThisSize: config.MORE_LIKE_THIS_SIZE,
     useRocchio: config.USE_ROCCHIO,

@@ -14,26 +14,31 @@ interface MoreLikeThisSnippetListProps {
 }
 
 class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListProps, any> {
+    static contextType = AppContext;
+    context!: React.ContextType<typeof AppContext>;
+
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
             // array of snippet ids and relevance
             answers: []
         };
-        this.fetchSnippets();
+        this.fetchSnippets(context);
     }
 
-    fetchSnippets = () => {
+    private fetchSnippets = (context: React.ContextType<typeof AppContext>) => {
         if (this.state.snippets || this.state.error) {
             return;
         }
 
-        if (this.context.moreLikeThisType === MoreLikeThisType.ES) {
-            this.fetchFromES(this.context.moreLikeThisSize, this.context.useRocchio);
-        } else if (this.context.moreLikeThisType === MoreLikeThisType.DOC2VEC) {
-            this.fetchFromDoc2Vec(this.context.moreLikeThisSize);
+        switch (context.moreLikeThisType) {
+            case MoreLikeThisType.ES:
+                this.fetchFromES(context.moreLikeThisSize, context.useRocchio);
+                break;
+            case MoreLikeThisType.DOC2VEC:
+                this.fetchFromDoc2Vec(context.moreLikeThisSize);
+                break;
         }
-
     };
 
     private fetchFromES(size: number, useRocchio: boolean) {
@@ -144,6 +149,5 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         );
     }
 }
-MoreLikeThisSnippetList.contextType = AppContext;
 
 export default MoreLikeThisSnippetList;
