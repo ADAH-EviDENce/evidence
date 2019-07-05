@@ -52,7 +52,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
 
     private renderScoreForm(from: number, snippetId: string, documentId: string) {
         return <>
-            <h2>Te beoordelen (#{from + 1}-{from + parseInt(this.context.moreLikeThisSize)})</h2>
+            <h2>Te beoordelen (#{from + 1}-{from + this.context.moreLikeThisSize})</h2>
             <MoreLikeThisSnippetList
                 snippetId={snippetId}
                 docId={documentId}
