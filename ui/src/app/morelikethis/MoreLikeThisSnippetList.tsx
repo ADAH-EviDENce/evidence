@@ -144,6 +144,5 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         );
     }
 }
-MoreLikeThisSnippetList.contextType = AppContext;
 
 export default MoreLikeThisSnippetList;

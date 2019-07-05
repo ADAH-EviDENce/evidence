@@ -12,6 +12,9 @@ import {AppContext} from "../AppContext";
 import {Link} from "react-router-dom";
 
 class MoreLikeThisPage extends React.Component<any, any> {
+    static contextType = AppContext;
+    context!: React.ContextType<typeof AppContext>;
+
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {

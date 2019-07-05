@@ -2,8 +2,6 @@ import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
 import {AppContext} from "../AppContext";
-import config from "../../config";
-import ReadableId from "../common/ReadableId";
 
 type MoreLikeThisCommitModalProps = RouteComponentProps & {
     documentId: string,
@@ -14,6 +12,9 @@ type MoreLikeThisCommitModalProps = RouteComponentProps & {
 }
 
 class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalProps, any> {
+    static contextType = AppContext;
+    context!: React.ContextType<typeof AppContext>;
+
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {modal: false};
@@ -58,7 +59,5 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
         );
     }
 }
-
-MoreLikeThisCommitModal.contextType = AppContext;
 
 export default withRouter(MoreLikeThisCommitModal);
