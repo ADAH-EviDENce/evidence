@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 
 	"github.com/julienschmidt/httprouter"
@@ -165,13 +166,34 @@ func (s *server) rocchioExpand(ctx context.Context, es *elastic.Client, q elasti
 func termsQuery(docs []*elastic.TermvectorsResponse) *elastic.BoolQuery {
 	q := elastic.NewBoolQuery()
 
+	type termInField struct{ term, field string }
+	terms := make(map[termInField]int64)
+
 	for _, doc := range docs {
 		for field, fieldinfo := range doc.TermVectors {
-			for term, _ := range fieldinfo.Terms {
+			for term, terminfo := range fieldinfo.Terms {
 				// TODO Take into account DocFreq? What does the Score field contain?
-				q.Should(elastic.NewTermQuery(field, term))
+				terms[termInField{term, field}] += terminfo.TermFreq
 			}
 		}
+	}
+
+	type termWithFreq struct {
+		termInField
+		freq int64
+	}
+	byFreq := make([]termWithFreq, 0, len(terms))
+	for t, freq := range terms {
+		byFreq = append(byFreq, termWithFreq{t, freq})
+	}
+	sort.Slice(byFreq, func(i, j int) bool {
+		return byFreq[i].freq > byFreq[j].freq
+	})
+
+	// Limited to 25 terms to prevent queries from getting too large.
+	// TODO: make this number a parameter.
+	for _, t := range byFreq[25:] {
+		q.Should(elastic.NewTermQuery(t.field, t.term).Boost(float64(t.freq)))
 	}
 
 	return q
