@@ -1,0 +1,19 @@
+FROM jupyter/base-notebook
+MAINTAINER Meiert Grootes <m.grootes@esciencecenter.nl>
+
+RUN conda install scipy numpy smart_open gensim flask dask pandas
+RUN pip install import_ipynb
+
+RUN mkdir /home/jovyan/input
+RUN mkdir /home/jovyan/code
+RUN mkdir /home/jovyan/output
+
+RUN chown -R 1000:100 /home/jovyan/input
+RUN chown -R 1000:100 /home/jovyan/code
+RUN chown -R 1000:100 /home/jovyan/output
+
+ENTRYPOINT ["tini", "-g", "--"]
+
+ENV JUPYTER_ENABLE_LAB=true
+
+CMD ["start-notebook.sh"]

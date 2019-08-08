@@ -1,0 +1,7 @@
+FROM ubuntu:latest
+MAINTAINER Meiert Grootes <m.grootes@esciencecenter.nl>
+
+ARG codepath
+
+
+COPY --chown=1000:100 ${codepath} /code/
