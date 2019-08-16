@@ -9,6 +9,7 @@ Details are provided below
 ## tl;dr -- Let's get started   
 In order to get started
 - clone this repository to a location of your choice
+- make a derived directory with `mkdir derived' 
 - copy your corpus into the `/input/corpus_input` directory
 - configure the `model_config_template.conf` file accorrding to your preferences and save as `<your-config>.conf`
 - start up the framework by invoking `./run_evidence_framwork.sh <your-config>.conf`
