@@ -7,6 +7,7 @@ services:
       args:
         - inputpath=${INPUTPATH}
     image: "datastorage:${CORPUSNAME}"
+    container_name: "${TAG}_datastorage"
     #environment:
     #  - inpath=${INPUTPATH}
     user: "1000:100"
@@ -20,6 +21,7 @@ services:
       args:
         - codepath=${CODEPATH}
     image: "codestorage:${TAG}"
+    container_name: "${TAG}_codestorage"
     #environment:
     #  - inpath=${INPUTPATH}
     user: "1000:100"
@@ -33,6 +35,7 @@ services:
       args:
         - derivedpath=${DERIVEDPATH}
     image: "derivedstorage:${TAG}"
+    container_name: "${TAG}_derivedstorage"
     #environment:
     #  - inpath=${INPUTPATH}
     user: "1000:100"
@@ -48,6 +51,7 @@ services:
       - codestorage
       - derivedstorage
     image: "gend2v:${TAG}"
+    container_name: "${TAG}_generate_doc2vec_model"
     ports:
       - "6789:8888"
     volumes:
@@ -86,6 +90,7 @@ services:
       - derivedstorage
       - generate_doc2vec_model
     image: "inferal:${TAG}"
+    container_name: "${TAG}_inferal"
     ports:
       - "5000:5000"
     volumes:

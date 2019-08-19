@@ -27,7 +27,13 @@ echo "DERIVEDPATH=${DERIVED_PATH}" >> ${ENVIRONMENTFILE}
 #copy the environment file to the .env file used by docker-compose
 cp ${ENVIRONMENTFILE} .env
 
-#run docker compose using the .env file and TAG_NAMe as unique project name
+#run docker compose using the .env file and TAG_NAME as unique project name
 docker-compose --project-name ${TAG_NAME} up -d
-
 docker-compose --project-name ${TAG_NAME} logs | tail -100 > ${TAG_NAME}_logs.txt
+
+#retrieve token for jupyter lab and write to dockerfile
+docker exec -it ${TAG_NAME}_generate_doc2vec_model bash -c 'cat /home/jovyan/.local/share/jupyter/runtime/*.html' > conttokens.txt
+
+python get_lab_token.py conttokens.txt > ${TAG_NAME}_token_file.txt
+
+rm conttokens.txt
