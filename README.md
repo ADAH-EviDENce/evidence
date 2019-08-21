@@ -13,6 +13,7 @@ In order to get started
 - configure the `model_config_template.conf` file accorrding to your preferences and save as `<your-config>.conf`
 - start up the framework by invoking `./run_evidence_framwork.sh <your-config>.conf`
 - with a browser navigate to `http://127.0.0.1:6789` and log in with the token in the `<tag-name>_token_file.txt` file
+- edit the `filepaths.ipynb` to reflect your prefered filenames for corpus and model files
 - run the `preprocess_corpus.ipynb` to process the corpus
 - run the `generate_doc2vec_model.ipynb` notebook to generate the model and corpus vectors
 - the inferal-engine can be queried via a RESTapi at `http://127.0.0.1:5000/infer_vector`
