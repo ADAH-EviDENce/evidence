@@ -9,7 +9,6 @@ Details are provided below
 ## tl;dr -- Let's get started   
 In order to get started
 - clone this repository to a location of your choice
-- make a derived directory with `mkdir derived' 
 - copy your corpus into the `/input/corpus_input` directory
 - configure the `model_config_template.conf` file accorrding to your preferences and save as `<your-config>.conf`
 - start up the framework by invoking `./run_evidence_framwork.sh <your-config>.conf`
@@ -19,7 +18,7 @@ In order to get started
 - the inferal-engine can be queried via a RESTapi at `http://127.0.0.1:5000/infer_vector`
 - the api returns a json dump with the inferred vector as well as a model_loaded boolean indicating whether the model required for inferrance was present when thee query was present.
 
-The command `docker-compose -p <tag-name> down`
+The command `docker-compose -p <tag-name> doqwn`
 stops the framework and removes the containers. Results are perpetuated to the DOCKER volumes created.
 
 See Docker and Docker Compose documentation for more details
