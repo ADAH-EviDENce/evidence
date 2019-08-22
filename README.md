@@ -9,7 +9,7 @@ Details are provided below
 ## tl;dr -- Let's get started   
 In order to get started
 - clone this repository to a location of your choice
-- copy your corpus into the `/input/corpus_input` directory
+- copy your corpus into the `/input/corpus_input` directory (PLEASE take care to remove the test corpus currently present)
 - configure the `config_template_docker.conf` file accorrding to your preferences and save as `<your-config>.conf`
 - configure filename declaration `template_filenames_config.txt` file according to your preferences and save as `<your-filenames>.txt`
 - start up the framework by invoking `./run_evidence_framwork.sh <your-config>.conf <your-filenames>.txt`
