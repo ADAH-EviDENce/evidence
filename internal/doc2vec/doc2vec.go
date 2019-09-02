@@ -98,16 +98,15 @@ func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int, exc
 	}
 
 	pred := func(x interface{}) bool {
-		_, ok := exclude[x.(*Document).id]
-		return !ok
+		id := x.(*Document).id
+		_, ok := exclude[id]
+		return !ok && id != qid
 	}
 
-	// Request one more neighbor to filter out qid itself.
-	near, err := idx.tree.Search(ctx, doc, 1+size+offset, math.Inf(+1), pred)
+	near, err := idx.tree.Search(ctx, doc, size+offset, math.Inf(+1), pred)
 	if err != nil || len(near) == 0 {
 		return nil, err
 	}
-	near = near[1:] // Skip qid.
 
 	offset = min(offset, len(near))
 	end := min(offset+size, len(near))
