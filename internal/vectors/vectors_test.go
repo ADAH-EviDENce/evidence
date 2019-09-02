@@ -20,3 +20,8 @@ func TestDot(t *testing.T) {
 	y := []float32{1, 3, 5, 7}
 	assert.InEpsilon(t, 82, dot(x, y), 1e-15)
 }
+
+func TestZeroNorm(t *testing.T) {
+	x := make(Vector, 1)
+	assert.Equal(t, float32(0), x.Normalize()[0])
+}

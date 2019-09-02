@@ -24,7 +24,9 @@ func (x Vector) Normalize() Vector {
 	norm := math.Sqrt(dot(x, x))
 	y := make(Vector, len(x))
 	copy(y, x)
-	y.Mul(float32(1 / norm))
+	if norm > 0 {
+		y.Mul(float32(1 / norm))
+	}
 	return y
 }
 
