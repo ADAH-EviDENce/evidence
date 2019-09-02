@@ -3,29 +3,38 @@ package vectors
 
 import "math"
 
-// A Normalized vector has Euclidean norm 1.
-type Normalized []float32
+type Vector []float32
 
-// NewNormalized returns a normalized copy of the vector x.
-func NewNormalized(x []float32) Normalized {
-	norm := math.Sqrt(dot(x, x))
-	y := make(Normalized, len(x))
+// Adds y to x, in-place.
+func (x Vector) Add(y Vector) {
 	for i := range x {
-		y[i] = float32(float64(x[i]) / norm)
+		x[i] += y[i]
 	}
+}
+
+// Multiplies x by a, in-place.
+func (x Vector) Mul(a float32) {
+	for i := range x {
+		x[i] *= a
+	}
+}
+
+// Normalize returns a normalized copy of the vector x.
+func (x Vector) Normalize() Vector {
+	norm := math.Sqrt(dot(x, x))
+	y := make(Vector, len(x))
+	copy(y, x)
+	y.Mul(float32(1 / norm))
 	return y
 }
 
-// Euclidean distance between normalized vectors.
-func Distance(x, y Normalized) float64 {
+// Euclidean distance between two vectors.
+func Distance(x, y Vector) float64 {
 	// The square of the Euclidean distance between x and y is
 	// ‖x−y‖² = ‖x‖² + ‖y‖² − 2‖x·y‖.
-	// For normalized vectors x and y, that's ‖x−y‖² = 2 − 2‖x·y‖.
-	//
-	// The subtraction may give a negative result due to rounding error.
-
-	distSq := 2 - 2*dot(x, y)
+	distSq := dot(x, x) + dot(y, y) - 2*dot(x, y)
 	if distSq < 0 {
+		// The subtraction may give a negative result due to rounding error.
 		return 0
 	}
 	return math.Sqrt(distSq)

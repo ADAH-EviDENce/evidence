@@ -7,11 +7,11 @@ import (
 )
 
 func TestDistance(t *testing.T) {
-	x := NewNormalized([]float32{0, 2, 4, 8})
-	y := NewNormalized([]float32{1, 3, 5, 7})
+	x := Vector([]float32{0, 2, 4, 8}).Normalize()
+	y := Vector([]float32{1, 3, 5, 7}).Normalize()
 	assert.InEpsilon(t, 0.218218, Distance(x, y), 1e-6)
 
-	x = NewNormalized([]float32{.01, -.021, .003, .00015})
+	x = Vector([]float32{.01, -.021, .003, .00015}).Normalize()
 	assert.Equal(t, float64(0), Distance(x, x))
 }
 

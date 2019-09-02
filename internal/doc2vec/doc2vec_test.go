@@ -70,7 +70,7 @@ func makeDocs() []interface{} {
 	r := rand.New(rand.NewSource(42))
 
 	var docs []interface{}
-	v := make([]float32, 15)
+	v := make(vectors.Vector, 15)
 
 	for i := 0; i < 100; i++ {
 		for j := range v {
@@ -79,7 +79,7 @@ func makeDocs() []interface{} {
 
 		docs = append(docs, &Document{
 			id:     fmt.Sprintf("doc%d", i),
-			vector: vectors.NewNormalized(v),
+			vector: v.Normalize(),
 		})
 	}
 

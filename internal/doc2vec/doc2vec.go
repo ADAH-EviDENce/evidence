@@ -20,7 +20,7 @@ import (
 // combined with its a doc2vec vector.
 type Document struct {
 	id     string
-	vector vectors.Normalized
+	vector vectors.Vector
 }
 
 // An Index contains doc2vec vectors for documents and allows nearest neighbor
@@ -71,7 +71,7 @@ loop:
 			return nil, err
 		}
 
-		vector := make([]float32, 0)
+		vector := make(vectors.Vector, 0)
 		for _, f := range record[1:] {
 			x, err := strconv.ParseFloat(f, 32)
 			if err != nil {
@@ -82,7 +82,7 @@ loop:
 
 		docs = append(docs, &Document{
 			id:     record[0],
-			vector: vectors.NewNormalized(vector),
+			vector: vector.Normalize(),
 		})
 	}
 
