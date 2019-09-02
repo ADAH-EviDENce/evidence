@@ -25,7 +25,6 @@ export default {
     BASENAME: '/ui',
     ES_HOST: config.HOST + '/es',
     ES_ROCCHIO_HOST: config.HOST + '/rocchio',
-    DOC2VEC_HOST: config.HOST + '/doc2vec',
     ASSESS_HOST: config.HOST + '/assess',
     USERS_HOST: config.HOST + '/users',
     EXPORT_HOST: config.HOST + '/export',

@@ -91,16 +91,24 @@ loop:
 
 // Performs a nearest-neighbors query for the document with id qid.
 // The results at offset through offset+size are returned.
-func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int, exclude map[string]struct{}) ([]string, error) {
+func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int,
+	exclude map[string]struct{}) ([]string, error) {
+
 	doc, ok := idx.docs[qid]
 	if !ok {
 		return nil, fmt.Errorf("no document with id %q", qid)
 	}
 
+	return idx.nearest(ctx, doc, offset, size, exclude)
+}
+
+func (idx *Index) nearest(ctx context.Context, doc *Document, offset, size int,
+	exclude map[string]struct{}) ([]string, error) {
+
 	pred := func(x interface{}) bool {
 		id := x.(*Document).id
 		_, ok := exclude[id]
-		return !ok && id != qid
+		return !ok && id != doc.id
 	}
 
 	near, err := idx.tree.Search(ctx, doc, size+offset, math.Inf(+1), pred)

@@ -100,7 +100,16 @@ class Resources {
         from: number,
         size: number
     ) => {
-        return fetch(`${config.DOC2VEC_HOST}/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
+        return fetch(`${config.HOST}/dov2vec/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
+    };
+
+    public static getMoreLikeThisSnippetsFromDoc2VecUsingRocchio = (
+        snippetId: string,
+        docId: string,
+        from: number,
+        size: number
+    ) => {
+        return fetch(`${config.HOST}/doc2vec_rocchio/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
     };
 
     public static commitAnswers = (answers: Array<any>, user: string) => {

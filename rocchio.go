@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -24,16 +27,7 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 
 	r.ParseForm()
 
-	// Default values taken from Manning, Raghavan and Schütze,
-	// https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html
-	var queryWeight, posWeight, negWeight float64
-	queryWeight, err := formWeight(r, "queryweight", 1)
-	if err == nil {
-		posWeight, err = formWeight(r, "posweight", .75)
-	}
-	if err == nil {
-		negWeight, err = formWeight(r, "negweight", .15)
-	}
+	queryWeight, posWeight, negWeight, err := rocchioWeights(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -48,7 +42,8 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		return
 	}
 
-	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint))
+	es, err := elastic.NewSimpleClient(elastic.SetURL(s.elasticEndpoint),
+		elastic.SetHttpClient(&loggingClient))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -87,6 +82,43 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	}
 
 	json.NewEncoder(w).Encode(result)
+}
+
+// Parses Rocchio query, positive and negative weights from r.
+// They default to 1, .75 and .15 when not specified; these are the values
+// recommended by Manning, Raghavan and Schütze,
+// https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html
+func rocchioWeights(r *http.Request) (wq, wpos, wneg float64, err error) {
+	wq, err = formWeight(r, "queryweight", 1)
+	if err == nil {
+		wpos, err = formWeight(r, "posweight", .75)
+	}
+	if err == nil {
+		wneg, err = formWeight(r, "negweight", .15)
+	}
+	return
+}
+
+var loggingClient http.Client = *http.DefaultClient
+
+func loggingTransport(r *http.Request) (*http.Response, error) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("cannot read Body from HTTP request to ES: %v", err)
+		return nil, err
+	}
+	log.Printf("HTTP request to Elasticsearch: %s to %s with body %q",
+		r.Method, r.URL, body)
+	r.Body = ioutil.NopCloser(bytes.NewReader(body))
+	return http.DefaultTransport.RoundTrip(r)
+}
+
+type functionRoundTripper func(*http.Request) (*http.Response, error)
+
+func (f functionRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
+
+func init() {
+	loggingClient.Transport = functionRoundTripper(loggingTransport)
 }
 
 func formWeight(r *http.Request, name string, def float64) (float64, error) {

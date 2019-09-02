@@ -36,7 +36,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 this.fetchFromES(context.moreLikeThisSize, context.useRocchio);
                 break;
             case MoreLikeThisType.DOC2VEC:
-                this.fetchFromDoc2Vec(context.moreLikeThisSize);
+                this.fetchFromDoc2Vec(context.moreLikeThisSize, context.useRocchio);
                 break;
         }
     };
@@ -77,8 +77,11 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         this.setState({snippets, answers}, () => this.props.onAllSnippetsHaveAnswers(this.state.answers));
     }
 
-    private fetchFromDoc2Vec(size: number) {
-        Resources.getMoreLikeThisSnippetsFromDoc2Vec(
+    private fetchFromDoc2Vec(size: number, useRocchio: boolean) {
+        let get = useRocchio ?
+                  Resources.getMoreLikeThisSnippetsFromDoc2VecUsingRocchio :
+                  Resources.getMoreLikeThisSnippetsFromDoc2Vec;
+        get(
             this.props.snippetId,
             this.props.docId,
             this.props.from,

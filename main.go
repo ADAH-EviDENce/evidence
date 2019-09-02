@@ -80,6 +80,7 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.GET("/assess", s.get)
 
 	r.GET("/doc2vec/:id", s.doc2vecNearest)
+	r.GET("/doc2vec_rocchio/:id", s.doc2vecRocchio)
 
 	s.elasticProxy = httputil.NewSingleHostReverseProxy(esURL)
 
@@ -142,13 +143,59 @@ func (s *server) doc2vecNearest(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	// Simulate Elasticsearch output.
-	resp, err := s.mgetSnippets(r.Context(), w, near, true)
+	s.makeHits(r, w, near)
+}
+
+func (s *server) doc2vecRocchio(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	id := ps.ByName("id")
+	if !s.validateId(w, r, []string{id}) {
+		return
+	}
+
+	r.ParseForm()
+
+	uparams := r.URL.Query()
+	offset := intValue(w, uparams, "from", 0)
+	if offset == -1 {
+		return
+	}
+	size := intValue(w, uparams, "size", 10)
+	if size == -1 {
+		return
+	}
+
+	wq, wpos, wneg, err := rocchioWeights(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	ids, npos, err := s.getAssessed()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	near, err := s.d2vIndex.Rocchio(r.Context(), id, offset, size,
+		ids[:npos], ids[npos:], float32(wq), float32(wpos), float32(wneg))
+	if err != nil {
+		http.Error(w, "error in doc2vec Rocchio search",
+			http.StatusInternalServerError)
+		log.Print(err)
+		return
+	}
+
+	s.makeHits(r, w, near)
+}
+
+// Simulate Elasticsearch-style output for a doc2vec query.
+func (s *server) makeHits(r *http.Request, w http.ResponseWriter, ids []string) {
+	resp, err := s.mgetSnippets(r.Context(), w, ids, true)
 	if err != nil {
 		return
 	}
 
-	// Set Found to false to suppress it from the output.
+	// Set Found to false to suppress the field from the output.
 	for i := range resp.Docs {
 		resp.Docs[i].Found = false
 	}
