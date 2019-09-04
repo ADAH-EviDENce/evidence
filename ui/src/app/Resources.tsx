@@ -100,7 +100,7 @@ class Resources {
         from: number,
         size: number
     ) => {
-        return fetch(`${config.HOST}/dov2vec/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
+        return fetch(`${config.HOST}/doc2vec/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
     };
 
     public static getMoreLikeThisSnippetsFromDoc2VecUsingRocchio = (
