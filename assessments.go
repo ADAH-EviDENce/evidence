@@ -222,7 +222,8 @@ func (s *server) purge(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	}
 
 	log.Printf("purge by %s", username)
-	_, err = s.db.Exec(`DELETE FROM assessments`)
+	_, err = s.db.Exec(`DELETE FROM assessments WHERE userid IN`+
+		`(SELECT userid FROM users WHERE username = ?)`, username)
 	if err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		log.Print(err)
