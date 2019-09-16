@@ -170,7 +170,7 @@ func (s *server) doc2vecRocchio(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	ids, npos, err := s.getAssessed()
+	ids, npos, err := s.getAssessed("")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

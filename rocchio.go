@@ -49,7 +49,7 @@ func (s *server) rocchio(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		return
 	}
 
-	ids, npos, err := s.getAssessed()
+	ids, npos, err := s.getAssessed("")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -133,20 +133,22 @@ func formWeight(r *http.Request, name string, def float64) (float64, error) {
 	}
 }
 
-// Gets the identifiers of assessed snippets from the database.
-func (s *server) getAssessed() (ids []string, npos int, err error) {
+// Gets the identifiers of assessed snippets for some user from the database.
+//
+// If the username is "", all assessed snippets are returned.
+func (s *server) getAssessed(username string) (ids []string, npos int, err error) {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return
 	}
 	defer tx.Commit()
 
-	ids, err = s.byAssessment(tx, true, nil)
+	ids, err = s.byAssessment(tx, username, true, nil)
 	if err != nil {
 		return
 	}
 	npos = len(ids)
-	ids, err = s.byAssessment(tx, false, ids)
+	ids, err = s.byAssessment(tx, username, false, ids)
 	if err != nil {
 		return
 	}
@@ -154,8 +156,17 @@ func (s *server) getAssessed() (ids []string, npos int, err error) {
 	return
 }
 
-func (s *server) byAssessment(tx *sql.Tx, value bool, buf []string) (ids []string, err error) {
-	rows, err := tx.Query(`SELECT id FROM assessments WHERE relevant = ?`, value)
+func (s *server) byAssessment(tx *sql.Tx, username string, value bool,
+	buf []string) (ids []string, err error) {
+
+	var rows *sql.Rows
+	if username == "" {
+		rows, err = tx.Query(`SELECT id FROM assessments WHERE relevant = ?`, value)
+	} else {
+		rows, err = tx.Query(
+			`SELECT id FROM assessments JOIN users USING (userid) WHERE relevant = ? AND username = ?`,
+			value, username)
+	}
 	if err != nil {
 		return nil, err
 	}
