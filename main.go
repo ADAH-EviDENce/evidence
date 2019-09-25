@@ -135,7 +135,7 @@ func (s *server) doc2vecNearest(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	near, err := s.d2vIndex.Nearest(r.Context(), id, offset, size, nil)
+	near, err := s.d2vIndex.NearestToDoc(r.Context(), id, offset, size, nil)
 	if err != nil {
 		http.Error(w, "error in doc2vec nearest-neighbor search",
 			http.StatusInternalServerError)
