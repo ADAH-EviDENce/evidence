@@ -11,10 +11,12 @@ class MainHeader extends React.Component<any, any> {
     render() {
         return (
             <div className="main-header">
-                    <Link className="navbar-brand" to="/">Evidence</Link>
+                <h1><Link to="/">Evidence</Link></h1>
+                <div className="main-nav text-center">
                     <Link className="nav-item" to={"/search/"}>zoeken</Link>
                     <Link className="nav-item" to={"/config/"}>instellingen</Link>
                     <Link className="nav-item" to={"/data/"}>data</Link>
+                </div>
             </div>
         );
     }

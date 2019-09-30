@@ -4,6 +4,7 @@ import './Page.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {CrumbProps} from "./Crumb";
 import Breadcrumb from "./Breadcrumb";
+import ConfigSummary from "../configuring/ConfigSummary";
 
 const Fragment = React.Fragment;
 
@@ -20,14 +21,20 @@ class Page extends React.Component<PageProps, any> {
     render() {
         return (
             <Fragment>
-                <nav className="navbar sticky-top navbar-light bg-light">
+                <nav id="page-navbar" className="navbar sticky-top navbar-light bg-light">
                     <div className="container">
-                        <div className="offset-2 col-8">
-                            <MainHeader/>
+                        <div className="col-10">
+                            <div className="float-right">
+                                <small className="text-muted"><ConfigSummary/></small>
+                            </div>
                         </div>
-
                     </div>
                 </nav>
+                <div className="row page-header">
+                    <div className="col-12">
+                        <MainHeader/>
+                    </div>
+                </div>
                 <div className="container page-container">
                     <div className="rows page-body">
                         <div className="offset-2 col-8">
