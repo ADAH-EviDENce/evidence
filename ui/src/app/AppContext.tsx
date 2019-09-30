@@ -13,7 +13,7 @@ export type AppContextType = {
 
 export const initAppContext = {
     search: "",
-    user: "",
+    user: config.DEFAULT_USER,
     moreLikeThisType: config.MORE_LIKE_THIS_TYPE,
     moreLikeThisSize: config.MORE_LIKE_THIS_SIZE,
     useRocchio: config.USE_ROCCHIO,

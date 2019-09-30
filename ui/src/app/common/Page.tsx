@@ -5,6 +5,8 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {CrumbProps} from "./Crumb";
 import Breadcrumb from "./Breadcrumb";
 import ConfigSummary from "../configuring/ConfigSummary";
+import ConfigModal from "../configuring/ConfigModal";
+import {AppContext} from "../AppContext";
 
 const Fragment = React.Fragment;
 
@@ -15,10 +17,13 @@ type PageProps = RouteComponentProps & {
 class Page extends React.Component<PageProps, any> {
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {};
+        this.state = {
+            configModal: !this.context.user
+        };
     }
 
     render() {
+
         return (
             <Fragment>
                 <nav id="page-navbar" className="navbar sticky-top navbar-light bg-light">
@@ -30,9 +35,10 @@ class Page extends React.Component<PageProps, any> {
                         </div>
                     </div>
                 </nav>
+                <ConfigModal isOpen={this.state.configModal} onClose={() => this.setState({configModal: false})}/>
                 <div className="row page-header">
                     <div className="col-12">
-                        <MainHeader/>
+                        <MainHeader openConfig={() => this.setState({configModal: true})}/>
                     </div>
                 </div>
                 <div className="container page-container">
@@ -43,9 +49,12 @@ class Page extends React.Component<PageProps, any> {
                         </div>
                     </div>
                 </div>
+
             </Fragment>
         );
     }
 }
+
+Page.contextType = AppContext;
 
 export default withRouter(Page);

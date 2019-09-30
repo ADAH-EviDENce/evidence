@@ -1,7 +1,6 @@
 import * as React from "react";
 import {AppContext} from "../AppContext";
 import {MoreLikeThisType} from "./MoreLikeThisType";
-import './ConfigPage.css';
 import {Button, ButtonGroup, Col, CustomInput, Input, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
 import InfoPopover from "../common/InfoPopover";
 

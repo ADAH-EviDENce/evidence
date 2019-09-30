@@ -1,8 +1,13 @@
 import * as React from "react";
 import {Link} from "react-router-dom";
 import './MainHeader.css';
+import {Button} from "reactstrap";
 
-class MainHeader extends React.Component<any, any> {
+interface MainHeaderProps {
+    openConfig: Function,
+}
+
+class MainHeader extends React.Component<MainHeaderProps, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {};
@@ -14,7 +19,7 @@ class MainHeader extends React.Component<any, any> {
                 <h1><Link to="/">Evidence</Link></h1>
                 <div className="main-nav text-center">
                     <Link className="nav-item" to={"/search/"}>zoeken</Link>
-                    <Link className="nav-item" to={"/config/"}>instellingen</Link>
+                    <Button color="link" className="nav-item" onClick={() => this.props.openConfig()}>instellingen</Button>
                     <Link className="nav-item" to={"/data/"}>data</Link>
                 </div>
             </div>

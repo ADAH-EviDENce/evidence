@@ -27,10 +27,8 @@ class DocumentSnippet extends React.Component<PropsType, any> {
         let moreLikeThis = this.props.moreLikeThis
             ?
             <Button color="primary" size="sm" className='float-right' onClick={this.handleMoreLikeThis}>
-                More like this using&nbsp;<Badge color="success" pill>{this.context.moreLikeThisType}</Badge>
-                {this.context.useRocchio && <Badge color="warning" pill>+rocchio</Badge>}
-                &nbsp;
-                <FontAwesome name='chevron-right '/>
+                More like this
+                <FontAwesome name='chevron-right ml-1'/>
             </Button>
             :
             null;
