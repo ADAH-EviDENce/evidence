@@ -30,7 +30,7 @@ class InfoBox extends React.Component<InfoBoxProps, any> {
                     :
                     null
                 }
-                {this.props.type == 'info'
+                {this.props.type === 'info'
                     ?
                     <span className="fa-stack fa-sm mt-1" style={{"verticalAlign": "top"}}>
                         <i className='fa fa-circle-thin fa-stack-2x'/>

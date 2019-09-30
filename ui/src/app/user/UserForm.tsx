@@ -1,12 +1,11 @@
 import React from "react";
 import Resources from "../Resources";
 import FontAwesome from "react-fontawesome";
-import Page from "../common/Page";
 import InfoBox from "../common/InfoBox";
 import {AppContext} from "../AppContext";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
-class UserPage extends React.Component<any, any> {
+class UserForm extends React.Component<any, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -41,7 +40,7 @@ class UserPage extends React.Component<any, any> {
 
     private renderUserForm() {
         return <>
-            <ul className="list-group d-flex" role="group">
+            <ul className="list-group d-flex list-group-flush" role="group">
                 {this.state.users.map((user: any, i: number) => {
                     return <li
                         key={i}
@@ -65,48 +64,23 @@ class UserPage extends React.Component<any, any> {
                     </li>
                 })}
             </ul>
-            {this.renderBtns()}
         </>;
-    }
-
-    private renderBtns() {
-        return <div className="float-right mt-3 mb-3">
-            <button
-                onClick={() => this.props.history.goBack()}
-                className="search btn btn-sm btn-success mr-3"
-                disabled={!this.context.user}
-            >
-                <FontAwesome name="chevron-left"/>
-                &nbsp;
-                Terug
-            </button>
-            <button
-                onClick={() => this.props.history.push("/search/")}
-                className="search btn btn-sm btn-success"
-                disabled={!this.context.user}
-            >
-                Zoeken
-                &nbsp;
-                <FontAwesome name="chevron-right"/>
-            </button>
-        </div>;
     }
 
     render() {
         return (
-            <Page>
-                <h2>Selecteer gebruiker</h2>
+            <>
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 {this.state.loading ?
                     <FontAwesome name='spinner' spin/>
                     :
                     this.renderUserForm()
                 }
-            </Page>
+            </>
         );
     }
 }
 
-UserPage.contextType = AppContext;
+UserForm.contextType = AppContext;
 
-export default withRouter(UserPage);
+export default withRouter(UserForm);

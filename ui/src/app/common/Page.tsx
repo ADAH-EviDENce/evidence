@@ -20,15 +20,18 @@ class Page extends React.Component<PageProps, any> {
     render() {
         return (
             <Fragment>
-                <div className="container page-container">
-                    <div className="row page-header">
-                        <div className="col-12">
+                <nav className="navbar sticky-top navbar-light bg-light">
+                    <div className="container">
+                        <div className="offset-2 col-8">
                             <MainHeader/>
                         </div>
+
                     </div>
+                </nav>
+                <div className="container page-container">
                     <div className="rows page-body">
                         <div className="offset-2 col-8">
-                            {this.props.breadcrumbTrail ? <Breadcrumb trail={this.props.breadcrumbTrail} /> : null}
+                            {this.props.breadcrumbTrail ? <Breadcrumb trail={this.props.breadcrumbTrail}/> : null}
                             {this.props.children}
                         </div>
                     </div>
