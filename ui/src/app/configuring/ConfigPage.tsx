@@ -3,9 +3,10 @@ import Page from "../common/Page";
 import {AppContext} from "../AppContext";
 import './ConfigPage.css';
 import {Alert} from "reactstrap";
-import UserForm from "../user/UserForm";
+import UserForm from "./UserForm";
 import ConfigForm from "./ConfigForm";
 import ConfigBtns from "./ConfigBtns";
+import IconWarning from "../common/IconWarning";
 
 class ConfigPage extends React.Component<any, any> {
     static contextType = AppContext;
@@ -17,8 +18,11 @@ class ConfigPage extends React.Component<any, any> {
     }
 
     render() {
+        const selectUserWarning = this.context.user
+            ? null
+            : <> (verplicht) <IconWarning/></>;
 
-        return (
+            return (
             <Page>
                 <h2>Instellingen</h2>
                 <Alert color='info'>
@@ -27,7 +31,7 @@ class ConfigPage extends React.Component<any, any> {
 
                 <div className="card">
                     <div className="card-header">
-                        <h4>Gebruiker</h4>
+                        <h4>Gebruiker{selectUserWarning}</h4>
                     </div>
                     <div className="card-block">
                         <UserForm/>

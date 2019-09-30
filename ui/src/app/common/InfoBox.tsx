@@ -1,5 +1,6 @@
 import * as React from "react";
 import './InfoBox.css';
+import IconWarning from "./IconWarning";
 
 /**
  * Show msg as alert
@@ -37,10 +38,7 @@ class InfoBox extends React.Component<InfoBoxProps, any> {
                         <i className='fa fa-info fa-stack-1x'/>
                     </span>
                     :
-                    <span className="fa-stack fa-sm mt-1" style={{"verticalAlign": "top"}}>
-                        <i className='fa fa-circle-thin fa-stack-2x'/>
-                        <i className='fa fa-exclamation fa-stack-1x'/>
-                    </span>
+                    <span style={{"verticalAlign": "top"}}><IconWarning/></span>
                 }
                 &nbsp;
                 &nbsp;
