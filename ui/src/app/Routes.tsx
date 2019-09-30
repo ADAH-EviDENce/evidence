@@ -5,6 +5,7 @@ import MoreLikeThisPage from "./morelikethis/MoreLikeThisPage";
 import DocumentPage from "./document/DocumentPage";
 import ConfigPage from "./configuring/ConfigPage";
 import DataPage from "./data/DataPage";
+import {AppContext} from "./AppContext";
 
 class Routes extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -15,6 +16,11 @@ class Routes extends React.Component<any, any> {
     render() {
         // add pathname as key to force instantiation of new component when path changes
         const pathname = this.props.location.pathname;
+
+        if(!this.context.user && pathname !== '/config/') {
+            this.props.history.push(`/config/`);
+            return null;
+        }
 
         return (
             <Switch>
@@ -29,5 +35,6 @@ class Routes extends React.Component<any, any> {
         );
     }
 }
+Routes.contextType = AppContext;
 
 export default withRouter(Routes);
