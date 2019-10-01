@@ -9,11 +9,15 @@
 
 
 #source the config file
+echo 'sourcing config file'
 source $1
 
+
 #setup environment variables and a perpetuated environment file
+echo 'setting tag name'
 TAG_NAME=${CORPUS_NAME}_${MODEL_NAME}
 
+echo "writing environment file"
 ENVIRONMENTFILE=${TAG_NAME}.env
 
 > ${ENVIRONMENTFILE}
@@ -26,6 +30,7 @@ echo "CODEPATH=${CODE_PATH}" >> ${ENVIRONMENTFILE}
 echo "DERIVEDPATH=${DERIVED_PATH}" >> ${ENVIRONMENTFILE}
 
 #copy the environment file to the .env file used by docker-compose
+echo "copying environment file"
 cp ${ENVIRONMENTFILE} .env
 
 
@@ -33,14 +38,19 @@ cp ${ENVIRONMENTFILE} .env
 cp $2 ./config/filenames_config.txt
 cp $2 ${TAG_NAME}_filenames_config.txt
 
-
+echo "running docker compose"
 #run docker compose using the .env file and TAG_NAME as unique project name
-docker-compose --project-name ${TAG_NAME} up -d
+docker-compose --project-name ${TAG_NAME} up  -d
 docker-compose --project-name ${TAG_NAME} logs | tail -100 > ${TAG_NAME}_logs.txt
 
+echo "retrieving token frrom container"
 #retrieve token for jupyter lab and write to dockerfile
-docker exec -it ${TAG_NAME}_generate_doc2vec_model bash -c 'cat /home/jovyan/.local/share/jupyter/runtime/*.html' > conttokens.txt
+#echo "docker exec -it ${TAG_NAME}_generate_doc2vec_model bash -c 'cat /home/jovyan/.local/share/jupyter/runtime/*.html'  > conttokens.txt"
+#sleep 5
+docker exec ${TAG_NAME}_generate_doc2vec_model bash -c 'cat /home/jovyan/.local/share/jupyter/runtime/*.html'  > conttokens.txt
+echo "retrieved"
 
+echo "creating token file"
 python get_lab_token.py conttokens.txt > ${TAG_NAME}_token_file.txt
 
 rm conttokens.txt

@@ -138,6 +138,44 @@ services:
 
 
 
+  representationapi:
+    build:
+      context: .
+      dockerfile: ./representationapicontainer/dockerfile-representationapi
+    depends_on:
+      - datastorage
+      - configstorage
+      - codestorage
+      - derivedstorage
+      - generate_doc2vec_model
+    image: "representationapi:${TAG}"
+    container_name: "${TAG}_representationapi"
+    ports:
+      - "5001:5000"
+    volumes:
+      - type: volume
+        source: volume_config
+        target: /home/jovyan/config/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_code
+        target: /home/jovyan/code/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_derived
+        target: /home/jovyan/output/
+        read_only: false
+        volume:
+          nocopy: true
+
+
+
 volumes:
   #test:
   volume_data:
