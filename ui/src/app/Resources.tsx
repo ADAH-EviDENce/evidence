@@ -90,9 +90,10 @@ class Resources {
         docId: string,
         from: number,
         size: number,
+        user: string
     ) {
         const url = `${config.ES_ROCCHIO_HOST}/${snippetId}?docId=${docId}&from=${from}&size=${size}`;
-        return fetch(url);
+        return fetch(url, Resources.withUserHeader(user));
     };
 
     public static getMoreLikeThisSnippetsFromDoc2Vec = (
@@ -110,9 +111,10 @@ class Resources {
         docId: string,
         from: number,
         size: number,
+        user: string
     ) {
         const url = `${config.HOST}/doc2vec_rocchio/${snippetId}?docId=${docId}&from=${from}&size=${size}`;
-        return fetch(url);
+        return fetch(url, Resources.withUserHeader(user));
     };
 
     public static commitAnswers = (answers: Array<any>, user: string) => {

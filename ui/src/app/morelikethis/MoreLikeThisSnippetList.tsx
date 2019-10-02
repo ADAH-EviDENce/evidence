@@ -14,8 +14,6 @@ interface MoreLikeThisSnippetListProps {
 }
 
 class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListProps, any> {
-    static contextType = AppContext;
-    context!: React.ContextType<typeof AppContext>;
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -47,7 +45,8 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 this.props.snippetId,
                 this.props.docId,
                 this.props.from,
-                size
+                size,
+                this.context.user
             ).then( (data) => {
                 data.json().then( (json) => {
                     this.handleNewSnippets(json)
@@ -85,7 +84,8 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             this.props.snippetId,
             this.props.docId,
             this.props.from,
-            size
+            size,
+            this.context.user
         ).then((data) => {
             if (!data.ok) {
                 throw Error("Status " + data.status);
@@ -152,5 +152,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         );
     }
 }
+
+MoreLikeThisSnippetList.contextType = AppContext;
 
 export default MoreLikeThisSnippetList;
