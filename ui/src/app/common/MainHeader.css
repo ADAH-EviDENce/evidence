@@ -1,3 +1,13 @@
 h1 a {
     color: inherit;
 }
+
+.main-header {
+    margin-top: 1em;
+}
+
+.main-header .btn-link {
+    margin-top: 0;
+    padding-top: 0;
+    vertical-align: unset;
+}

@@ -128,10 +128,7 @@ class Resources {
     }
 
     public static getExport() {
-        return fetch(config.EXPORT_HOST)
-            .then(function(data) {
-                return data.text()
-            });
+        return fetch(config.EXPORT_HOST).then(data => data.text());
     }
 
     public static purgeDatabase(user: string) {

@@ -21,7 +21,7 @@ class ConfirmModal extends React.Component<ConfirmModalProps, any> {
                         Weet u het zeker?
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="secondary" onClick={() => this.props.onCancel()}>Nee</Button>
+                        <Button color="outline-secondary" onClick={() => this.props.onCancel()}>Nee</Button>
                         <Button color="danger" onClick={() => this.props.onContinue()}>Ja</Button>
                     </ModalFooter>
                 </Modal>

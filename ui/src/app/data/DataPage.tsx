@@ -22,7 +22,7 @@ export default class DataPage extends React.Component<any, any> {
             const csv = new Blob([data], {type: "text/csv;charset=utf-8"});
             FileSaver.saveAs(csv, exportFilename);
         }).catch(() => {
-            this.setState({error: 'Het csv-bestand kon niet opgehaald worden.'});
+            this.setState({error: 'Csv-bestand kon niet opgehaald worden.'});
         });
     };
 
@@ -30,11 +30,11 @@ export default class DataPage extends React.Component<any, any> {
         Resources.purgeDatabase(this.context.user).then(() => {
             this.setState({purging: false, info: 'Database is geleegd.'});
         }).catch(() => {
-            this.setState({purging: false, error: 'De database kon niet geleegd worden.'});
+            this.setState({purging: false, error: 'Database kon niet geleegd worden.'});
         });
     };
 
-    private askForPurge = () => {
+    private confirmPurge = () => {
         this.setState({purging: true});
     };
 
@@ -59,7 +59,7 @@ export default class DataPage extends React.Component<any, any> {
                     <li className="list-group-item list-group-item-action">
                         Leeg database
                         <button
-                            onClick={() => this.askForPurge()}
+                            onClick={this.confirmPurge}
                             className="float-right btn btn-danger btn-sm"
                         >
                             <FontAwesome name='trash'/>
