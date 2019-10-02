@@ -12,18 +12,22 @@ interface ConfigModalProps {
 }
 
 class ConfigModal extends React.Component<ConfigModalProps, any> {
-    static contextType = AppContext;
-    context!: React.ContextType<typeof AppContext>;
 
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
-            modal: false
+            modal: false,
+            formContext: JSON.parse(JSON.stringify(this.context))
         };
-    }
+    };
 
-    toggle = () => {
-        this.setState({modal: !this.state.modal});
+    updateContext = () => {
+        this.context.updateContext(this.state.formContext);
+        this.props.onClose();
+    };
+
+    private updateFormContext = (updatedContextField : any) => {
+        this.setState({formContext: Object.assign(this.state.formContext, updatedContextField)});
     };
 
     render() {
@@ -32,8 +36,8 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
             : <> (verplicht) <IconWarning/></>;
 
             return (<>
-                <Modal className="config-modal" size="lg" isOpen={this.props.isOpen} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle} className="text-center">Instellingen</ModalHeader>
+                <Modal className="config-modal" size="lg" isOpen={this.props.isOpen} >
+                    <ModalHeader className="text-center">Instellingen</ModalHeader>
                     <ModalBody>
 
                         <Alert color='info'>
@@ -45,7 +49,7 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                                 Gebruiker{selectUserWarning}
                             </div>
                             <div className="card-block">
-                                <UserForm/>
+                                <UserForm updateFormContext={this.updateFormContext}/>
                             </div>
                         </div>
                         <div className="card mt-3">
@@ -53,14 +57,14 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                                 Zoeken en beoordelen
                             </div>
                             <div className="card-block">
-                                <ConfigForm/>
+                                <ConfigForm formContext={this.state.formContext} updateFormContext={this.updateFormContext}/>
                             </div>
                         </div>
                     </ModalBody>
                     <ModalFooter>
                         <div className="float-right mt-3 mb-3">
                             <button
-                                onClick={() => this.props.onClose()}
+                                onClick={this.updateContext}
                                 className="search btn btn-sm btn-success"
                                 disabled={!this.context.user}
                             >
@@ -75,5 +79,7 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
         );
     }
 }
+
+ConfigModal.contextType = AppContext;
 
 export default ConfigModal;

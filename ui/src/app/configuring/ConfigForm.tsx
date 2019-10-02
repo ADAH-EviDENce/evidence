@@ -4,7 +4,12 @@ import {MoreLikeThisType} from "./MoreLikeThisType";
 import {Button, ButtonGroup, Col, CustomInput, Input, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
 import InfoPopover from "../common/InfoPopover";
 
-class ConfigForm extends React.Component<any, any> {
+interface ConfigFormProps {
+    formContext: any,
+    updateFormContext: Function
+}
+
+class ConfigForm extends React.Component<ConfigFormProps, any> {
     static contextType = AppContext;
     context!: React.ContextType<typeof AppContext>;
 
@@ -16,27 +21,27 @@ class ConfigForm extends React.Component<any, any> {
     }
 
     private updateUseRocchio = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.context.updateContext({useRocchio: e.target.checked})
+        this.props.updateFormContext({useRocchio: e.target.checked});
     };
 
     private updateSize = (e: React.ChangeEvent<HTMLInputElement>) => {
         var newSize = parseInt(e.target.value) || 0;
-        this.context.updateContext({moreLikeThisSize: newSize})
+        this.props.updateFormContext({moreLikeThisSize: newSize});
     };
 
     private useElastic = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        this.context.updateContext({moreLikeThisType: MoreLikeThisType.ES})
+        this.props.updateFormContext({moreLikeThisType: MoreLikeThisType.ES});
     };
 
     private useDoc2Vec = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        this.context.updateContext({moreLikeThisType: MoreLikeThisType.DOC2VEC})
+        this.props.updateFormContext({moreLikeThisType: MoreLikeThisType.DOC2VEC});
     };
 
     render() {
         let doc2vecButton;
         let elasticButton;
 
-        if (this.context.moreLikeThisType == MoreLikeThisType.DOC2VEC) {
+        if (this.props.formContext.moreLikeThisType == MoreLikeThisType.DOC2VEC) {
             doc2vecButton = <Button color='info'>Doc2Vec</Button>;
             elasticButton = <Button outline color='secondary' onClick={this.useElastic}>ElasticSearch (ES)</Button>
         } else {
@@ -65,7 +70,7 @@ class ConfigForm extends React.Component<any, any> {
                             <Col sm='2'>
                                 <Input id="more-like-this-size"
                                        type="number" min={1}
-                                       value={this.context.moreLikeThisSize}
+                                       value={this.props.formContext.moreLikeThisSize}
                                        onChange={this.updateSize}
                                        bsSize="sm"
                                        className="float-right"
@@ -85,7 +90,7 @@ class ConfigForm extends React.Component<any, any> {
                         </Col>
                         <Col sm='2'>
                             <CustomInput
-                                defaultChecked={this.context.useRocchio}
+                                defaultChecked={this.props.formContext.useRocchio}
                                 onChange={this.updateUseRocchio}
                                 type="switch"
                                 id="use-rocchio-check"

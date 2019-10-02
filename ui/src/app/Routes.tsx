@@ -13,17 +13,17 @@ class Routes extends React.Component<any, any> {
     }
 
     render() {
-        // add pathname as key to force instantiation of new component when path changes
-        const pathname = this.props.location.pathname;
+        // add key to force instantiation of new component when path or context changes
+        const key = this.props.location.pathname + JSON.stringify(this.context);
 
         return (
             <Switch>
                 <Redirect exact from="/" to="/search/"/>
-                <Route exact path='/data/' component={DataPage} key={pathname}/>
-                <Route exact path='/documents/:did/' component={DocumentPage} key={pathname}/>
-                <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThisPage} key={pathname}/>
-                <Route exact path='/search/' component={Search} key={pathname}/>
-                <Route exact path='/search/:search/' component={Search} key={pathname}/>
+                <Route exact path='/data/' component={DataPage} key={key}/>
+                <Route exact path='/documents/:did/' component={DocumentPage} key={key}/>
+                <Route exact path='/documents/:did/snippets/:sid/from/:from/' component={MoreLikeThisPage} key={key}/>
+                <Route exact path='/search/' component={Search} key={key}/>
+                <Route exact path='/search/:search/' component={Search} key={key}/>
             </Switch>
         );
     }

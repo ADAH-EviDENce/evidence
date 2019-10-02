@@ -3,9 +3,13 @@ import Resources from "../Resources";
 import FontAwesome from "react-fontawesome";
 import InfoBox from "../common/InfoBox";
 import {AppContext} from "../AppContext";
-import {withRouter} from "react-router-dom";
+import {RouteComponentProps, withRouter} from "react-router-dom";
 
-class UserForm extends React.Component<any, any> {
+type UserFormProps = RouteComponentProps & {
+    updateFormContext: Function
+}
+
+class UserForm extends React.Component<UserFormProps, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -35,7 +39,7 @@ class UserForm extends React.Component<any, any> {
     }
 
     private handleSelect(user: string) {
-        this.context.updateContext({user})
+        this.props.updateFormContext({formContext: {user}});
     }
 
     private renderUserForm() {

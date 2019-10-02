@@ -85,13 +85,14 @@ class Resources {
         });
     };
 
-    public static getSnippetsFromESUsingRocchio = (
+    public static getSnippetsFromESUsingRocchio (
         snippetId: string,
         docId: string,
         from: number,
-        size: number
-    ) => {
-        return fetch(`${config.ES_ROCCHIO_HOST}/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
+        size: number,
+    ) {
+        const url = `${config.ES_ROCCHIO_HOST}/${snippetId}?docId=${docId}&from=${from}&size=${size}`;
+        return fetch(url);
     };
 
     public static getMoreLikeThisSnippetsFromDoc2Vec = (
@@ -100,16 +101,18 @@ class Resources {
         from: number,
         size: number
     ) => {
-        return fetch(`${config.HOST}/doc2vec/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
+        const url = `${config.HOST}/doc2vec/${snippetId}?docId=${docId}&from=${from}&size=${size}`;
+        return fetch(url);
     };
 
-    public static getMoreLikeThisSnippetsFromDoc2VecUsingRocchio = (
+    public static getMoreLikeThisSnippetsFromDoc2VecUsingRocchio (
         snippetId: string,
         docId: string,
         from: number,
-        size: number
-    ) => {
-        return fetch(`${config.HOST}/doc2vec_rocchio/${snippetId}?docId=${docId}&from=${from}&size=${size}`);
+        size: number,
+    ) {
+        const url = `${config.HOST}/doc2vec_rocchio/${snippetId}?docId=${docId}&from=${from}&size=${size}`;
+        return fetch(url);
     };
 
     public static commitAnswers = (answers: Array<any>, user: string) => {
@@ -132,11 +135,15 @@ class Resources {
     }
 
     public static purgeDatabase(user: string) {
-        return fetch(config.PURGE_HOST, {
+        return fetch(config.PURGE_HOST, Resources.withUserHeader(user));
+    }
+
+    private static withUserHeader(user: string) {
+        return {
             headers: {
                 "X-User": user
             }
-        });
+        };
     }
 }
 
