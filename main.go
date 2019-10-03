@@ -93,6 +93,10 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 
 	r.GET("/rocchio/:id", s.rocchio)
 
+	r.DELETE("/seed/:id", s.removeSeed)
+	r.GET("/seed", s.listSeed)
+	r.POST("/seed", s.addSeed)
+
 	r.GET("/ui/*path", s.ui)
 
 	r.GET("/users", s.listUsers)

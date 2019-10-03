@@ -9,9 +9,14 @@ CREATE TABLE assessments (
   FOREIGN KEY(userid) REFERENCES users(userid)
 ) WITHOUT ROWID;
 
+-- Seed set of snippets.
+CREATE TABLE seed (
+  id TEXT NOT NULL,
+  userid INTEGER NOT NULL,
+  PRIMARY KEY(id, userid)
+) WITHOUT ROWID;
+
 CREATE TABLE users (
   userid INTEGER PRIMARY KEY,
   username TEXT UNIQUE NOT NULL
 );
-
-CREATE INDEX users_by_username ON users (username);
