@@ -89,9 +89,17 @@ loop:
 	return NewIndex(docs)
 }
 
+// Performs a nearest-neighbors query given a vector.
+// The results at offset through offset+size are returned.
+func (idx *Index) Nearest(ctx context.Context, v vectors.Vector, offset, size int,
+	exclude map[string]struct{}) ([]string, error) {
+
+	return idx.nearest(ctx, &Document{"", v}, offset, size, exclude)
+}
+
 // Performs a nearest-neighbors query for the document with id qid.
 // The results at offset through offset+size are returned.
-func (idx *Index) Nearest(ctx context.Context, qid string, offset, size int,
+func (idx *Index) NearestToDoc(ctx context.Context, qid string, offset, size int,
 	exclude map[string]struct{}) ([]string, error) {
 
 	doc, ok := idx.docs[qid]

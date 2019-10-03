@@ -11,6 +11,7 @@ RUN go mod download
 
 COPY *.go schema.sql ./
 COPY internal internal
+COPY testdata testdata
 
 RUN go test ./...
 RUN go build -ldflags="-s" .

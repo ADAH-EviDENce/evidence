@@ -15,7 +15,7 @@ func TestQuery(t *testing.T) {
 
 	q := docs[14].(*Document).id
 	const size = 10
-	near, err := idx.Nearest(context.TODO(), q, 0, size, nil)
+	near, err := idx.NearestToDoc(context.TODO(), q, 0, size, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,7 +35,7 @@ func TestScroll(t *testing.T) {
 		size = 6
 	)
 	for offset := 0; offset < len(docs); offset += size {
-		near, err := idx.Nearest(context.TODO(), q, offset, size, nil)
+		near, err := idx.NearestToDoc(context.TODO(), q, offset, size, nil)
 		if err != nil {
 			t.Fatal(err)
 		}
