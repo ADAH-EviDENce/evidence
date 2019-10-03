@@ -1,6 +1,6 @@
 import * as React from "react";
 import {AppContext} from "../AppContext";
-import {Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {Alert, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import UserForm from "./UserForm";
 import ConfigForm from "./ConfigForm";
 import IconWarning from "../common/IconWarning";

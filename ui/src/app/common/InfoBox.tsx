@@ -13,9 +13,6 @@ interface InfoBoxProps {
 }
 
 class InfoBox extends React.Component<InfoBoxProps, any> {
-    constructor(props: any, context: any) {
-        super(props, context);
-    }
 
     render() {
         if (!this.props.msg) {

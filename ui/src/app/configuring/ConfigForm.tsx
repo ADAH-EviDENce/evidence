@@ -41,7 +41,7 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
         let doc2vecButton;
         let elasticButton;
 
-        if (this.props.formContext.moreLikeThisType == MoreLikeThisType.DOC2VEC) {
+        if (this.props.formContext.moreLikeThisType === MoreLikeThisType.DOC2VEC) {
             doc2vecButton = <Button color='info'>Doc2Vec</Button>;
             elasticButton = <Button outline color='secondary' onClick={this.useElastic}>ElasticSearch (ES)</Button>
         } else {
@@ -84,7 +84,15 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
                             <Label for="use-rocchio-check" check>
                                 Weeg geannoteerde fragmenten mee tijdens zoeken:
                                 <InfoPopover>
-                                    <>Op basis van het <a href="https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html" target="_blank">rocchio algoritme <i className='fa fa-external-link'/></a></>
+                                    <>Op basis van het
+                                        <a href="https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                        >
+                                            rocchio algoritme
+                                            <i className='fa fa-external-link'/>
+                                        </a>
+                                    </>
                                 </InfoPopover>
                             </Label>
                         </Col>

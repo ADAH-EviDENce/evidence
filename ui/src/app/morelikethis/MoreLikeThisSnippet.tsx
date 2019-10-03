@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Card, CardBody, CardFooter, CardHeader} from "reactstrap";
+import {Card, CardBody, CardFooter} from "reactstrap";
 import './MoreLikeThisSnippet.css';
 import FontAwesome from "react-fontawesome";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";

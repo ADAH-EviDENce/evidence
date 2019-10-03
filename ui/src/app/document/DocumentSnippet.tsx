@@ -1,7 +1,7 @@
 import * as React from "react";
 import FontAwesome from "react-fontawesome";
 import {RouteComponentProps, withRouter} from "react-router";
-import {Badge, Button, Card, CardBody, CardHeader} from "reactstrap";
+import {Button, Card, CardBody, CardHeader} from "reactstrap";
 import './DocumentSnippet.css';
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";

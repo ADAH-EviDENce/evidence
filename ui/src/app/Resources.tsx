@@ -1,4 +1,3 @@
-import * as React from "react";
 import elasticsearch from 'elasticsearch';
 import config from "../config";
 
