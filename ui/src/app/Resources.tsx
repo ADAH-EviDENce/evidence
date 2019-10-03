@@ -1,7 +1,20 @@
 import elasticsearch from 'elasticsearch';
 import config from "../config";
+import fetchMock from "fetch-mock";
 
-class Resources {
+export default class Resources {
+
+    // TODO: remove mocks
+    static initialize() {
+        fetchMock.post(config.SEED_HOST, 200);
+        fetchMock.get(config.SEED_HOST, [
+            {_id: "GV_NIOD_Buchenwald_31_clipped_150_paragraph_57-76"},
+            {_id: "GV_NIOD_Buchenwald_14_clipped_150_paragraph_57-65"}
+        ]);
+        fetchMock.delete(config.SEED_HOST + '/GV_NIOD_Buchenwald_31_clipped_150_paragraph_57-76', 200);
+        fetchMock.delete(config.SEED_HOST + '/GV_NIOD_Buchenwald_14_clipped_150_paragraph_57-65', 200);
+        fetchMock.spy();
+    }
 
     public static getSnippetsByDocumentId = (documentId: string) => {
         return fetch(config.ES_HOST + "/documents/document/" + documentId);
@@ -84,7 +97,7 @@ class Resources {
         });
     };
 
-    public static getSnippetsFromESUsingRocchio (
+    public static getSnippetsFromESUsingRocchio(
         snippetId: string,
         docId: string,
         from: number,
@@ -105,7 +118,7 @@ class Resources {
         return fetch(url);
     };
 
-    public static getMoreLikeThisSnippetsFromDoc2VecUsingRocchio (
+    public static getMoreLikeThisSnippetsFromDoc2VecUsingRocchio(
         snippetId: string,
         docId: string,
         from: number,
@@ -139,6 +152,31 @@ class Resources {
         return fetch(config.PURGE_HOST, Resources.withUserHeader(user));
     }
 
+    /*
+     GET /seed  - lijstje identifiers in JSON
+      curl http://localhost:8080/seed
+     */
+    public static getSeedSet(user: string) {
+        return fetch(config.SEED_HOST, Resources.withUserHeader(user));
+    }
+
+    /*
+     POST /seed  - voeg identifier toe
+      curl -XPOST http://localhost:8080/seed -d lijstje identifiers in JSON
+     */
+    public static postSeedSet(user: string, ids: Array<string>) {
+        return fetch(config.SEED_HOST, Resources.withUserHeader(user));
+    }
+
+    /*
+     DELETE /seed/:id  - verwijder identifier
+      curl -XDELETE http://localhost:8080/seed/id_van_fragment_zus_totenmet_zo
+     */
+    public static removeSeedId(user: string, id: string) {
+        return fetch(config.SEED_HOST, Resources.withUserHeader(user));
+    }
+
+
     private static withUserHeader(user: string) {
         return {
             headers: {
@@ -148,4 +186,4 @@ class Resources {
     }
 }
 
-export default Resources;
+Resources.initialize();

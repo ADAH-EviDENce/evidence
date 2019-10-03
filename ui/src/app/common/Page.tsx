@@ -36,7 +36,7 @@ class Page extends React.Component<PageProps, any> {
                     </div>
                 </nav>
                 <ConfigModal isOpen={this.state.configModal} onClose={() => this.setState({configModal: false})}/>
-                <div className="row page-header">
+                <div className="page-header">
                     <div className="col-12">
                         <MainHeader openConfig={() => this.setState({configModal: true})}/>
                     </div>

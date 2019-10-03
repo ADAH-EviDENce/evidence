@@ -31,6 +31,7 @@ export default {
     USERS_HOST: config.HOST + '/users',
     EXPORT_HOST: config.HOST + '/export',
     PURGE_HOST: config.HOST + '/purge',
+    SEED_HOST: config.HOST + '/seed',
 
     ...config
 };

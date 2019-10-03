@@ -8,9 +8,9 @@ import SearchSnippetList from "./SearchSnippetList";
 import config from "../../config";
 import {withRouter} from "react-router";
 import InfiniteScroll from "react-infinite-scroll-component";
-import FontAwesome from "react-fontawesome";
+import Spinner from "../common/Spinner";
 
-class Search extends React.Component<any, any> {
+class SearchPage extends React.Component<any, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -20,6 +20,7 @@ class Search extends React.Component<any, any> {
             size: config.SEARCH_RESULTS_SIZE,
             snippets: [],
             total: 0,
+            searching: true
         };
         this.updateContext();
     }
@@ -37,11 +38,11 @@ class Search extends React.Component<any, any> {
         const newSearch = nextProps.match.params.search;
         if (newSearch !== this.state.search) {
             if (newSearch) {
-                this.setState({search: newSearch, page: 1, loading: true}, () => {
+                this.setState({search: newSearch, page: 1, searching: true}, () => {
                     this.handleSearch(newSearch);
                 });
             } else {
-                this.setState({search: newSearch, page: 1, loading: false});
+                this.setState({search: newSearch, page: 1});
             }
         }
     }
@@ -52,11 +53,13 @@ class Search extends React.Component<any, any> {
 
             this.setState({
                 snippets: this.state.snippets.concat(json.hits.hits),
-                total: json.hits.total
+                total: json.hits.total,
+                searching: false
             });
         }).catch(() => {
             this.setState({
-                error: 'Er konden geen fragmenten gevonden worden op basis van de opgegeven zoektermen.'
+                error: 'Er konden geen fragmenten gevonden worden op basis van de opgegeven zoektermen.',
+                searching: false
             });
         });
     };
@@ -80,20 +83,31 @@ class Search extends React.Component<any, any> {
             >
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <SearchBar defaultSearch={this.state.search}/>
+                {this.renderTable()}
+            </Page>
+        );
+    }
+
+    private renderTable() {
+        if(this.state.searching) {
+            return null;
+        }
+        return (
+            <>
                 <p>{this.state.total} resultaten</p>
                 <InfiniteScroll
                     dataLength={this.state.snippets.length}
                     next={this.handlePageChange}
                     hasMore={this.state.total > this.state.snippets.length}
-                    loader={<p className="text-center mt-3"><FontAwesome name='spinner' spin/></p>}
+                    loader={<Spinner/>}
                 >
                     <SearchSnippetList snippets={this.state.snippets}/>
                 </InfiniteScroll>
-            </Page>
-        );
+            </>
+        )
     }
 }
 
-Search.contextType = AppContext;
+SearchPage.contextType = AppContext;
 
-export default withRouter(Search);
+export default withRouter(SearchPage);

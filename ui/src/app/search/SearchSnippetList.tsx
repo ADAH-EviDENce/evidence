@@ -1,5 +1,6 @@
 import * as React from "react";
 import SearchSnippet from "./SearchSnippet";
+import SnippetList from "../common/SnippetList";
 
 interface SnippetListProps {
     snippets: Array<any>
@@ -16,11 +17,11 @@ export class SearchSnippetList extends React.Component<SnippetListProps, any> {
             return null;
         }
         return (
-            <div className="snippet-list">
+            <SnippetList>
                 {this.props.snippets.map((s: any, i: number) => {
                     return <SearchSnippet key={i} id={s._id} text={s.highlight ? s.highlight.text[0] : s._source.text}/>
                 })}
-            </div>
+            </SnippetList>
         );
     }
 }
