@@ -101,7 +101,8 @@ func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	id := ps.ByName("id")
-	if !s.validateId(w, r, []string{id}) {
+	// elasticEndpoint == "" turns off validation, for testing purposes.
+	if s.elasticEndpoint != "" && !s.validateId(w, r, []string{id}) {
 		return
 	}
 
