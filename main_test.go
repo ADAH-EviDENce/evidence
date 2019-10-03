@@ -165,6 +165,7 @@ func TestExport(t *testing.T) {
 	tx.Commit()
 
 	req := httptest.NewRequest("GET", "/export", nil)
+	req.Header.Set("X-User", "test")
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))

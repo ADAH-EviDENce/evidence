@@ -110,6 +110,12 @@ func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, us
 
 // Exports the entire assessments table in CSV format.
 func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	username, err := getUsername(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	tx, err := s.db.Begin()
 	if err != nil {
 		return
@@ -121,7 +127,8 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	}()
 
 	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
-		FROM assessments a JOIN users u ON a.userid = u.userid`)
+		FROM assessments a JOIN users u ON a.userid = u.userid
+		WHERE u.username = ?`, username)
 	if err != nil {
 		return
 	}
