@@ -1,13 +1,13 @@
 import * as React from "react";
 import {Button} from "reactstrap";
-import {withRouter} from "react-router";
+import {RouteComponentProps, withRouter} from "react-router";
 
-interface MoreLikeThisButtonProps {
+type MoreLikeThisButtonProps = RouteComponentProps & {
     id: string
     documentId: string
 }
 
-class MoreLikeThisButton extends React.Component<any, any> {
+class MoreLikeThisButton extends React.Component<MoreLikeThisButtonProps, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {};

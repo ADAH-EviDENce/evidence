@@ -23,9 +23,9 @@ export class SeedSnippetList extends React.Component<SnippetListProps, any> {
                     return <SeedSetSnippet
                         key={i}
                         id={s._id}
-                        text={s.highlight ? s.highlight.text[0] : s._source.text}
-                        onDeselect={() => this.props.onDeselect(s._id)}
                         documentId={s._source.document}
+                        onDeselect={() => this.props.onDeselect(s._id)}
+                        text={s.highlight ? s.highlight.text[0] : s._source.text}
                     />
                 })}
             </SnippetList>
