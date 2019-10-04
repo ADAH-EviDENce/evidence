@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -118,6 +119,32 @@ func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 	if err != nil {
 		log.Print("removeSeed: ", err)
+		http.Error(w, "database error", http.StatusInternalServerError)
+	}
+}
+
+func (s *server) seedContains(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	username, err := getUsername(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	id := ps.ByName("id")
+	row := s.db.QueryRow(
+		`SELECT 1 FROM seed WHERE id = ?
+		AND userid IN (SELECT userid FROM users WHERE username = ?)`,
+		id, username)
+
+	var i int
+	switch err = row.Scan(&i); err {
+	case nil:
+		// Report 200 to client. Currently no output.
+		return
+	case sql.ErrNoRows:
+		http.Error(w, "not in seed set", http.StatusNotFound)
+	default:
+		log.Print(err)
 		http.Error(w, "database error", http.StatusInternalServerError)
 	}
 }
