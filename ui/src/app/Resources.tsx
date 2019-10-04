@@ -6,11 +6,11 @@ export default class Resources {
 
     // TODO: remove mocks
     static initialize() {
-        fetchMock.post(config.SEED_HOST, 200);
-        fetchMock.get(config.SEED_HOST, [
-            {_id: "GV_NIOD_Buchenwald_31_clipped_150_paragraph_57-76"},
-            {_id: "GV_NIOD_Buchenwald_14_clipped_150_paragraph_57-65"}
-        ]);
+        // fetchMock.post(config.SEED_HOST, 200);
+        // fetchMock.get(config.SEED_HOST, [
+        //     {_id: "GV_NIOD_Buchenwald_31_clipped_150_paragraph_57-76"},
+        //     {_id: "GV_NIOD_Buchenwald_14_clipped_150_paragraph_57-65"}
+        // ]);
         fetchMock.delete(config.SEED_HOST + '/GV_NIOD_Buchenwald_31_clipped_150_paragraph_57-76', 200);
         fetchMock.delete(config.SEED_HOST + '/GV_NIOD_Buchenwald_14_clipped_150_paragraph_57-65', 200);
         fetchMock.spy();
@@ -165,7 +165,15 @@ export default class Resources {
       curl -XPOST http://localhost:8080/seed -d lijstje identifiers in JSON
      */
     public static postSeedSet(user: string, ids: Array<string>) {
-        return fetch(config.SEED_HOST, Resources.withUserHeader(user));
+        // const test = {"headers":{"X-User":"henk"},"method":"POST","body":JSON.stringify(ids)};
+        const props = Resources
+            .withUserHeader(user);
+        props.headers['Content-Type'] = 'application/json';
+        props.method = "POST";
+        props.body = JSON.stringify(ids);
+        const url = config.SEED_HOST;
+        console.log('post', url, props);
+        return fetch(url, props);
     }
 
     /*
@@ -173,11 +181,17 @@ export default class Resources {
       curl -XDELETE http://localhost:8080/seed/id_van_fragment_zus_totenmet_zo
      */
     public static removeSeedId(user: string, id: string) {
-        return fetch(config.SEED_HOST, Resources.withUserHeader(user));
+        const props = Resources
+            .withUserHeader(user);
+        props.method = "DELETE";
+        return fetch(config.SEED_HOST + '/' + id, props);
     }
 
+    static checkInSeedSet(user: string, id: string) {
+        return fetch(config.SEED_HOST + '/' + id, Resources.withUserHeader(user));
+    }
 
-    private static withUserHeader(user: string) {
+    private static withUserHeader(user: string) : any {
         return {
             headers: {
                 "X-User": user

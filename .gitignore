@@ -26,3 +26,6 @@ yarn-error.log*
 
 /data
 /TargetSize150
+
+Dockerfile.noUI
+docker-compose-no-ui.yml

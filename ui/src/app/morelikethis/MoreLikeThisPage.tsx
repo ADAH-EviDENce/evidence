@@ -107,6 +107,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
                         documentId={documentId}
                         text={this.state.snippet ? this.state.snippet._source.text : null}
                         moreLikeThis={false}
+                        showInSeedSet={true}
                     />
 
                     {this.context.user

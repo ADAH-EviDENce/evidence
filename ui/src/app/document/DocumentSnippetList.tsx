@@ -40,6 +40,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
                     text={s._source ? s._source.text : '-'}
                     documentId={this.props.documentId}
                     moreLikeThis={true}
+                    showInSeedSet={true}
                 />
             })}
         </>;
@@ -49,10 +50,8 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
         this.fetchSnippets();
 
         let listElements = this.state.snippets
-            ?
-            this.renderSnippets()
-            :
-            <li className="list-group-item"><Spinner /></li>;
+            ? this.renderSnippets()
+            : <li className="list-group-item"><Spinner /></li>;
 
         return (
             <div>

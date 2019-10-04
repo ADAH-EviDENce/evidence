@@ -16,7 +16,7 @@ class SeedSetPage extends React.Component<any, any> {
         Resources.getSeedSet(this.context.user).then((dataIds) => {
             dataIds.json().then(jsonIds => {
                 if (!jsonIds) {
-                    this.setState({snippets: [], info: "u heeft nog geen fragmenten geselecteerd"});
+                    this.setState({snippets: [], info: "U heeft nog geen fragmenten geselecteerd", loading: false});
                     return;
                 }
                 Resources.getSnippetsByIds(jsonIds).then((jsonSnippets) => {
