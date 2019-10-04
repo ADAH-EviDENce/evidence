@@ -43,20 +43,7 @@ func (s *server) addUser(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	}
 }
 
-func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		http.Error(w, "database error", http.StatusInternalServerError)
-		log.Print(err)
-		return
-	}
-
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func (s *server) listUsers(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	rows, err := tx.Query(`SELECT username FROM users`)
 	if err != nil {
 		return
@@ -75,10 +62,8 @@ func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	tx.Commit()
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(usernames)
+	return json.NewEncoder(w).Encode(usernames)
 }
 
 // Logs in using the username provided in the X-User header.

@@ -76,8 +76,8 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 
 	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
 
-	r.POST("/assess", s.add)
-	r.GET("/assess", s.get)
+	r.POST("/assess", s.inTx(s.addAssessment))
+	r.GET("/assess", s.inTx(s.getAssessment))
 
 	r.GET("/doc2vec/:id", s.doc2vecNearest)
 	r.GET("/doc2vec_rocchio/:id", s.doc2vecRocchio)
@@ -87,22 +87,22 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.GET("/es/*path", s.elasticsearch)
 	r.POST("/es/*path", s.elasticsearch)
 
-	r.GET("/export", s.export)
+	r.GET("/export", s.inTx(s.export))
 
-	r.GET("/positive", s.listPositives)
+	r.GET("/positive", s.inTx(s.listPositives))
 
-	r.GET("/purge", s.purge)
+	r.GET("/purge", s.inTx(purgeAssessments))
 
 	r.GET("/rocchio/:id", s.rocchio)
 
-	r.GET("/seed", s.listSeed)
-	r.POST("/seed", s.addSeed)
-	r.GET("/seed/:id", s.seedContains)
-	r.DELETE("/seed/:id", s.removeSeed)
+	r.GET("/seed", s.inTx(listSeed))
+	r.POST("/seed", s.inTx(s.addSeed))
+	r.GET("/seed/:id", s.inTx(s.seedContains))
+	r.DELETE("/seed/:id", s.inTx(s.removeSeed))
 
 	r.GET("/ui/*path", s.ui)
 
-	r.GET("/users", s.listUsers)
+	r.GET("/users", s.inTx(s.listUsers))
 	r.POST("/users", s.addUser)
 
 	return s
@@ -311,9 +311,29 @@ func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string
 	return
 }
 
-func rollback(w http.ResponseWriter, tx *sql.Tx, err error) {
-	// We always report "database error", regardless of the actual error.
-	http.Error(w, "database error", http.StatusInternalServerError)
-	log.Printf("%v; rolling back", err)
-	tx.Rollback()
+// InTx runs a function inside a transaction.
+// The transaction is automatically committed or rolled back
+// depending on the return value of the function.
+func (s *server) inTx(f func(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) error) httprouter.Handle {
+
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		tx, err := s.db.Begin()
+		if err != nil {
+			log.Printf("unable to begin transaction: %v", err)
+			http.Error(w, "database error", http.StatusInternalServerError)
+			return
+		}
+
+		err = f(tx, w, r, ps)
+		if err == nil {
+			err = tx.Commit()
+		} else {
+			err = tx.Rollback()
+		}
+
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "database error", http.StatusInternalServerError)
+		}
+	}
 }

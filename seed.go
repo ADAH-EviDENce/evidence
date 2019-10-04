@@ -10,17 +10,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func (s *server) addSeed(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func (s *server) addSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	userid, err := login(w, r, tx)
 	if err != nil {
 		return
@@ -45,22 +35,11 @@ func (s *server) addSeed(w http.ResponseWriter, r *http.Request, ps httprouter.P
 			return
 		}
 	}
-
-	err = tx.Commit()
+	return
 }
 
 // ListPositives allows listing the union of seed set and positive assessments.
-func (s *server) listPositives(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func (s *server) listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	userid, err := login(w, r, tx)
 	if err != nil {
 		return
@@ -88,22 +67,10 @@ func (s *server) listPositives(w http.ResponseWriter, r *http.Request, ps httpro
 	if err != nil {
 		return
 	}
-	json.NewEncoder(w).Encode(ids)
-
-	err = tx.Commit()
+	return json.NewEncoder(w).Encode(ids)
 }
 
-func (s *server) listSeed(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func listSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	userid, err := login(w, r, tx)
 	if err != nil {
 		return
@@ -113,9 +80,7 @@ func (s *server) listSeed(w http.ResponseWriter, r *http.Request, ps httprouter.
 	if err != nil {
 		return
 	}
-	json.NewEncoder(w).Encode(ids)
-
-	err = tx.Commit()
+	return json.NewEncoder(w).Encode(ids)
 }
 
 // GatherSeed returns the seed set for the specified user. It reports any
@@ -145,17 +110,7 @@ func gatherIds(rows *sql.Rows, w http.ResponseWriter) (ids []string, err error) 
 	return
 }
 
-func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func (s *server) removeSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	userid, err := login(w, r, tx)
 	if err != nil {
 		return
@@ -177,23 +132,11 @@ func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httproute
 	if err != nil {
 		log.Print("removeSeed: ", err)
 		http.Error(w, "database error", http.StatusInternalServerError)
-		return
 	}
-
-	err = tx.Commit()
+	return
 }
 
-func (s *server) seedContains(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func (s *server) seedContains(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	userid, err := login(w, r, tx)
 	if err != nil {
 		return
@@ -206,15 +149,13 @@ func (s *server) seedContains(w http.ResponseWriter, r *http.Request, ps httprou
 	switch err = row.Scan(&i); err {
 	case nil:
 		// Report 200 to client. Currently no output.
-		return
 	case sql.ErrNoRows:
 		notInSeedSet(w, id)
 	default:
 		log.Print("seedContains: ", err)
 		http.Error(w, "database error", http.StatusInternalServerError)
 	}
-
-	err = tx.Commit()
+	return
 }
 
 func notInSeedSet(w http.ResponseWriter, id string) {
