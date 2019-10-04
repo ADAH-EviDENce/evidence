@@ -1,5 +1,4 @@
 import * as React from "react";
-import FontAwesome from "react-fontawesome";
 import {RouteComponentProps, withRouter} from "react-router";
 import {Button, Card, CardBody, CardHeader} from "reactstrap";
 import './DocumentSnippet.css';
@@ -28,7 +27,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
             ?
             <Button color="primary" size="sm" className='float-right' onClick={this.handleMoreLikeThis}>
                 More like this
-                <FontAwesome name='chevron-right ml-1'/>
+                <i className='fa fa-chevron-right ml-1'/>
             </Button>
             :
             null;

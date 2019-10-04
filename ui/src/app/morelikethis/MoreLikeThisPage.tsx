@@ -4,12 +4,12 @@ import InfoBox from "../common/InfoBox";
 import Resources from "../Resources";
 import DocumentSnippet from "../document/DocumentSnippet";
 import MoreLikeThisSnippetList from "./MoreLikeThisSnippetList";
-import FontAwesome from "react-fontawesome";
 import './MoreLikeThisPage.css';
 import MoreLikeThisCommitModal from "./MoreLikeThisCommitModal";
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
 import {Link} from "react-router-dom";
+import Spinner from "../common/Spinner";
 
 class MoreLikeThisPage extends React.Component<any, any> {
     static contextType = AppContext;
@@ -69,8 +69,8 @@ class MoreLikeThisPage extends React.Component<any, any> {
                     Opslaan ({this.context.user})
                     &nbsp;
                     {this.state.savingAnswers
-                        ? <FontAwesome name='spinner' spin/>
-                        : <FontAwesome name='chevron-right '/>
+                        ? <Spinner />
+                        : <i className='fa fa-chevron-right'/>
                     }
                 </button>
             </div>

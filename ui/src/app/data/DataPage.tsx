@@ -2,7 +2,6 @@ import React from "react";
 import Page from "../common/Page";
 import InfoBox from "../common/InfoBox";
 import {AppContext} from "../AppContext";
-import FontAwesome from "react-fontawesome";
 import * as FileSaver from "file-saver";
 import Resources from "../Resources";
 import ConfirmModal from "../common/ConfirmModal";
@@ -51,7 +50,7 @@ export default class DataPage extends React.Component<any, any> {
                             onClick={this.saveFile}
                             className="float-right btn btn-info btn-sm"
                         >
-                            <FontAwesome name='download'/>
+                            <i className='fa fa-download'/>
                             &nbsp;
                             Download
                         </button>
@@ -62,7 +61,7 @@ export default class DataPage extends React.Component<any, any> {
                             onClick={this.confirmPurge}
                             className="float-right btn btn-danger btn-sm"
                         >
-                            <FontAwesome name='trash'/>
+                            <i className='fa fa-trash'/>
                             &nbsp;
                             Leeg
                         </button>

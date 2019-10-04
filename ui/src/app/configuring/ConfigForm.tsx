@@ -89,6 +89,7 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
                                            target="_blank"
                                            rel="noopener noreferrer"
                                         >
+                                            &nbsp;
                                             rocchio algoritme
                                             <i className='fa fa-external-link'/>
                                         </a>

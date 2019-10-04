@@ -1,5 +1,4 @@
 import * as React from "react";
-import FontAwesome from "react-fontawesome";
 import SnippetListItem from "../common/SnippetListItem";
 
 interface SearchSnippetProps {
@@ -14,7 +13,7 @@ export class SeedSetSnippet extends React.Component<SearchSnippetProps, any> {
         return (
             <SnippetListItem id={this.props.id} text={this.props.text} >
                 <button className="btn btn-danger btn-sm float-right" onClick={() => this.props.onDeselect()}>
-                    <FontAwesome name='trash'/>
+                    <i className='fa fa-trash'/>
                 </button>
             </SnippetListItem>
         );

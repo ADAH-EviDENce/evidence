@@ -1,6 +1,5 @@
 import * as React from "react";
 import {Card, CardHeader, Collapse} from "reactstrap";
-import FontAwesome from 'react-fontawesome';
 import DocumentSnippetList from "./DocumentSnippetList";
 
 interface QueryDocumentProps {
@@ -26,7 +25,7 @@ class Document extends React.Component<QueryDocumentProps, any> {
                 <Card>
                     <CardHeader onClick={this.toggle}>
                         <button className="btn btn-primary btn-sm float-right">
-                            <FontAwesome name='plus-square-o'/>
+                            <i className='fa fa-plus-square-o'/>
                             &nbsp;
                             <span>Snippets</span>
                         </button>

@@ -1,8 +1,8 @@
 import * as React from "react";
-import FontAwesome from "react-fontawesome";
 import Resources from "../Resources";
 import InfoBox from "../common/InfoBox";
 import DocumentSnippet from "./DocumentSnippet";
+import Spinner from "../common/Spinner";
 
 interface DocumentSnippetListProps {
     documentId: string,
@@ -52,7 +52,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
             ?
             this.renderSnippets()
             :
-            <li className="list-group-item"><FontAwesome name='spinner' spin/></li>;
+            <li className="list-group-item"><Spinner /></li>;
 
         return (
             <div>

@@ -1,7 +1,6 @@
 import React from "react";
 import {AppContext} from "../AppContext";
 import {withRouter} from "react-router-dom";
-import FontAwesome from "react-fontawesome";
 
 class ConfigBtns extends React.Component<any, any> {
 
@@ -16,7 +15,7 @@ class ConfigBtns extends React.Component<any, any> {
                 className="search btn btn-sm btn-success mr-3"
                 disabled={!this.context.user}
             >
-                <FontAwesome name="chevron-left"/>
+                <i className='fa fa-chevron-left'/>
                 &nbsp;
                 Terug
             </button>
@@ -27,7 +26,7 @@ class ConfigBtns extends React.Component<any, any> {
             >
                 Zoeken
                 &nbsp;
-                <FontAwesome name="chevron-right"/>
+                <i className='fa fa-chevron-right'/>
             </button>
         </div>;
     }

@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Card, CardBody, CardFooter} from "reactstrap";
 import './MoreLikeThisSnippet.css';
-import FontAwesome from "react-fontawesome";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
 import ReadableId from "../common/ReadableId";
 
@@ -43,21 +42,21 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
                         <button type="button"
                                 className={`btn btn-outline-success ${this.props.relevant === MoreLikeThisOption.YES ? "active" : ""}`}
                                 onClick={this.onClickYes}>
-                            <FontAwesome name='check-circle-o'/>
+                            <i className='fa fa-check-circle-o'/>
                             &nbsp;
                             Ja
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-danger ${this.props.relevant === MoreLikeThisOption.NO ? "active" : ""}`}
                                 onClick={this.onClickNo}>
-                            <FontAwesome name='times-circle-o'/>
+                            <i className='fa fa-times-circle-o'/>
                             &nbsp;
                             Nee
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-secondary ${this.props.relevant === MoreLikeThisOption.MAYBE ? "active" : ""}`}
                                 onClick={this.onClickMaybe}>
-                            <FontAwesome name='question-circle-o'/>
+                            <i className='fa fa-question-circle-o'/>
                             &nbsp;
                             Blanco
                         </button>
