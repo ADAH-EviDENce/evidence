@@ -20,9 +20,18 @@ type assessment struct {
 }
 
 func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	username, err := getUsername(r)
+	tx, err := s.db.Begin()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	defer func() {
+		if err != nil {
+			rollback(w, tx, err)
+		}
+	}()
+
+	userid, err := login(w, r, tx)
+	if err != nil {
 		return
 	}
 
@@ -50,22 +59,6 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	}
 
 	if !s.validateId(w, r, ids) {
-		return
-	}
-
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
-	var userid int
-	row := tx.QueryRow(`SELECT userid FROM users WHERE username = ?`, username)
-	if err = row.Scan(&userid); err != nil {
 		return
 	}
 
@@ -110,12 +103,6 @@ func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, us
 
 // Exports the entire assessments table in CSV format.
 func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	username, err := getUsername(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-
 	tx, err := s.db.Begin()
 	if err != nil {
 		return
@@ -126,9 +113,14 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		}
 	}()
 
+	userid, err := login(w, r, tx)
+	if err != nil {
+		return
+	}
+
 	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
 		FROM assessments a JOIN users u ON a.userid = u.userid
-		WHERE u.username = ?`, username)
+		WHERE u.userid = ?`, userid)
 	if err != nil {
 		return
 	}
@@ -222,15 +214,23 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 }
 
 func (s *server) purge(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	username, err := getUsername(r)
+	tx, err := s.db.Begin()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	defer func() {
+		if err != nil {
+			rollback(w, tx, err)
+		}
+	}()
+
+	userid, err := login(w, r, tx)
+	if err != nil {
 		return
 	}
 
-	log.Printf("purge by %s", username)
-	_, err = s.db.Exec(`DELETE FROM assessments WHERE userid IN`+
-		`(SELECT userid FROM users WHERE username = ?)`, username)
+	log.Printf("purge by user %d", userid)
+	_, err = tx.Exec(`DELETE FROM assessments WHERE userid = ?`, userid)
 	if err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
 		log.Print(err)

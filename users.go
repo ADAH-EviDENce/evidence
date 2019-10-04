@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -80,13 +81,24 @@ func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter
 	json.NewEncoder(w).Encode(usernames)
 }
 
-func getUsername(r *http.Request) (username string, err error) {
+// Logs in using the username provided in the X-User header.
+// Returns the user's id.
+//
+// Errors are reported on w and logged.
+func login(w http.ResponseWriter, r *http.Request, tx *sql.Tx) (userid int, err error) {
 	// For the moment, we have a custom "authorization" header that contains
 	// just the username. We can upgrade this to Basic-Auth or something fancy
 	// later.
-	username = r.Header.Get("X-User")
+	username := r.Header.Get("X-User")
 	if username == "" {
-		err = errors.New("no username provided")
+		const msg = "no username provided"
+		log.Print(msg)
+		http.Error(w, msg, http.StatusUnauthorized)
+		err = errors.New(msg)
+		return
 	}
+
+	row := tx.QueryRow(`SELECT userid FROM users WHERE username = ?`, username)
+	err = row.Scan(&userid)
 	return
 }

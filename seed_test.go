@@ -24,11 +24,11 @@ func TestSeed(t *testing.T) {
 		addSeed(t, r, "user2", `["fred", "barney"]`) &&
 
 		listSeed(t, r, "user1", "foo", "bar", "baz", "quux") &&
-		listSeed(t, r, "user2", "fred", "barney")
+		listSeed(t, r, "user2", "fred", "barney") &&
 
-	removeSeed(t, r, "user1", "foo", http.StatusOK)
-	removeSeed(t, r, "user1", "foo", http.StatusNotFound)
-	removeSeed(t, r, "user2", "bar", http.StatusNotFound)
+		removeSeed(t, r, "user1", "foo", http.StatusOK) &&
+		removeSeed(t, r, "user1", "foo", http.StatusNotFound) &&
+		removeSeed(t, r, "user2", "bar", http.StatusNotFound)
 }
 
 func addSeed(t *testing.T, r *httprouter.Router, username, ids string) bool {
@@ -63,7 +63,7 @@ func listSeed(t *testing.T, r *httprouter.Router, username string, expect ...str
 	return assert.Equal(t, expect, actual)
 }
 
-func removeSeed(t *testing.T, r *httprouter.Router, username, id string, status int) {
+func removeSeed(t *testing.T, r *httprouter.Router, username, id string, status int) bool {
 	t.Helper()
 
 	req := httptest.NewRequest("DELETE", "/seed/"+id, nil)
@@ -72,5 +72,5 @@ func removeSeed(t *testing.T, r *httprouter.Router, username, id string, status 
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	res := w.Result()
-	assert.Equal(t, status, res.StatusCode)
+	return assert.Equal(t, status, res.StatusCode)
 }
