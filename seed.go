@@ -150,8 +150,7 @@ func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httproute
 	if err == nil {
 		changed, err := res.RowsAffected()
 		if err == nil && changed == 0 {
-			http.Error(w, fmt.Sprintf("%q not in seed set", id),
-				http.StatusNotFound)
+			notInSeedSet(w, id)
 			return
 		}
 	}
@@ -180,9 +179,13 @@ func (s *server) seedContains(w http.ResponseWriter, r *http.Request, ps httprou
 		// Report 200 to client. Currently no output.
 		return
 	case sql.ErrNoRows:
-		http.Error(w, "not in seed set", http.StatusNotFound)
+		notInSeedSet(w, id)
 	default:
 		log.Print(err)
 		http.Error(w, "database error", http.StatusInternalServerError)
 	}
+}
+
+func notInSeedSet(w http.ResponseWriter, id string) {
+	http.Error(w, fmt.Sprintf("%q not in seed set", id), http.StatusNotFound)
 }
