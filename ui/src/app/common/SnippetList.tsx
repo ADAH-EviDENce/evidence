@@ -1,4 +1,5 @@
 import * as React from "react";
+import './SnippetList.css';
 
 class SnippetList extends React.Component<any, any> {
     constructor(props: any, context: any) {

@@ -19,9 +19,10 @@ class SeedSetPage extends React.Component<any, any> {
                     this.setState({snippets: [], info: "U heeft nog geen fragmenten geselecteerd", loading: false});
                     return;
                 }
-                Resources.getSnippetsByIds(jsonIds).then((jsonSnippets) => {
+                const ids = jsonIds.map((id: string) => {return {_id: id}});
+                Resources.getSnippetsByIds(ids).then((jsonSnippets) => {
                     this.setState({snippets: jsonSnippets.docs, loading: false});
-                })
+                });
             });
         }).catch(() => {
             this.setState({
@@ -51,7 +52,7 @@ class SeedSetPage extends React.Component<any, any> {
     render() {
         return (
             <Page>
-                <h2>Geselecteerde documenten</h2>
+                <h2>Startset</h2>
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <InfoBox msg={this.state.info} type="info" onClose={() => this.setState({info: null})}/>
 

@@ -20,6 +20,10 @@ After local deploy (requires ./data setup as per "Local setup" instructions)
 
     docker-compose up --build
 
+Add a user:
+    
+    curl -XPOST http://localhost:3000/users -d '${username}'
+
 ## Elastic search example queries
 List of snippets:
 
