@@ -24,7 +24,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
     };
 
     render() {
-        let moreLikeThis = this.props.moreLikeThis
+        let moreLikeThisBtn = this.props.moreLikeThis
             ?
             <Button color="primary" size="sm" className='float-right' onClick={this.handleMoreLikeThis}>
                 More like this
@@ -37,7 +37,7 @@ class DocumentSnippet extends React.Component<PropsType, any> {
             <div className="document-snippet">
                 <Card>
                     <CardHeader>
-                        {moreLikeThis}
+                        {moreLikeThisBtn}
                         <span className="small">
                             <strong>Fragment: <ReadableId id={this.props.id} toRemove={this.props.documentId}/></strong></span>
                     </CardHeader>
