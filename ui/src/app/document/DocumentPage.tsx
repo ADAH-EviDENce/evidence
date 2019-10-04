@@ -59,7 +59,7 @@ class DocumentPage extends React.Component<any, any> {
                 breadcrumbTrail={breadcrumbTrail}
             >
                 <div className="document-page">
-                    <h2><ReadableId id={documentId}/></h2>
+                    <h3><ReadableId id={documentId}/></h3>
                     <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                     {this.renderDocument()}
                 </div>

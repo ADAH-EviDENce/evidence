@@ -5,6 +5,7 @@ import './DocumentSnippet.css';
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
 import Resources from "../Resources";
+import MoreLikeThisButton from "../common/MoreLikeThisButton";
 
 type DocumentSnippetProps = RouteComponentProps & {
     id: string,
@@ -30,10 +31,6 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
         });
     }
 
-    handleMoreLikeThis = () => {
-        this.props.history.push(`/documents/${this.props.documentId}/snippets/${this.props.id}/from/0/`);
-    };
-
     handleSeedSetClick = () => {
         if(this.state.inSeedSet) {
             Resources.removeSeedId(this.context.user, this.props.id).then(() => {
@@ -48,7 +45,8 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
     };
 
     render() {
-        let seedSetBtn =
+        let seedSetBtn = this.props.showInSeedSet
+            ?
             <Button
                 onClick={this.handleSeedSetClick}
                 color={this.state.inSeedSet ? "danger" : "primary"}
@@ -57,14 +55,13 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
             >
                 <i className={`fa ${this.state.inSeedSet ? "fa-trash" : "fa-plus-square"} ml-1`}/>
                 &nbsp;{this.state.inSeedSet ? 'Uit startset' : 'In startset'}
-            </Button>;
+            </Button>
+            :
+            null;
 
         let moreLikeThisBtn = this.props.moreLikeThis
             ?
-            <Button color="primary" size="sm" onClick={this.handleMoreLikeThis}>
-                More like this
-                <i className='fa fa-chevron-right ml-1'/>
-            </Button>
+            <MoreLikeThisButton id={this.props.id} documentId={this.props.documentId}/>
             :
             null;
 

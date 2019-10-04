@@ -100,14 +100,14 @@ class MoreLikeThisPage extends React.Component<any, any> {
                 ]}
             >
                 <div className="more-like-this">
-                    <h2><ReadableId id={documentId}/></h2>
+                    <h3><ReadableId id={documentId}/></h3>
                     <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                     <DocumentSnippet
                         id={snippetId}
                         documentId={documentId}
                         text={this.state.snippet ? this.state.snippet._source.text : null}
                         moreLikeThis={false}
-                        showInSeedSet={true}
+                        showInSeedSet={false}
                     />
 
                     {this.context.user

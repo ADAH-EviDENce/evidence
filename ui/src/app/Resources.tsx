@@ -144,7 +144,6 @@ export default class Resources {
     }
 
     public static postSeedSet(user: string, ids: Array<string>) {
-        // const test = {"headers":{"X-User":"henk"},"method":"POST","body":JSON.stringify(ids)};
         const props = Resources
             .withUserHeader(user);
         props.method = "POST";
