@@ -25,6 +25,10 @@ func TestSeed(t *testing.T) {
 
 		listSeed(t, r, "user1", "foo", "bar", "baz", "quux") &&
 		listSeed(t, r, "user2", "fred", "barney")
+
+	removeSeed(t, r, "user1", "foo", http.StatusOK)
+	removeSeed(t, r, "user1", "foo", http.StatusNotFound)
+	removeSeed(t, r, "user2", "bar", http.StatusNotFound)
 }
 
 func addSeed(t *testing.T, r *httprouter.Router, username, ids string) bool {
@@ -57,4 +61,16 @@ func listSeed(t *testing.T, r *httprouter.Router, username string, expect ...str
 	sort.Strings(actual)
 	sort.Strings(expect)
 	return assert.Equal(t, expect, actual)
+}
+
+func removeSeed(t *testing.T, r *httprouter.Router, username, id string, status int) {
+	t.Helper()
+
+	req := httptest.NewRequest("DELETE", "/seed/"+id, nil)
+	req.Header.Set("X-User", username)
+
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	res := w.Result()
+	assert.Equal(t, status, res.StatusCode)
 }

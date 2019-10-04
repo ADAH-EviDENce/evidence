@@ -44,8 +44,6 @@ func (s *server) addSeed(w http.ResponseWriter, r *http.Request, ps httprouter.P
 			SELECT ?, userid FROM users WHERE username = ?`,
 			id, username)
 		if err != nil {
-			log.Print("addSeed: ", err)
-			http.Error(w, "database error", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -101,7 +99,8 @@ func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	id := ps.ByName("id")
-	if !s.validateId(w, r, []string{id}) {
+	// elasticEndpoint == "" turns off validation, for testing purposes.
+	if s.elasticEndpoint != "" && !s.validateId(w, r, []string{id}) {
 		return
 	}
 

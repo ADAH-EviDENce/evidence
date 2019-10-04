@@ -253,8 +253,8 @@ func (s *server) validateId(w http.ResponseWriter, r *http.Request, ids []string
 
 	for _, doc := range resp.Docs {
 		if !doc.Found {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "no snippet with id %q", doc.Id)
+			http.Error(w, fmt.Sprintf("no snippet with id %q", doc.Id),
+				http.StatusNotFound)
 			return
 		}
 	}
