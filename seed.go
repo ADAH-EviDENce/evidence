@@ -52,6 +52,40 @@ func (s *server) addSeed(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	err = tx.Commit()
 }
 
+// ListPositives allows listing the union of seed set and positive assessments.
+func (s *server) listPositives(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	username, err := getUsername(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	uparams := r.URL.Query()
+	offset := intValue(w, uparams, "from", 0)
+	if offset == -1 {
+		return
+	}
+	size := intValue(w, uparams, "size", 10)
+	if size == -1 {
+		return
+	}
+
+	rows, err := s.db.Query(
+		`WITH uid AS (SELECT userid FROM users WHERE username = ?)
+		SELECT * FROM (
+			SELECT id FROM seed WHERE userid IN uid
+			UNION
+			SELECT id FROM assessments WHERE userid IN uid
+		) LIMIT ? OFFSET ?`,
+		username, size, offset)
+
+	ids, err := gatherIds(rows, w)
+	if err != nil {
+		return
+	}
+	json.NewEncoder(w).Encode(ids)
+}
+
 func (s *server) listSeed(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	username, err := getUsername(r)
 	if err != nil {
@@ -80,6 +114,10 @@ func (s *server) gatherSeed(w http.ResponseWriter, username string) (ids []strin
 	}
 	defer rows.Close()
 
+	return gatherIds(rows, w)
+}
+
+func gatherIds(rows *sql.Rows, w http.ResponseWriter) (ids []string, err error) {
 	for rows.Next() {
 		var id string
 		if err = rows.Scan(&id); err != nil {
@@ -112,8 +150,7 @@ func (s *server) removeSeed(w http.ResponseWriter, r *http.Request, ps httproute
 	if err == nil {
 		changed, err := res.RowsAffected()
 		if err == nil && changed == 0 {
-			http.Error(w, fmt.Sprintf("%q not in seed set", id),
-				http.StatusNotFound)
+			notInSeedSet(w, id)
 			return
 		}
 	}
@@ -142,9 +179,13 @@ func (s *server) seedContains(w http.ResponseWriter, r *http.Request, ps httprou
 		// Report 200 to client. Currently no output.
 		return
 	case sql.ErrNoRows:
-		http.Error(w, "not in seed set", http.StatusNotFound)
+		notInSeedSet(w, id)
 	default:
 		log.Print(err)
 		http.Error(w, "database error", http.StatusInternalServerError)
 	}
+}
+
+func notInSeedSet(w http.ResponseWriter, id string) {
+	http.Error(w, fmt.Sprintf("%q not in seed set", id), http.StatusNotFound)
 }
