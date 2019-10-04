@@ -44,8 +44,6 @@ func (s *server) addSeed(w http.ResponseWriter, r *http.Request, ps httprouter.P
 			SELECT ?, userid FROM users WHERE username = ?`,
 			id, username)
 		if err != nil {
-			log.Print("addSeed: ", err)
-			http.Error(w, "database error", http.StatusInternalServerError)
 			return
 		}
 	}
