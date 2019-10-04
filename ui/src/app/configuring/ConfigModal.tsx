@@ -27,7 +27,8 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
     };
 
     private updateFormContext = (updatedContextField : any) => {
-        this.setState({formContext: Object.assign(this.state.formContext, updatedContextField)});
+        const formContext = Object.assign({}, this.state.formContext, updatedContextField);
+        this.setState({formContext});
     };
 
     render() {
@@ -49,7 +50,10 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                                 Gebruiker{selectUserWarning}
                             </div>
                             <div className="card-block">
-                                <UserForm updateFormContext={this.updateFormContext}/>
+                                <UserForm
+                                    formContext={this.state.formContext}
+                                    updateFormContext={this.updateFormContext}
+                                />
                             </div>
                         </div>
                         <div className="card mt-3">
@@ -57,7 +61,10 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                                 Zoeken en beoordelen
                             </div>
                             <div className="card-block">
-                                <ConfigForm formContext={this.state.formContext} updateFormContext={this.updateFormContext}/>
+                                <ConfigForm
+                                    formContext={this.state.formContext}
+                                    updateFormContext={this.updateFormContext}
+                                />
                             </div>
                         </div>
                     </ModalBody>
@@ -66,7 +73,7 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                             <button
                                 onClick={this.updateContext}
                                 className="search btn btn-sm btn-success"
-                                disabled={!this.context.user}
+                                disabled={!this.state.formContext.user}
                             >
                                 <i className="fa fa-check"/>
                                 Sluiten

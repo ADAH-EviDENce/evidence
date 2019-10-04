@@ -13,7 +13,7 @@ const dev = {
     MORE_LIKE_THIS_SIZE: 3,
     SEARCH_RESULTS_SIZE: 3,
     USE_ROCCHIO: true,
-    DEFAULT_USER: "henk"
+    DEFAULT_USER: ""
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod'

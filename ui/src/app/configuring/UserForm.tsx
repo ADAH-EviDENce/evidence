@@ -1,15 +1,16 @@
 import React from "react";
 import Resources from "../Resources";
-import FontAwesome from "react-fontawesome";
 import InfoBox from "../common/InfoBox";
-import {AppContext} from "../AppContext";
-import {RouteComponentProps, withRouter} from "react-router-dom";
+import Spinner from "../common/Spinner";
 
-type UserFormProps = RouteComponentProps & {
+interface UserFormProps {
+    formContext: any,
     updateFormContext: Function
 }
 
 class UserForm extends React.Component<UserFormProps, any> {
+
+    private mounted: boolean;
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -18,7 +19,12 @@ class UserForm extends React.Component<UserFormProps, any> {
             users: [],
             error: null
         };
+        this.mounted = true;
         this.requestUsers();
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     private requestUsers() {
@@ -27,6 +33,9 @@ class UserForm extends React.Component<UserFormProps, any> {
                 throw Error("Status " + data.status);
             }
             data.json().then((json) => {
+                if(!this.mounted) {
+                    return;
+                }
                 if (json && json.length > 0) {
                     this.setState({loading: false, users: json});
                 } else {
@@ -39,7 +48,7 @@ class UserForm extends React.Component<UserFormProps, any> {
     }
 
     private handleSelect(user: string) {
-        this.props.updateFormContext({formContext: {user}});
+        this.props.updateFormContext({user});
     }
 
     private renderUserForm() {
@@ -55,7 +64,7 @@ class UserForm extends React.Component<UserFormProps, any> {
                                 name="names"
                                 type="radio"
                                 className="custom-control-input"
-                                checked={user === this.context.user}
+                                checked={user === this.props.formContext.user}
                                 onChange={() => this.handleSelect(user)}
                             />
                             <label
@@ -75,16 +84,13 @@ class UserForm extends React.Component<UserFormProps, any> {
         return (
             <>
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
-                {this.state.loading ?
-                    <FontAwesome name='spinner' spin/>
-                    :
-                    this.renderUserForm()
+                {this.state.loading
+                    ? <Spinner />
+                    : this.renderUserForm()
                 }
             </>
         );
     }
 }
 
-UserForm.contextType = AppContext;
-
-export default withRouter(UserForm);
+export default UserForm;
