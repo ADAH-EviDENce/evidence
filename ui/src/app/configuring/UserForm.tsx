@@ -10,7 +10,7 @@ interface UserFormProps {
 
 class UserForm extends React.Component<UserFormProps, any> {
 
-    private mounted: boolean;
+    private abort: AbortController = new AbortController();
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -19,30 +19,28 @@ class UserForm extends React.Component<UserFormProps, any> {
             users: [],
             error: null
         };
-        this.mounted = true;
         this.requestUsers();
     }
 
-    componentWillUnmount() {
-        this.mounted = false;
+    public componentWillUnmount() {
+        // prevent calling setState on unmounted component:
+        this.abort.abort();
     }
 
     private requestUsers() {
-        Resources.getUsers().then((data) => {
+        Resources.getUsers(this.abort.signal).then((data) => {
             if (!data.ok) {
                 throw Error("Status " + data.status);
             }
             data.json().then((json) => {
-                if(!this.mounted) {
-                    return;
-                }
                 if (json && json.length > 0) {
                     this.setState({loading: false, users: json});
                 } else {
                     this.setState({loading: false, error: 'Geen gebruikers gevonden.'});
                 }
             });
-        }).catch(() => {
+        }).catch((e: Error) => {
+            if(e.name  === 'AbortError') return;
             this.setState({loading: false, error: 'Er trad een fout op bij het ophalen van de gebruikers.'});
         });
     }

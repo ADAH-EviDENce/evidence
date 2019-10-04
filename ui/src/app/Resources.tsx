@@ -140,8 +140,8 @@ export default class Resources {
         });
     };
 
-    public static getUsers() {
-        return fetch(config.USERS_HOST);
+    public static getUsers(signal: AbortSignal) {
+        return fetch(config.USERS_HOST, {signal});
     }
 
     public static getExport() {

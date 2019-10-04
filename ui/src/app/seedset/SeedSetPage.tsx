@@ -43,7 +43,6 @@ class SeedSetPage extends React.Component<any, any> {
     private handleDeselect(id: string) {
         Resources.removeSeedId(this.context.user, id).then(() => {
             const index = this.state.snippets.findIndex((s: any) => s._id === id);
-            console.log(id, index, this.state.snippets);
             this.state.snippets.splice(index, 1);
             this.setState({snippets: this.state.snippets});
         });
