@@ -19,10 +19,9 @@ type assessment struct {
 	Relevant string `json:"relevant"` // "yes", "no" or ""
 }
 
-func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	username, err := getUsername(r)
+func (s *server) addAssessment(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
+	userid, err := login(w, r, tx)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
@@ -53,29 +52,7 @@ func (s *server) add(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		return
 	}
 
-	tx, err := s.db.Begin()
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
-	var userid int
-	row := tx.QueryRow(`SELECT userid FROM users WHERE username = ?`, username)
-	if err = row.Scan(&userid); err != nil {
-		return
-	}
-
-	err = s.addAssessments(tx, assessments, time.Now(), userid)
-	if err != nil {
-		return
-	}
-
-	err = tx.Commit()
-	return
+	return s.addAssessments(tx, assessments, time.Now(), userid)
 }
 
 // Add assessments with timestamp t and the given user id.
@@ -109,26 +86,15 @@ func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, us
 }
 
 // Exports the entire assessments table in CSV format.
-func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	username, err := getUsername(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-
-	tx, err := s.db.Begin()
+func (s *server) export(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
+	userid, err := login(w, r, tx)
 	if err != nil {
 		return
 	}
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
 
 	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
 		FROM assessments a JOIN users u ON a.userid = u.userid
-		WHERE u.username = ?`, username)
+		WHERE u.userid = ?`, userid)
 	if err != nil {
 		return
 	}
@@ -160,18 +126,14 @@ func (s *server) export(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	}
 	cw.Flush()
 
-	if err = rows.Err(); err != nil {
-		return
-	}
-
-	tx.Commit()
+	return rows.Err()
 }
 
 // Reads identifiers (JSON list of strings) from body, writes assessments for
 // designated snippets.
-func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *server) getAssessment(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	var ids []string
-	err := json.NewDecoder(r.Body).Decode(&ids)
+	err = json.NewDecoder(r.Body).Decode(&ids)
 	if err != nil && err != io.EOF {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -180,18 +142,6 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	if !s.validateId(w, r, ids) {
 		return
 	}
-
-	tx, err := s.db.Begin()
-	if err != nil {
-		http.Error(w, "database error", http.StatusInternalServerError)
-		return
-	}
-
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
 
 	selectRelevant, err := tx.Prepare(`SELECT relevant FROM assessments WHERE id = ?`)
 	if err != nil {
@@ -216,25 +166,22 @@ func (s *server) get(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		result = append(result, assessment{Id: id, Relevant: stringOfBool(relevant)})
 	}
 
-	tx.Commit()
-
-	json.NewEncoder(w).Encode(result)
+	return json.NewEncoder(w).Encode(result)
 }
 
-func (s *server) purge(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	username, err := getUsername(r)
+func purgeAssessments(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
+	userid, err := login(w, r, tx)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	log.Printf("purge by %s", username)
-	_, err = s.db.Exec(`DELETE FROM assessments WHERE userid IN`+
-		`(SELECT userid FROM users WHERE username = ?)`, username)
+	log.Printf("purge by user %d", userid)
+	_, err = tx.Exec(`DELETE FROM assessments WHERE userid = ?`, userid)
 	if err != nil {
 		http.Error(w, "database error", http.StatusInternalServerError)
-		log.Print(err)
+		log.Print("purge: ", err)
 	}
+	return
 }
 
 func stringOfBool(b sql.NullBool) string {

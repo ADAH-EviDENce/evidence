@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -42,20 +43,7 @@ func (s *server) addUser(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	}
 }
 
-func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tx, err := s.db.Begin()
-	if err != nil {
-		http.Error(w, "database error", http.StatusInternalServerError)
-		log.Print(err)
-		return
-	}
-
-	defer func() {
-		if err != nil {
-			rollback(w, tx, err)
-		}
-	}()
-
+func (s *server) listUsers(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	rows, err := tx.Query(`SELECT username FROM users`)
 	if err != nil {
 		return
@@ -74,19 +62,28 @@ func (s *server) listUsers(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	tx.Commit()
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(usernames)
+	return json.NewEncoder(w).Encode(usernames)
 }
 
-func getUsername(r *http.Request) (username string, err error) {
+// Logs in using the username provided in the X-User header.
+// Returns the user's id.
+//
+// Errors are reported on w and logged.
+func login(w http.ResponseWriter, r *http.Request, tx *sql.Tx) (userid int, err error) {
 	// For the moment, we have a custom "authorization" header that contains
 	// just the username. We can upgrade this to Basic-Auth or something fancy
 	// later.
-	username = r.Header.Get("X-User")
+	username := r.Header.Get("X-User")
 	if username == "" {
-		err = errors.New("no username provided")
+		const msg = "no username provided"
+		log.Print(msg)
+		http.Error(w, msg, http.StatusUnauthorized)
+		err = errors.New(msg)
+		return
 	}
+
+	row := tx.QueryRow(`SELECT userid FROM users WHERE username = ?`, username)
+	err = row.Scan(&userid)
 	return
 }
