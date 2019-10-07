@@ -22,7 +22,9 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
             inSeedSet: false
         };
 
-        this.checkInSeedSet();
+        if(this.props.showInSeedSet) {
+            this.checkInSeedSet();
+        }
 
     }
     private checkInSeedSet() {

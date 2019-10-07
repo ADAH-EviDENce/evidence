@@ -19,9 +19,6 @@ class FivePagePagination extends React.Component<FivePagePaginationProps, any> {
         const range = FivePagePagination.getDisplayedPages(current, total);
 
         const first = range[0];
-        const second = range[1];
-        const third = range[2];
-        const fourth = range[3];
         const fifth = range[4];
 
         return (
@@ -31,36 +28,18 @@ class FivePagePagination extends React.Component<FivePagePaginationProps, any> {
                         «
                     </button>
                 </li>
-                <li className={`page-item ${first === 1 ? 'disabled' : ''}`}>
+                <li className={`page-item ${current === 1 ? 'disabled' : ''}`}>
                     <button onClick={() => this.props.onPageClick(current - 1)} className="btn-link page-link">
                         ‹
                     </button>
                 </li>
-                <li className={`page-item`}>
-                    <button onClick={() => this.props.onPageClick(first)} className="btn-link page-link">
-                        {first}
-                    </button>
-                </li>
-                <li className={`page-item ${total < 2 ? 'd-none' : ''}`}>
-                    <button onClick={() => this.props.onPageClick(second)} className="btn-link page-link">
-                        {second}
-                    </button>
-                </li>
-                <li className={`page-item ${total < 3 ? 'd-none' : ''}`}>
-                    <button onClick={() => this.props.onPageClick(third)} className="btn-link page-link">
-                        {third}
-                    </button>
-                </li>
-                <li className={`page-item ${total < 4 ? 'd-none' : ''}`}>
-                    <button onClick={() => this.props.onPageClick(fourth)} className="btn-link page-link">
-                        {fourth}
-                    </button>
-                </li>
-                <li className={`page-item ${total < 5 ? 'd-none' : ''}`}>
-                    <button onClick={() => this.props.onPageClick(fifth)} className="btn-link page-link">
-                        {fifth}
-                    </button>
-                </li>
+
+                {this.createPageNo(first, 1, total, current)}
+                {this.createPageNo(range[1], 2, total, current)}
+                {this.createPageNo(range[2], 3, total, current)}
+                {this.createPageNo(range[3], 4, total, current)}
+                {this.createPageNo(fifth, 5, total, current)}
+
                 <li className={`page-item ${current >= total ? 'disabled' : ''}`}>
                     <button onClick={() => this.props.onPageClick(current + 1)} className="btn-link page-link">
                         ›
@@ -73,6 +52,24 @@ class FivePagePagination extends React.Component<FivePagePaginationProps, any> {
                 </li>
             </ul>
         );
+    }
+
+    private createPageNo(
+        no: number,
+        min: number,
+        total: number,
+        current: number
+    ) {
+        return <li className={
+            `page-item
+            ${total < min ? 'd-none' : ''}
+            ${no === current ? 'active' : ''}
+            `}
+        >
+            <button onClick={() => this.props.onPageClick(no)} className="btn-link page-link">
+                {no}
+            </button>
+        </li>;
     }
 
     private static getDisplayedPages(current: number, total: number): Array<number> {
