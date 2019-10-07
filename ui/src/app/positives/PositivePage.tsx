@@ -3,7 +3,6 @@ import Page from "../common/Page";
 import InfoBox from "../common/InfoBox";
 import {AppContext} from "../AppContext";
 import Resources from "../Resources";
-import queryString from "query-string";
 import {withRouter} from "react-router";
 import config from "../../config";
 import SnippetList from "../snippet/SnippetList";
@@ -14,15 +13,13 @@ class PositivePage extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
 
-        const params = queryString.parse(this.props.location.search);
-
         this.state = {
             snippets: [],
             loading: true,
             loadingTotal: true,
-            total: -1,
-            page: params.page ? params.page: 0,
-            size: params.size ? params.size : config.POSITIVE_SIZE
+            total: 0,
+            page: this.props.match.params.page,
+            size: config.POSITIVE_SIZE
         };
 
         this.getTotalSnippets();
@@ -32,18 +29,26 @@ class PositivePage extends React.Component<any, any> {
     private getTotalSnippets() {
         Resources.getPositiveTotal(
             this.context.user
-        ).then((total) => {
-            this.setState({loadingTotal: false, total});
+        ).then((response) => {
+            response.text().then((totalResults) => {
+                const totalPages = Math.ceil(parseInt(totalResults) / this.state.size);
+                this.setState({loadingTotal: false, total: totalPages})
+            });
         }).catch(() => {
             this.setState({loadingTotal: false, error: 'Fout bij ophalen aantal resultaten'});
         });
     }
 
     private getSnippets() {
+        const size = this.state.size;
+        const page = this.state.page;
+        const from = (page - 1) * size;
+
+        console.log('from:', from, 'size:', size, 'page:', page);
         Resources.getPositive(
             this.context.user,
-            this.state.from,
-            this.state.size
+            from,
+            size
         ).then((data) => {
             if(!data) {
                 this.setState({loading: false});
@@ -59,6 +64,12 @@ class PositivePage extends React.Component<any, any> {
             this.setState({loading: false, error: 'Fout bij ophalen van resultaten'});
         });
     }
+
+    handlePageClick = (page: number) => {
+        const url = `/positive/${page}/`;
+        console.log(url);
+        this.props.history.push(url);
+    };
 
     private renderSnippets() {
         return <SnippetList>
@@ -77,7 +88,11 @@ class PositivePage extends React.Component<any, any> {
         if(this.state.loading || this.state.loadingTotal) {
             return null;
         }
-        return <FivePagePagination page={this.props.page} total={this.props.total}/>;
+        return <FivePagePagination
+            page={this.state.page}
+            total={this.state.total}
+            onPageClick={this.handlePageClick}
+        />;
     }
 
     render() {

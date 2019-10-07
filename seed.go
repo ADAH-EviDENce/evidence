@@ -39,7 +39,7 @@ func (s *server) addSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps 
 }
 
 // ListPositives allows listing the union of seed set and positive assessments.
-func (s *server) listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
+func listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	userid, err := login(w, r, tx)
 	if err != nil {
 		return
@@ -68,6 +68,28 @@ func (s *server) listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Reques
 		return
 	}
 	return json.NewEncoder(w).Encode(ids)
+}
+
+func numPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
+	userid, err := login(w, r, tx)
+	if err != nil {
+		return
+	}
+
+	row := tx.QueryRow(`SELECT COUNT(*) FROM (
+			SELECT id FROM seed WHERE userid = ?
+			UNION
+			SELECT id FROM assessments WHERE userid = ?
+		)`, userid, userid)
+	var n uint
+	err = row.Scan(&n)
+	if err != nil {
+		log.Print("numPositives: ", err)
+		http.Error(w, "database error", http.StatusInternalServerError)
+		return
+	}
+	_, err = fmt.Fprint(w, n)
+	return
 }
 
 func listSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {

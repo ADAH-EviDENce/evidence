@@ -1,10 +1,9 @@
 import * as React from "react";
 
-import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
-
 interface FivePagePaginationProps {
     page: number
-    total: number
+    total: number,
+    onPageClick: Function
 }
 
 class FivePagePagination extends React.Component<FivePagePaginationProps, any> {
@@ -15,62 +14,68 @@ class FivePagePagination extends React.Component<FivePagePaginationProps, any> {
     }
 
     render() {
-        const range = FivePagePagination.getDisplayedPages(this.props.page, this.props.total)
-        const url = "#";
+        const current = this.props.page;
+        const total = this.props.total;
+        const range = FivePagePagination.getDisplayedPages(current, total);
+
         const first = range[0];
         const second = range[1];
         const third = range[2];
         const fourth = range[3];
         const fifth = range[4];
+
         return (
-            <Pagination aria-label="Page navigation example">
-                <PaginationItem disabled={range.includes(this.props.page)}>
-                    <PaginationLink first href={url}/>
-                </PaginationItem>
-                <PaginationItem disabled={range.includes(this.props.page)}>
-                    <PaginationLink previous href="#"/>
-                </PaginationItem>
-                <PaginationItem active>
-                    <PaginationLink href="#">
+            <ul className="pagination justify-content-center mt-3" aria-label="Page navigation">
+                <li className={`page-item ${first === 1 ? 'disabled' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(1)} className="btn-link page-link">
+                        «
+                    </button>
+                </li>
+                <li className={`page-item ${first === 1 ? 'disabled' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(current - 1)} className="btn-link page-link">
+                        ‹
+                    </button>
+                </li>
+                <li className={`page-item`}>
+                    <button onClick={() => this.props.onPageClick(first)} className="btn-link page-link">
                         {first}
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink href="#">
+                    </button>
+                </li>
+                <li className={`page-item ${total < 2 ? 'd-none' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(second)} className="btn-link page-link">
                         {second}
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink href="#">
+                    </button>
+                </li>
+                <li className={`page-item ${total < 3 ? 'd-none' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(third)} className="btn-link page-link">
                         {third}
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink href="#">
+                    </button>
+                </li>
+                <li className={`page-item ${total < 4 ? 'd-none' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(fourth)} className="btn-link page-link">
                         {fourth}
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink href="#">
+                    </button>
+                </li>
+                <li className={`page-item ${total < 5 ? 'd-none' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(fifth)} className="btn-link page-link">
                         {fifth}
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem disabled={range.includes(this.props.page)}>
-                    <PaginationLink next href="#"/>
-                </PaginationItem>
-                <PaginationItem disabled={range.includes(this.props.page)}>
-                    <PaginationLink last href="#" />
-                </PaginationItem>
-            </Pagination>
+                    </button>
+                </li>
+                <li className={`page-item ${current >= total ? 'disabled' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(current + 1)} className="btn-link page-link">
+                        ›
+                    </button>
+                </li>
+                <li className={`page-item ${fifth >= total ? 'disabled' : ''}`}>
+                    <button onClick={() => this.props.onPageClick(total)} className="btn-link page-link">
+                        »
+                    </button>
+                </li>
+            </ul>
         );
     }
 
-    private static get(me: number, current: number, total: number) {
-        const range = FivePagePagination.getDisplayedPages(current, total);
-        return range[me];
-    }
-
-    private static getDisplayedPages(current: number, total: number) : Array<number> {
+    private static getDisplayedPages(current: number, total: number): Array<number> {
         let middle = current;
         if (current < 3) {
             middle = 3;

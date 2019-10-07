@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"sort"
@@ -25,6 +26,9 @@ func TestSeed(t *testing.T) {
 
 		testListSeed(t, r, "user1", "foo", "bar", "baz", "quux") &&
 		testListSeed(t, r, "user2", "fred", "barney") &&
+
+		testNumPositives(t, r, "user1", 4) &&
+		testNumPositives(t, r, "user2", 2) &&
 
 		removeSeed(t, r, "user1", "foo", http.StatusOK) &&
 		removeSeed(t, r, "user1", "foo", http.StatusNotFound) &&
@@ -61,6 +65,25 @@ func testListSeed(t *testing.T, r *httprouter.Router, username string, expect ..
 	sort.Strings(actual)
 	sort.Strings(expect)
 	return assert.Equal(t, expect, actual)
+}
+
+func testNumPositives(t *testing.T, r *httprouter.Router, username string, expect int) bool {
+	t.Helper()
+
+	req := httptest.NewRequest("GET", "/positive/num", nil)
+	req.Header.Set("X-User", username)
+
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	res := w.Result()
+	if !assert.Equal(t, http.StatusOK, w.Result().StatusCode) {
+		return false
+	}
+
+	//n, err := strconv.Atoi(w.Body.String())
+	var n int
+	_, err := fmt.Fscanf(res.Body, "%d", &n)
+	return assert.Nil(t, err) && assert.Equal(t, expect, n)
 }
 
 func removeSeed(t *testing.T, r *httprouter.Router, username, id string, status int) bool {
