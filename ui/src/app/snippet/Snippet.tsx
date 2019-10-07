@@ -1,5 +1,5 @@
 import * as React from "react";
-import ReadableId from "./ReadableId";
+import ReadableId from "../common/ReadableId";
 
 interface SnippetProps {
     id: string,

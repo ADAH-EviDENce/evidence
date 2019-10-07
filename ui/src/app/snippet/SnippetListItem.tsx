@@ -1,6 +1,6 @@
 import * as React from "react";
 import './SnippetListItem.css';
-import Snippet from "../common/Snippet";
+import Snippet from "./Snippet";
 
 interface SnippetListItemProps {
     id: string,

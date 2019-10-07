@@ -1,6 +1,6 @@
 import * as React from "react";
 import SeedSetSnippet from "./SeedSetSnippet";
-import SnippetList from "../common/SnippetList";
+import SnippetList from "../snippet/SnippetList";
 
 interface SnippetListProps {
     snippets: Array<any>,

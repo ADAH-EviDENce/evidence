@@ -1,6 +1,6 @@
 import * as React from "react";
 import SearchSnippet from "./SearchSnippet";
-import SnippetList from "../common/SnippetList";
+import SnippetList from "../snippet/SnippetList";
 
 interface SnippetListProps {
     snippets: Array<any>

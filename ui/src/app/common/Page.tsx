@@ -2,8 +2,8 @@ import * as React from "react";
 import MainHeader from "./MainHeader";
 import './Page.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {CrumbProps} from "./Crumb";
-import Breadcrumb from "./Breadcrumb";
+import {BreadcrumbProps} from "./Breadcrumb";
+import BreadcrumbTrail from "./BreadcrumbTrail";
 import ConfigSummary from "../configuring/ConfigSummary";
 import ConfigModal from "../configuring/ConfigModal";
 import {AppContext} from "../AppContext";
@@ -11,7 +11,7 @@ import {AppContext} from "../AppContext";
 const Fragment = React.Fragment;
 
 type PageProps = RouteComponentProps & {
-    breadcrumbTrail?: CrumbProps[]
+    breadcrumbTrail?: BreadcrumbProps[]
 }
 
 class Page extends React.Component<PageProps, any> {
@@ -44,7 +44,7 @@ class Page extends React.Component<PageProps, any> {
                 <div className="container page-container">
                     <div className="rows page-body">
                         <div className="offset-2 col-8">
-                            {this.props.breadcrumbTrail ? <Breadcrumb trail={this.props.breadcrumbTrail}/> : null}
+                            {this.props.breadcrumbTrail ? <BreadcrumbTrail trail={this.props.breadcrumbTrail}/> : null}
                             {this.props.children}
                         </div>
                     </div>

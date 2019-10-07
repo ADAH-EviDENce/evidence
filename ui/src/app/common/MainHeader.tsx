@@ -20,6 +20,7 @@ class MainHeader extends React.Component<MainHeaderProps, any> {
                 <div className="main-nav text-center">
                     <Link className="nav-item" to={"/search/"}>zoeken</Link>
                     <Link className="nav-item" to={"/seedset/"}>startset</Link>
+                    <Link className="nav-item" to={"/positive/"}>resultaten</Link>
                     <Link className="nav-item" to={"/data/"}>data</Link>
                     <Button color="link" className="nav-item" onClick={() => this.props.openConfig()}>instellingen</Button>
                 </div>
