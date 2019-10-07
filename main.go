@@ -89,7 +89,8 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 
 	r.GET("/export", s.inTx(s.export))
 
-	r.GET("/positive", s.inTx(s.listPositives))
+	r.GET("/positive", s.inTx(listPositives))
+	r.GET("/positive/num", s.inTx(numPositives))
 
 	r.GET("/purge", s.inTx(purgeAssessments))
 
@@ -324,16 +325,19 @@ func (s *server) inTx(f func(tx *sql.Tx, w http.ResponseWriter, r *http.Request,
 			return
 		}
 
-		err = f(tx, w, r, ps)
-		if err == nil {
-			err = tx.Commit()
-		} else {
-			err = tx.Rollback()
-		}
+		defer func() {
+			if err == nil {
+				err = tx.Commit()
+			} else {
+				err = tx.Rollback()
+			}
 
-		if err != nil {
-			log.Print(err)
-			http.Error(w, "database error", http.StatusInternalServerError)
-		}
+			if err != nil {
+				log.Print(err)
+				http.Error(w, "database error", http.StatusInternalServerError)
+			}
+		}()
+
+		err = f(tx, w, r, ps)
 	}
 }
