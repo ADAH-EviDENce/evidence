@@ -38,7 +38,6 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
             })
         } else {
             Resources.postSeedSet(this.context.user, [this.props.id]).then((response) => {
-                console.log('response', response);
                 this.setState({inSeedSet: true});
             });
         }

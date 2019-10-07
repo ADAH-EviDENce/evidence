@@ -1,9 +1,8 @@
 import * as React from "react";
-import {RouteComponentProps, withRouter} from "react-router";
 import {Link} from "react-router-dom";
 import SnippetListItem from "../snippet/SnippetListItem";
 
-type SearchSnippetProps = RouteComponentProps & {
+interface SearchSnippetProps {
     id: string,
     text: string
 }
@@ -23,4 +22,4 @@ export class SearchSnippet extends React.Component<SearchSnippetProps, any> {
     }
 }
 
-export default withRouter(SearchSnippet);
+export default SearchSnippet;

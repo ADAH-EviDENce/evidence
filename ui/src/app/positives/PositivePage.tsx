@@ -1,15 +1,62 @@
 import * as React from "react";
 import Page from "../common/Page";
 import InfoBox from "../common/InfoBox";
+import {AppContext} from "../AppContext";
+import Resources from "../Resources";
+import queryString from "query-string";
+import {withRouter} from "react-router";
+import config from "../../config";
+import SnippetList from "../snippet/SnippetList";
+import PositiveSnippet from "./PositiveSnippet";
 
-export default class PositivePage extends React.Component<any, any> {
+class PositivePage extends React.Component<any, any> {
     constructor(props: any, context: any) {
         super(props, context);
-        this.state = {};
+
+        const params = queryString.parse(this.props.location.search);
+
+        this.state = {
+            snippets: [],
+            loading: true,
+            from: params.from ? params.from: 0,
+            size: params.size ? params.size : config.POSITIVE_SIZE
+        };
+
+        this.getSnippets();
+    }
+
+    private getSnippets() {
+        Resources.getPositive(
+            this.context.user,
+            this.state.from,
+            this.state.size
+        ).then((data) => {
+            if(!data) {
+                this.setState({loading: false});
+                return;
+            }
+            data.json().then((positiveIds) => {
+                const docIds = positiveIds.map((id: string) => {return {_id: id}});
+                Resources.getSnippetsByIds(docIds).then((snippets) => {
+                    this.setState({loading: false, snippets: snippets.docs});
+                });
+            });
+        }).catch(() => {
+            this.setState({loading: false, error: 'Er trad een fout op tijdens het ophalen van de resultaten'});
+        });
     }
 
     private renderSnippets() {
-        console.log('I exist!');
+        return <SnippetList>
+            {!this.state.loading && this.state.snippets.map((s: any, i: number) => {
+                return <PositiveSnippet
+                    key={i}
+                    id={s._id}
+                    documentId={s._source.document}
+                    text={s.highlight ? s.highlight.text[0] : s._source.text}
+                />
+            })}
+        </SnippetList>
     }
 
     render() {
@@ -25,3 +72,7 @@ export default class PositivePage extends React.Component<any, any> {
         );
     }
 }
+
+PositivePage.contextType = AppContext;
+
+export default withRouter(PositivePage);

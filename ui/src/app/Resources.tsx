@@ -163,6 +163,13 @@ export default class Resources {
         return fetch(config.SEED_HOST + '/' + id, Resources.withUserHeader(user));
     }
 
+    static getPositive(user: string, from: number, size: number) {
+        return fetch(
+            `${config.POSITIVE_HOST}?from=${from}&size=${size}`,
+            Resources.withUserHeader(user)
+        );
+    }
+
     private static withUserHeader(user: string) : any {
         return {
             headers: {

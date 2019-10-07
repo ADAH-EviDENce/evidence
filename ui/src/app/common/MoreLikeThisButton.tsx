@@ -2,7 +2,7 @@ import * as React from "react";
 import {Button} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
 
-type MoreLikeThisButtonProps = RouteComponentProps & {
+export type MoreLikeThisButtonProps = RouteComponentProps & {
     id: string
     documentId: string
 }
