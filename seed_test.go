@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -75,14 +75,11 @@ func testNumPositives(t *testing.T, r *httprouter.Router, username string, expec
 
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
-	res := w.Result()
 	if !assert.Equal(t, http.StatusOK, w.Result().StatusCode) {
 		return false
 	}
 
-	//n, err := strconv.Atoi(w.Body.String())
-	var n int
-	_, err := fmt.Fscanf(res.Body, "%d", &n)
+	n, err := strconv.Atoi(w.Body.String())
 	return assert.Nil(t, err) && assert.Equal(t, expect, n)
 }
 
