@@ -170,6 +170,13 @@ export default class Resources {
         );
     }
 
+    static getPositiveTotal(user: string) {
+        return fetch(
+            `${config.POSITIVE_HOST}/num`,
+            Resources.withUserHeader(user)
+        );
+    }
+
     private static withUserHeader(user: string) : any {
         return {
             headers: {

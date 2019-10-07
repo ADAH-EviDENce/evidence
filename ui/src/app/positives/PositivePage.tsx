@@ -8,6 +8,7 @@ import {withRouter} from "react-router";
 import config from "../../config";
 import SnippetList from "../snippet/SnippetList";
 import PositiveSnippet from "./PositiveSnippet";
+import FivePagePagination from "../common/FivePagePagination";
 
 class PositivePage extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -18,11 +19,24 @@ class PositivePage extends React.Component<any, any> {
         this.state = {
             snippets: [],
             loading: true,
-            from: params.from ? params.from: 0,
+            loadingTotal: true,
+            total: -1,
+            page: params.page ? params.page: 0,
             size: params.size ? params.size : config.POSITIVE_SIZE
         };
 
+        this.getTotalSnippets();
         this.getSnippets();
+    }
+
+    private getTotalSnippets() {
+        Resources.getPositiveTotal(
+            this.context.user
+        ).then((total) => {
+            this.setState({loadingTotal: false, total});
+        }).catch(() => {
+            this.setState({loadingTotal: false, error: 'Fout bij ophalen aantal resultaten'});
+        });
     }
 
     private getSnippets() {
@@ -42,7 +56,7 @@ class PositivePage extends React.Component<any, any> {
                 });
             });
         }).catch(() => {
-            this.setState({loading: false, error: 'Er trad een fout op tijdens het ophalen van de resultaten'});
+            this.setState({loading: false, error: 'Fout bij ophalen van resultaten'});
         });
     }
 
@@ -59,6 +73,13 @@ class PositivePage extends React.Component<any, any> {
         </SnippetList>
     }
 
+    private renderPagination() {
+        if(this.state.loading || this.state.loadingTotal) {
+            return null;
+        }
+        return <FivePagePagination page={this.props.page} total={this.props.total}/>;
+    }
+
     render() {
         return (
             <Page>
@@ -68,6 +89,8 @@ class PositivePage extends React.Component<any, any> {
                 <InfoBox msg={this.state.info} type="info" onClose={() => this.setState({info: null})}/>
 
                 {this.renderSnippets()}
+                {this.renderPagination()}
+
             </Page>
         );
     }
