@@ -1,6 +1,6 @@
 import * as React from "react";
 import SnippetListItem from "../snippet/SnippetListItem";
-import MoreLikeThisButton from "../common/MoreLikeThisButton";
+import MoreLikeThisButton from "../morelikethis/MoreLikeThisButton";
 
 interface SearchSnippetProps {
     id: string,

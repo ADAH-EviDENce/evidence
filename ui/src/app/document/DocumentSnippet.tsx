@@ -5,7 +5,7 @@ import './DocumentSnippet.css';
 import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
 import Resources from "../Resources";
-import MoreLikeThisButton from "../common/MoreLikeThisButton";
+import MoreLikeThisButton from "../morelikethis/MoreLikeThisButton";
 
 type DocumentSnippetProps = RouteComponentProps & {
     id: string,

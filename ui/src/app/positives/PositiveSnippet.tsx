@@ -1,6 +1,6 @@
 import * as React from "react";
 import SnippetListItem from "../snippet/SnippetListItem";
-import MoreLikeThisButton, {MoreLikeThisButtonProps} from "../common/MoreLikeThisButton";
+import MoreLikeThisButton, {MoreLikeThisButtonProps} from "../morelikethis/MoreLikeThisButton";
 import {withRouter} from "react-router";
 
 type PositiveSnippetProps = MoreLikeThisButtonProps & {
