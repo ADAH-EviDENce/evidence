@@ -27,6 +27,8 @@ class ReadableId extends React.Component<ReadableIdProps, any> {
             readable = readable.toLowerCase();
         }
 
+        readable = readable.replace('conversation clipped 150 ', '');
+
         return (
             <span className="readable-id">{readable}</span>
         );
