@@ -320,7 +320,7 @@ type txHandler func(*sql.Tx, http.ResponseWriter, *http.Request, httprouter.Para
 // depending on the return value of the function.
 func (s *server) inTx(f txHandler) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		tx, err := s.db.Begin()
+		tx, err := s.db.BeginTx(r.Context(), nil)
 		if err != nil {
 			log.Printf("unable to begin transaction: %v", err)
 			http.Error(w, "database error", http.StatusInternalServerError)
