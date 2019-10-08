@@ -20,13 +20,7 @@ type assessment struct {
 }
 
 func (s *server) addAssessment(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
 	var assessments []assessment
-
 	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields()
 	err = dec.Decode(&assessments)
@@ -52,7 +46,7 @@ func (s *server) addAssessment(tx *sql.Tx, w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	return s.addAssessments(tx, assessments, time.Now(), userid)
+	return s.addAssessments(tx, assessments, time.Now(), userId(r))
 }
 
 // Add assessments with timestamp t and the given user id.
@@ -87,14 +81,9 @@ func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, us
 
 // Exports the entire assessments table in CSV format.
 func (s *server) export(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
 	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
 		FROM assessments a JOIN users u ON a.userid = u.userid
-		WHERE u.userid = ?`, userid)
+		WHERE u.userid = ?`, userId(r))
 	if err != nil {
 		return
 	}
@@ -170,11 +159,7 @@ func (s *server) getAssessment(tx *sql.Tx, w http.ResponseWriter, r *http.Reques
 }
 
 func purgeAssessments(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
+	userid := userId(r)
 	log.Printf("purge by user %d", userid)
 	_, err = tx.Exec(`DELETE FROM assessments WHERE userid = ?`, userid)
 	if err != nil {

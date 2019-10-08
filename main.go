@@ -76,8 +76,8 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 
 	r.Handler("GET", "/", http.RedirectHandler("/ui/", http.StatusPermanentRedirect))
 
-	r.POST("/assess", s.inTx(s.addAssessment))
-	r.GET("/assess", s.inTx(s.getAssessment))
+	r.POST("/assess", s.inTx(loggedIn(s.addAssessment)))
+	r.GET("/assess", s.inTx(loggedIn(s.getAssessment)))
 
 	r.GET("/doc2vec/:id", s.doc2vecNearest)
 	r.GET("/doc2vec_rocchio/:id", s.doc2vecRocchio)
@@ -87,19 +87,19 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.GET("/es/*path", s.elasticsearch)
 	r.POST("/es/*path", s.elasticsearch)
 
-	r.GET("/export", s.inTx(s.export))
+	r.GET("/export", s.inTx(loggedIn(s.export)))
 
-	r.GET("/positive", s.inTx(listPositives))
-	r.GET("/positive/num", s.inTx(numPositives))
+	r.GET("/positive", s.inTx(loggedIn(listPositives)))
+	r.GET("/positive/num", s.inTx(loggedIn(numPositives)))
 
-	r.GET("/purge", s.inTx(purgeAssessments))
+	r.GET("/purge", s.inTx(loggedIn(purgeAssessments)))
 
 	r.GET("/rocchio/:id", s.rocchio)
 
-	r.GET("/seed", s.inTx(listSeed))
-	r.POST("/seed", s.inTx(s.addSeed))
-	r.GET("/seed/:id", s.inTx(s.seedContains))
-	r.DELETE("/seed/:id", s.inTx(s.removeSeed))
+	r.GET("/seed", s.inTx(loggedIn(listSeed)))
+	r.POST("/seed", s.inTx(loggedIn(s.addSeed)))
+	r.GET("/seed/:id", s.inTx(loggedIn(s.seedContains)))
+	r.DELETE("/seed/:id", s.inTx(loggedIn(s.removeSeed)))
 
 	r.GET("/ui/*path", s.ui)
 
@@ -312,11 +312,13 @@ func (s *server) getSource(ctx context.Context, w http.ResponseWriter, id string
 	return
 }
 
+// A txHandler is an HTTP handler that runs in a database transaction.
+type txHandler func(*sql.Tx, http.ResponseWriter, *http.Request, httprouter.Params) error
+
 // InTx runs a function inside a transaction.
 // The transaction is automatically committed or rolled back
 // depending on the return value of the function.
-func (s *server) inTx(f func(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) error) httprouter.Handle {
-
+func (s *server) inTx(f txHandler) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		tx, err := s.db.Begin()
 		if err != nil {
@@ -341,3 +343,20 @@ func (s *server) inTx(f func(tx *sql.Tx, w http.ResponseWriter, r *http.Request,
 		err = f(tx, w, r, ps)
 	}
 }
+
+// LoggedIn is an adapter that adds to a handler the requirement that a user logs in.
+// The user id can be retrieved using the function userId.
+func loggedIn(f txHandler) txHandler {
+	return func(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
+		userid, err := login(w, r, tx)
+		if err != nil {
+			return err
+		}
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, "userid", userid)
+		r = r.WithContext(ctx)
+		return f(tx, w, r, ps)
+	}
+}
+
+func userId(r *http.Request) int { return r.Context().Value("userid").(int) }
