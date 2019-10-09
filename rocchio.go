@@ -235,7 +235,11 @@ func termsQuery(docs []*elastic.TermvectorsResponse) *elastic.BoolQuery {
 
 	// Limited to 25 terms to prevent queries from getting too large.
 	// TODO: make this number a parameter.
-	for _, t := range byFreq[:25] {
+	const maxTerms = 25
+	if len(byFreq) > maxTerms {
+		byFreq = byFreq[:maxTerms]
+	}
+	for _, t := range byFreq {
 		q.Should(elastic.NewTermQuery(t.field, t.term).Boost(float64(t.freq)))
 	}
 
