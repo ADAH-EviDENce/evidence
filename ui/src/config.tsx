@@ -5,7 +5,7 @@ const prod = {
     MORE_LIKE_THIS_SIZE: 10,
     SEARCH_RESULTS_SIZE: 10,
     POSITIVE_SIZE: 10,
-    USE_ROCCHIO: false,
+    USE_ROCCHIO: true,
     DEFAULT_USER: ""
 };
 
