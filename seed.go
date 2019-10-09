@@ -11,11 +11,6 @@ import (
 )
 
 func (s *server) addSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
 	var ids []string
 	err = json.NewDecoder(r.Body).Decode(&ids)
 	if err != nil {
@@ -30,7 +25,7 @@ func (s *server) addSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps 
 
 	for _, id := range ids {
 		_, err = tx.Exec(`INSERT OR IGNORE INTO seed (id, userid) VALUES (?, ?)`,
-			id, userid)
+			id, userId(r))
 		if err != nil {
 			return
 		}
@@ -40,11 +35,6 @@ func (s *server) addSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps 
 
 // ListPositives allows listing the union of seed set and positive assessments.
 func listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
 	uparams := r.URL.Query()
 	offset := intValue(w, uparams, "from", 0)
 	if offset == -1 {
@@ -55,6 +45,7 @@ func listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	userid := userId(r)
 	rows, err := tx.Query(
 		`SELECT * FROM (
 			SELECT id FROM seed WHERE userid = ?
@@ -71,11 +62,7 @@ func listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httpro
 }
 
 func numPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
+	userid := userId(r)
 	row := tx.QueryRow(`SELECT COUNT(*) FROM (
 			SELECT id FROM seed WHERE userid = ?
 			UNION
@@ -93,12 +80,7 @@ func numPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprou
 }
 
 func listSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
-	ids, err := gatherSeed(w, tx, userid)
+	ids, err := gatherSeed(w, tx, userId(r))
 	if err != nil {
 		return
 	}
@@ -133,18 +115,14 @@ func gatherIds(rows *sql.Rows, w http.ResponseWriter) (ids []string, err error) 
 }
 
 func (s *server) removeSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
 	id := ps.ByName("id")
 	// elasticEndpoint == "" turns off validation, for testing purposes.
 	if s.elasticEndpoint != "" && !s.validateId(w, r, []string{id}) {
 		return
 	}
 
-	res, err := tx.Exec(`DELETE FROM seed WHERE id = ? AND userid = ?`, id, userid)
+	res, err := tx.Exec(`DELETE FROM seed WHERE id = ? AND userid = ?`,
+		id, userId(r))
 	if err == nil {
 		changed, err := res.RowsAffected()
 		if err == nil && changed == 0 {
@@ -159,13 +137,9 @@ func (s *server) removeSeed(tx *sql.Tx, w http.ResponseWriter, r *http.Request, 
 }
 
 func (s *server) seedContains(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid, err := login(w, r, tx)
-	if err != nil {
-		return
-	}
-
 	id := ps.ByName("id")
-	row := tx.QueryRow(`SELECT 1 FROM seed WHERE id = ? AND userid = ?`, id, userid)
+	row := tx.QueryRow(`SELECT 1 FROM seed WHERE id = ? AND userid = ?`,
+		id, userId(r))
 
 	var i int
 	switch err = row.Scan(&i); err {

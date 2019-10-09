@@ -31,6 +31,7 @@ func TestAssessments(t *testing.T) {
 
 	req := httptest.NewRequest("GET", "/assess",
 		strings.NewReader(`["foo", "bar", "baz"]`))
+	req.Header.Set("X-User", "test")
 
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -56,6 +57,7 @@ func TestAssessments(t *testing.T) {
 
 	req = httptest.NewRequest("GET", "/assess",
 		strings.NewReader(`["foo", "bar", "baz", "quux"]`))
+	req.Header.Set("X-User", "test")
 
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)
