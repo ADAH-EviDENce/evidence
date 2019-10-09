@@ -17,7 +17,7 @@ export default class DataPage extends React.Component<any, any> {
 
     private saveFile = () => {
         const exportFilename = 'export.csv';
-        Resources.getExport().then((data) => {
+        Resources.getExport(this.context.user).then((data) => {
             const csv = new Blob([data], {type: "text/csv;charset=utf-8"});
             FileSaver.saveAs(csv, exportFilename);
         }).catch(() => {

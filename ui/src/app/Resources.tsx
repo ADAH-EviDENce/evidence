@@ -131,8 +131,8 @@ export default class Resources {
         return fetch(config.USERS_HOST, {signal});
     }
 
-    public static getExport() {
-        return fetch(config.EXPORT_HOST).then(data => data.text());
+    public static getExport(user: string) {
+        return fetch(config.EXPORT_HOST, Resources.withUserHeader(user)).then(data => data.text());
     }
 
     public static purgeDatabase(user: string) {
