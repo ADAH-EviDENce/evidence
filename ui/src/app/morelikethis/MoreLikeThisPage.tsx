@@ -10,6 +10,7 @@ import ReadableId from "../common/ReadableId";
 import {AppContext} from "../AppContext";
 import {Link} from "react-router-dom";
 import Spinner from "../common/Spinner";
+import {fromVal} from "../configuring/MoreLikeThisType";
 
 class MoreLikeThisPage extends React.Component<any, any> {
     static contextType = AppContext;
@@ -58,6 +59,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
                 docId={documentId}
                 from={from}
                 onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
+                moreLikeThisType={fromVal(this.props.match.params.type)}
             />
             <div className="commit-answers">
                 <button

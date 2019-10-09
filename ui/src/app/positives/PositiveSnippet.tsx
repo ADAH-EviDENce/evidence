@@ -2,6 +2,7 @@ import * as React from "react";
 import SnippetListItem from "../snippet/SnippetListItem";
 import MoreLikeThisButton, {MoreLikeThisButtonProps} from "../morelikethis/MoreLikeThisButton";
 import {withRouter} from "react-router";
+import {MoreLikeThisType} from "../configuring/MoreLikeThisType";
 
 type PositiveSnippetProps = MoreLikeThisButtonProps & {
     text: string
@@ -17,7 +18,7 @@ class PositiveSnippet extends React.Component<PositiveSnippetProps, any> {
         return (
             <SnippetListItem id={this.props.id} text={this.props.text} >
                 <span className="float-right">
-                    <MoreLikeThisButton id={this.props.id} documentId={this.props.documentId} />
+                    <MoreLikeThisButton id={this.props.id} documentId={this.props.documentId} type={MoreLikeThisType.ES}/>
                 </span>
             </SnippetListItem>
         );

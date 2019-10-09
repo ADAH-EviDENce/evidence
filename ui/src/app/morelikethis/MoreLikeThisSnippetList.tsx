@@ -10,7 +10,8 @@ interface MoreLikeThisSnippetListProps {
     snippetId: string,
     docId: string,
     from: number,
-    onAllSnippetsHaveAnswers: ((answers: Array<any>) => void)
+    onAllSnippetsHaveAnswers: ((answers: Array<any>) => void),
+    moreLikeThisType: MoreLikeThisType
 }
 
 class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListProps, any> {
@@ -29,7 +30,11 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             return;
         }
 
-        switch (context.moreLikeThisType) {
+        let moreLikeThisType = this.props.moreLikeThisType !== MoreLikeThisType.NONE
+                ? this.props.moreLikeThisType
+                : context.moreLikeThisType;
+
+        switch (moreLikeThisType) {
             case MoreLikeThisType.ES:
                 this.fetchFromES(context.moreLikeThisSize, context.useRocchio);
                 break;
@@ -40,27 +45,20 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     };
 
     private fetchFromES(size: number, useRocchio: boolean) {
+        let snippetId = this.props.snippetId;
+        let docId = this.props.docId;
+        let from = this.props.from;
         if (useRocchio) {
-            Resources.getSnippetsFromESUsingRocchio(
-                this.props.snippetId,
-                this.props.docId,
-                this.props.from,
-                size,
-                this.context.user
-            ).then( (data) => {
-                data.json().then( (json) => {
+            let user = this.context.user;
+            Resources.getSnippetsFromESUsingRocchio(snippetId, docId, from, size, user).then((data) => {
+                data.json().then((json) => {
                     this.handleNewSnippets(json)
-                })
-            }).catch( (data) => {
+                });
+            }).catch((data) => {
                 this.setState({error: 'Fout bij ophalen ElasticSearch fragmenten met Rocchio.'})
             });
         } else {
-            Resources.getMoreLikeThisSnippetsFromES(
-                this.props.snippetId,
-                this.props.docId,
-                this.props.from,
-                size
-            ).then((json) => {
+            Resources.getMoreLikeThisSnippetsFromES(snippetId, docId, from, size).then((json) => {
                 this.handleNewSnippets(json);
             }).catch((data) => {
                 this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit ElasticSearch.'});
@@ -69,7 +67,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
     }
 
     private handleNewSnippets(snippets: any) {
-        const answers :any[] = [];
+        const answers: any[] = [];
         snippets.hits.hits.forEach((s: any) => {
             answers.push({id: s._id, relevant: MoreLikeThisOption.MAYBE});
         });
@@ -78,8 +76,8 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
 
     private fetchFromDoc2Vec(size: number, useRocchio: boolean) {
         let get = useRocchio ?
-                  Resources.getMoreLikeThisSnippetsFromDoc2VecUsingRocchio :
-                  Resources.getMoreLikeThisSnippetsFromDoc2Vec;
+            Resources.getMoreLikeThisSnippetsFromDoc2VecUsingRocchio :
+            Resources.getMoreLikeThisSnippetsFromDoc2Vec;
         get(
             this.props.snippetId,
             this.props.docId,

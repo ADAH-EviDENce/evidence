@@ -1,10 +1,12 @@
 import * as React from "react";
 import {Button} from "reactstrap";
 import {RouteComponentProps, withRouter} from "react-router";
+import {MoreLikeThisType} from "../configuring/MoreLikeThisType";
 
 export type MoreLikeThisButtonProps = RouteComponentProps & {
     id: string
     documentId: string
+    type?: MoreLikeThisType
 }
 
 class MoreLikeThisButton extends React.Component<MoreLikeThisButtonProps, any> {
@@ -14,7 +16,11 @@ class MoreLikeThisButton extends React.Component<MoreLikeThisButtonProps, any> {
     }
 
     handleMoreLikeThis = () => {
-        this.props.history.push(`/documents/${this.props.documentId}/snippets/${this.props.id}/from/0/`);
+        let url = `/documents/${this.props.documentId}/snippets/${this.props.id}/from/0/`;
+        if(this.props.type){
+            url += `type/${this.props.type}/`
+        }
+        this.props.history.push(url);
     };
 
 
