@@ -54,7 +54,7 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
                 className="mr-3"
                 size="sm"
             >
-                <i className={`fa ${this.state.inSeedSet ? "fa-trash" : "fa-plus-square"} ml-1`}/>
+                <i className={`fas ${this.state.inSeedSet ? "fa-trash" : "fa-plus-square"} ml-1`}/>
                 &nbsp;{this.state.inSeedSet ? 'Uit startset' : 'In startset'}
             </Button>
             :

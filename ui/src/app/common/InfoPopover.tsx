@@ -15,8 +15,8 @@ class InfoPopover extends React.Component<any, any> {
         return <>
             <Button id="PopoverClick" color="link" onClick={this.showInfo}>
               <span className="fa-stack fa-sm">
-                <i className='fa fa-circle-thin fa-stack-2x'/>
-                <i className='fa fa-info fa-stack-1x'/>
+                <i className='far fa-circle fa-stack-2x'/>
+                <i className='fas fa-info fa-stack-1x'/>
               </span>
             </Button>
             <Popover isOpen={this.state.popoverOpen} trigger="click" placement="top" target="PopoverClick">

@@ -89,9 +89,7 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
                                            target="_blank"
                                            rel="noopener noreferrer"
                                         >
-                                            &nbsp;
-                                            Rocchio-algoritme
-                                            <i className='fa fa-external-link'/>
+                                            &nbsp;Rocchio-algoritme&nbsp;<i className='fas fa-external-link-alt'/>
                                         </a>
                                     </>
                                 </InfoPopover>

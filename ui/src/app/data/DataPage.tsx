@@ -73,7 +73,7 @@ export default class DataPage extends React.Component<any, any> {
                             >
                                 Leeg database?
                                 &nbsp;
-                                <i className={`fa ${this.state.purgeOnSaveFile ? 'fa-check-square' :'fa-square-o'}`}/>
+                                <i className={`fa ${this.state.purgeOnSaveFile ? 'fa-check-square' :'fa-square'}`}/>
                             </button>
                             <button
                                 onClick={this.conformSaveWhenWithPurge}

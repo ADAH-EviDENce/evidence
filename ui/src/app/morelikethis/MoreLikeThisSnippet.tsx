@@ -42,21 +42,21 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
                         <button type="button"
                                 className={`btn btn-outline-success ${this.props.relevant === MoreLikeThisOption.YES ? "active" : ""}`}
                                 onClick={this.onClickYes}>
-                            <i className='fa fa-check-circle-o'/>
+                            <i className='fas fa-check-circle'/>
                             &nbsp;
                             Ja
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-danger ${this.props.relevant === MoreLikeThisOption.NO ? "active" : ""}`}
                                 onClick={this.onClickNo}>
-                            <i className='fa fa-times-circle-o'/>
+                            <i className='fas fa-times-circle'/>
                             &nbsp;
                             Nee
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-secondary ${this.props.relevant === MoreLikeThisOption.MAYBE ? "active" : ""}`}
                                 onClick={this.onClickMaybe}>
-                            <i className='fa fa-question-circle-o'/>
+                            <i className='fas fa-question-circle'/>
                             &nbsp;
                             Blanco
                         </button>
