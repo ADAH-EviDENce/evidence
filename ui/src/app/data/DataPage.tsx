@@ -68,20 +68,20 @@ export default class DataPage extends React.Component<any, any> {
                         Exporteer als csv
                         <div className="btn-group float-right">
                             <button
-                                className="btn btn-outline-secondary btn-sm"
-                                onClick={this.handleSetPurgeOnSaveFile}
-                            >
-                                Leeg database?
-                                &nbsp;
-                                <i className={`fa ${this.state.purgeOnSaveFile ? 'fa-check-square' :'fa-square'}`}/>
-                            </button>
-                            <button
                                 onClick={this.conformSaveWhenWithPurge}
                                 className="btn btn-info btn-sm"
                             >
                                 <i className='fa fa-download'/>
                                 &nbsp;
                                 Download
+                            </button>
+                            <button
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={this.handleSetPurgeOnSaveFile}
+                            >
+                                <i className={`far ${this.state.purgeOnSaveFile ? 'fa-check-square' :'fa-square'}`}/>
+                                &nbsp;
+                                En leeg database?
                             </button>
                         </div>
                     </li>
