@@ -18,7 +18,6 @@
     "elasticsearch": "^15.4.1",
     "fetch-mock": "^7.4.0",
     "file-saver": "^2.0.1",
-    "font-awesome5": "^1.0.5",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-infinite-scroll-component": "^4.2.4",

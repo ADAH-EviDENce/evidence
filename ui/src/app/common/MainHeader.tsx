@@ -22,13 +22,13 @@ class MainHeader extends React.Component<MainHeaderProps, any> {
                         <i className="fas fa-search"/> zoeken
                     </Link>
                     <Link className="nav-item" to={"/seedset/"}>
-                        <i className="fas fa-fire"/> startset
+                        <i className="fas fa-seedling"/> startset
                     </Link>
                     <Link className="nav-item" to={"/positive/1/"}>
-                        <i className="fas fa-clipboard-list"/> resultaten
+                        <i className="fas fa-check-double"/> resultaten
                     </Link>
                     <Link className="nav-item" to={"/data/"}>
-                        <i className="fas fa-database"/> data
+                        <i className="fas fa-table"/> data
                     </Link>
                     <Button color="link" className="nav-item" onClick={() => this.props.openConfig()}>
                         <i className="fas fa-cog"/> instellingen
