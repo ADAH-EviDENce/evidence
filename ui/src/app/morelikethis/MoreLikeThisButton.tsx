@@ -27,7 +27,7 @@ class MoreLikeThisButton extends React.Component<MoreLikeThisButtonProps, any> {
     render() {
         return (
             <Button color="primary" size="sm" onClick={this.handleMoreLikeThis}>
-                More like this
+                More like this {this.props.type ? `(${this.props.type})` : null}
                 <i className='fa fa-chevron-right ml-1'/>
             </Button>
         );
