@@ -12,41 +12,32 @@ type DocumentSnippetProps = RouteComponentProps & {
     text: string,
     documentId: string,
     moreLikeThis: boolean,
-    showInSeedSet: boolean
+    showSeedSetBtn: boolean
+    inSeedSet?: boolean
 }
 
 class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
-            inSeedSet: false
+            inSeedSet: this.props.inSeedSet
         };
 
-        if(this.props.showInSeedSet) {
-            this.checkInSeedSet();
-        }
-
     }
-    private checkInSeedSet() {
-        Resources.checkInSeedSet(this.context.user, this.props.id).then((response) => {
-            this.setState({inSeedSet: response.status === 200});
-        });
-    }
-
     handleSeedSetClick = () => {
         if(this.state.inSeedSet) {
             Resources.removeSeedId(this.context.user, this.props.id).then(() => {
                 this.setState({inSeedSet: false});
             })
         } else {
-            Resources.postSeedSet(this.context.user, [this.props.id]).then((response) => {
+            Resources.postSeedSet(this.context.user, [this.props.id]).then(() => {
                 this.setState({inSeedSet: true});
             });
         }
     };
 
     render() {
-        let seedSetBtn = this.props.showInSeedSet
+        let seedSetBtn = this.props.showSeedSetBtn
             ?
             <Button
                 onClick={this.handleSeedSetClick}

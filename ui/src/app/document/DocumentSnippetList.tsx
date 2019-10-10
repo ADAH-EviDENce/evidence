@@ -3,6 +3,7 @@ import Resources from "../Resources";
 import InfoBox from "../common/InfoBox";
 import DocumentSnippet from "./DocumentSnippet";
 import Spinner from "../common/Spinner";
+import {AppContext} from "../AppContext";
 
 interface DocumentSnippetListProps {
     documentId: string,
@@ -14,7 +15,8 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
     constructor(props: any, context: any) {
         super(props, context);
         this.state = {
-            snippets: null
+            snippets: null,
+            seedset: null
         };
     }
 
@@ -25,8 +27,14 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
 
         Resources.getSnippetsByIds(this.props.snippetIds).then((json) => {
             this.setState({snippets: json});
-        }).catch((data) => {
+        }).catch(() => {
             this.setState({error: 'Er konden geen fragmenten gevonden worden op basis van de opgegeven zoektermen.'});
+        });
+
+        Resources.getSeedSet(this.context.user).then((response) => {
+            response.json().then(ids => { this.setState({seedset: ids})});
+        }).catch(() => {
+            this.setState({error: 'Fout bij ophalen startset.'});
         });
 
     };
@@ -40,7 +48,8 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
                     documentId={this.props.documentId}
                     text={s._source ? s._source.text : '-'}
                     moreLikeThis={true}
-                    showInSeedSet={true}
+                    showSeedSetBtn={true}
+                    inSeedSet={this.state.seedset.includes(s._id)}
                 />
             })}
         </>;
@@ -49,7 +58,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
     render() {
         this.fetchSnippets();
 
-        let listElements = this.state.snippets
+        let listElements = this.state.snippets && this.state.seedset
             ? this.renderSnippets()
             : <li className="list-group-item"><Spinner /></li>;
 
@@ -61,5 +70,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
         );
     }
 }
+
+DocumentSnippetList.contextType = AppContext;
 
 export default DocumentSnippetList;
