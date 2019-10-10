@@ -42,7 +42,7 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                     <ModalBody>
 
                         <Alert color='info'>
-                            Instellingen worden alleen in huidige pagina van de browser opgeslagen.
+                            Instellingen worden alleen in de huidige pagina van de browser opgeslagen.
                         </Alert>
 
                         <div className="card">

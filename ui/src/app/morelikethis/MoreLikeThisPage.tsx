@@ -51,41 +51,6 @@ class MoreLikeThisPage extends React.Component<any, any> {
         }).catch(() => this.setState({error: 'De antwoorden konden niet worden opgeslagen.', savingAnswers: false}));
     };
 
-    private renderScoreForm(from: number, snippetId: string, documentId: string) {
-        return <>
-            <h2>Te beoordelen (#{from + 1}-{from + this.context.moreLikeThisSize})</h2>
-            <MoreLikeThisSnippetList
-                snippetId={snippetId}
-                docId={documentId}
-                from={from}
-                onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
-                moreLikeThisType={fromVal(this.props.match.params.type)}
-            />
-            <div className="commit-answers">
-                <button
-                    type="submit"
-                    className="btn btn-success float-right commit-btn"
-                    disabled={(!this.state.answersSet && !this.state.answersSaved) || !this.context.user}
-                    onClick={this.handleCommit}
-                >
-                    Opslaan ({this.context.user})
-                    &nbsp;
-                    {this.state.savingAnswers
-                        ? <Spinner />
-                        : <i className='fa fa-chevron-right'/>
-                    }
-                </button>
-            </div>
-            <MoreLikeThisCommitModal
-                documentId={documentId}
-                snippetId={snippetId}
-                from={from}
-                answers={this.state.answers}
-                committed={this.state.answersSaved}
-            />
-        </>;
-    }
-
     render() {
 
         let snippetId = this.props.match.params.sid;
@@ -124,6 +89,41 @@ class MoreLikeThisPage extends React.Component<any, any> {
                 </div>
             </Page>
         );
+    }
+
+    private renderScoreForm(from: number, snippetId: string, documentId: string) {
+        return <>
+            <h2>Te beoordelen #{from + 1}-{from + this.context.moreLikeThisSize}</h2>
+            <MoreLikeThisSnippetList
+                snippetId={snippetId}
+                docId={documentId}
+                from={from}
+                onAllSnippetsHaveAnswers={this.handleAllSnippetsHaveAnswers}
+                moreLikeThisType={fromVal(this.props.match.params.type)}
+            />
+            <div className="commit-answers">
+                <button
+                    type="submit"
+                    className="btn btn-success float-right commit-btn"
+                    disabled={(!this.state.answersSet && !this.state.answersSaved) || !this.context.user}
+                    onClick={this.handleCommit}
+                >
+                    Opslaan ({this.context.user})
+                    &nbsp;
+                    {this.state.savingAnswers
+                        ? <Spinner />
+                        : <i className='fa fa-chevron-right'/>
+                    }
+                </button>
+            </div>
+            <MoreLikeThisCommitModal
+                documentId={documentId}
+                snippetId={snippetId}
+                from={from}
+                answers={this.state.answers}
+                committed={this.state.answersSaved}
+            />
+        </>;
     }
 
 }

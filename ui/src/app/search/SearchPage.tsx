@@ -9,6 +9,7 @@ import config from "../../config";
 import {withRouter} from "react-router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../common/Spinner";
+import ResultCount from "../common/ResultCount";
 
 class SearchPage extends React.Component<any, any> {
 
@@ -94,7 +95,7 @@ class SearchPage extends React.Component<any, any> {
         }
         return (
             <>
-                <p>{this.state.total} resultaten</p>
+                <ResultCount count={this.state.total}/>
                 <InfiniteScroll
                     dataLength={this.state.snippets.length}
                     next={this.handlePageChange}

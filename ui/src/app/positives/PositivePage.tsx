@@ -9,6 +9,8 @@ import SnippetList from "../snippet/SnippetList";
 import PositiveSnippet from "./PositiveSnippet";
 import FivePagePagination from "../common/FivePagePagination";
 import Spinner from "../common/Spinner";
+import Subtitle from "../common/Subtitle";
+import ResultCount from "../common/ResultCount";
 
 class PositivePage extends React.Component<any, any> {
     constructor(props: any, context: any) {
@@ -77,7 +79,7 @@ class PositivePage extends React.Component<any, any> {
             return <Spinner/>
         }
         return <>
-            <p>{this.state.totalSnippets} resultaten</p>
+            <ResultCount count={this.state.totalSnippets}/>
             <SnippetList>
                 {this.state.snippets.map((s: any, i: number) => {
                     return <PositiveSnippet
@@ -106,7 +108,7 @@ class PositivePage extends React.Component<any, any> {
         return (
             <Page>
                 <h2>Resultaten</h2>
-                <p className="text-center text-muted">Alle positief beoordeelde fragmenten, inclusief de startset</p>
+                <Subtitle text={<>Alle positief beoordeelde fragmenten, inclusief de startset</>} />
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <InfoBox msg={this.state.info} type="info" onClose={() => this.setState({info: null})}/>
 

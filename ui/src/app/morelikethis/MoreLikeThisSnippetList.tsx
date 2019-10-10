@@ -5,6 +5,7 @@ import MoreLikeThisSnippet from "./MoreLikeThisSnippet";
 import {MoreLikeThisOption} from "./MoreLikeThisOption";
 import {AppContext} from "../AppContext";
 import {MoreLikeThisType} from "../configuring/MoreLikeThisType";
+import Subtitle from "../common/Subtitle";
 
 interface MoreLikeThisSnippetListProps {
     snippetId: string,
@@ -18,10 +19,16 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
 
     constructor(props: any, context: any) {
         super(props, context);
+
+        let moreLikeThisType = this.props.moreLikeThisType !== MoreLikeThisType.NONE
+            ? this.props.moreLikeThisType
+            : context.moreLikeThisType;
+
         this.state = {
-            // array of snippet ids and relevance
+            moreLikeThisType,
             answers: []
         };
+
         this.fetchSnippets(context);
     }
 
@@ -30,11 +37,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
             return;
         }
 
-        let moreLikeThisType = this.props.moreLikeThisType !== MoreLikeThisType.NONE
-                ? this.props.moreLikeThisType
-                : context.moreLikeThisType;
-
-        switch (moreLikeThisType) {
+        switch (this.state.moreLikeThisType) {
             case MoreLikeThisType.ES:
                 this.fetchFromES(context.moreLikeThisSize, context.useRocchio);
                 break;
@@ -124,6 +127,20 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
         }
     }
 
+    render() {
+        return (
+            <div className="more-like-this-snippet-list">
+                <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
+                <div>
+                    <Subtitle text={
+                        <>Fragmenten gevonden met {this.state.moreLikeThisType}{this.context.useRocchio ? ' en rocchio' : ''}</>}
+                    />
+                    {this.renderSnippets()}
+                </div>
+            </div>
+        );
+    }
+
     private renderSnippets() {
         if (!this.state.snippets) {
             return null;
@@ -137,17 +154,6 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 relevant={this.findRelevantById(s._id)}
             />
         });
-    }
-
-    render() {
-        return (
-            <div className="more-like-this-snippet-list">
-                <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
-                <div>
-                    {this.renderSnippets()}
-                </div>
-            </div>
-        );
     }
 }
 
