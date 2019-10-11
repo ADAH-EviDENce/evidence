@@ -78,27 +78,47 @@ func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, us
 	return
 }
 
-// Exports the entire assessments table in CSV format.
+// Exports the entire assessments table and the seed set in CSV format.
 func (s *server) export(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	rows, err := tx.Query(`SELECT id, relevant, username, timestamp
-		FROM assessments a JOIN users u ON a.userid = u.userid
-		WHERE u.userid = ?`, userId(r))
+	w.Header().Set("Content-Type", "text/csv")
+	cw := csv.NewWriter(w)
+	cw.Write([]string{"id", "relevant", "username", "timestamp", "seed", "text"})
+
+	// First the seed set, which is implicitly a set of positive assessments.
+	userid, username := userId(r), userName(r)
+
+	ids, err := gatherSeed(w, tx, userid)
+	if err != nil {
+		return
+	}
+	for _, id := range ids {
+		text, err := s.getSource(r.Context(), w, id)
+		if err != nil {
+			log.Printf("Failed to get source for %q: %v\n", id, err)
+			text = ""
+		}
+		cw.Write([]string{id, "yes", username, "", "yes", text})
+	}
+
+	rows, err := tx.Query(
+		`SELECT id, relevant, timestamp FROM assessments WHERE userid = ?`,
+		userid)
 	if err != nil {
 		return
 	}
 	defer rows.Close()
-
-	cw := csv.NewWriter(w)
-	w.Header().Set("Content-Type", "text/csv")
 
 	for rows.Next() {
 		var (
 			id        string
 			relevant  sql.NullBool
 			timestamp time.Time
-			username  string
 		)
-		rows.Scan(&id, &relevant, &username, &timestamp)
+		err = rows.Scan(&id, &relevant, &timestamp)
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "database error", http.StatusInternalServerError)
+		}
 
 		text, err := s.getSource(r.Context(), w, id)
 		if err != nil {
@@ -107,7 +127,7 @@ func (s *server) export(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps h
 		}
 
 		t, _ := timestamp.MarshalText()
-		row := [...]string{id, stringOfBool(relevant), username, string(t), text}
+		row := [...]string{id, stringOfBool(relevant), username, string(t), "no", text}
 		// No error checking here. What can go wrong is a connection error,
 		// which we can't report to the client.
 		cw.Write(row[:])
