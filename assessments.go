@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/julienschmidt/httprouter"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 type assessment struct {
@@ -156,17 +155,6 @@ func (s *server) getAssessment(tx *sql.Tx, w http.ResponseWriter, r *http.Reques
 	}
 
 	return json.NewEncoder(w).Encode(result)
-}
-
-func purgeAssessments(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
-	userid := userId(r)
-	log.Printf("purge by user %d", userid)
-	_, err = tx.Exec(`DELETE FROM assessments WHERE userid = ?`, userid)
-	if err != nil {
-		http.Error(w, "database error", http.StatusInternalServerError)
-		log.Print("purge: ", err)
-	}
-	return
 }
 
 func stringOfBool(b sql.NullBool) string {

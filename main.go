@@ -92,7 +92,7 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 	r.GET("/positive", s.inTx(loggedIn(listPositives)))
 	r.GET("/positive/num", s.inTx(loggedIn(numPositives)))
 
-	r.GET("/purge", s.inTx(loggedIn(purgeAssessments)))
+	r.GET("/purge", s.inTx(loggedIn(purge)))
 
 	r.GET("/rocchio/:id", s.rocchio)
 
