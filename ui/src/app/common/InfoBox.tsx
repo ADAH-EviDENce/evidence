@@ -31,8 +31,8 @@ class InfoBox extends React.Component<InfoBoxProps, any> {
                 {this.props.type === 'info'
                     ?
                     <span className="fa-stack fa-sm mt-1" style={{"verticalAlign": "top"}}>
-                        <i className='fa fa-circle-thin fa-stack-2x'/>
-                        <i className='fa fa-info fa-stack-1x'/>
+                        <i className='far fa-circle fa-stack-2x'/>
+                        <i className='fas fa-info fa-stack-1x'/>
                     </span>
                     :
                     <span style={{"verticalAlign": "top"}}><IconWarning/></span>
