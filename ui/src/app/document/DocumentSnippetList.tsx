@@ -32,7 +32,9 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
         });
 
         Resources.getSeedSet(this.context.user).then((response) => {
-            response.json().then(ids => { this.setState({seedset: ids})});
+            response.json().then(ids => {
+                this.setState({seedset: ids ? ids : []})
+            });
         }).catch(() => {
             this.setState({error: 'Fout bij ophalen startset.'});
         });
