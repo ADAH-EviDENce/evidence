@@ -11,7 +11,7 @@ export class SearchSnippet extends React.Component<SearchSnippetProps, any> {
     render() {
         return (
             <SnippetListItem id={this.props.id} text={this.props.text}>
-                <Link className="btn btn-primary btn-sm float-right"
+                <Link className="ml-1 btn btn-primary btn-sm float-right"
                       to={`/documents/${this.props.id.replace(/_clipped.*/, '')}/`}>
                     <span>Bekijk document</span>
                     &nbsp;

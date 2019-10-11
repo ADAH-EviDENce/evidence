@@ -101,11 +101,13 @@ export default class DataPage extends React.Component<any, any> {
                     onCancel={() => this.setState({purging: false})}
                     onContinue={this.purgeDatabase}
                     isOpen={this.state.purging}
+                    msg="U gaat de database legen."
                 />
                 <ConfirmModal
                     onCancel={() => this.setState({savingWithPurge: false})}
                     onContinue={this.saveFileAndPurge}
                     isOpen={this.state.savingWithPurge}
+                    msg="U gaat ook de database legen."
                 />
             </Page>
         );

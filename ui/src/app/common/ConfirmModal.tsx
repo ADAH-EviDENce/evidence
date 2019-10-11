@@ -1,10 +1,12 @@
 import * as React from "react";
 import {Button, Modal, ModalBody, ModalFooter} from "reactstrap";
+import './ConfirmModal.css';
 
 type ConfirmModalProps = {
     onContinue: Function,
     onCancel: Function,
-    isOpen: boolean
+    isOpen: boolean,
+    msg: string
 }
 
 class ConfirmModal extends React.Component<ConfirmModalProps, any> {
@@ -18,7 +20,10 @@ class ConfirmModal extends React.Component<ConfirmModalProps, any> {
             <div className="confirm-modal">
                 <Modal isOpen={this.props.isOpen}>
                     <ModalBody>
-                        Weet u het zeker?
+                        <span className="confirm-modal-p">
+                            <p>{this.props.msg}</p>
+                            <p>Weet u het zeker?</p>
+                        </span>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="outline-secondary" onClick={() => this.props.onCancel()}>Nee</Button>
