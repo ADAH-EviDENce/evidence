@@ -57,6 +57,10 @@ class PositivePage extends React.Component<any, any> {
                 return;
             }
             data.json().then((positiveIds) => {
+                if(!positiveIds) {
+                    this.setState({loading: false, snippets: []});
+                    return;
+                }
                 const docIds = positiveIds.map((id: string) => {
                     return {_id: id}
                 });
