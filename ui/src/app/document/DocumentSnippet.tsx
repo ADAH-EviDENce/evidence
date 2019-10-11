@@ -41,12 +41,12 @@ class DocumentSnippet extends React.Component<DocumentSnippetProps, any> {
             ?
             <Button
                 onClick={this.handleSeedSetClick}
-                color={this.state.inSeedSet ? "danger" : "primary"}
+                color={this.state.inSeedSet ? "success" : "primary"}
                 className="mr-3"
                 size="sm"
             >
-                <i className={`fas ${this.state.inSeedSet ? "fa-trash" : "fa-plus-square"} ml-1`}/>
-                &nbsp;{this.state.inSeedSet ? 'Uit startset' : 'In startset'}
+                <i className={`${this.state.inSeedSet ? "fas fa-check-square" : "far fa-plus-square"} ml-1`}/>
+                &nbsp;{this.state.inSeedSet ? 'Startset' : 'Startset'}
             </Button>
             :
             null;
