@@ -70,11 +70,11 @@ func (s *server) listUsers(tx *sql.Tx, w http.ResponseWriter, r *http.Request, p
 // Returns the user's id.
 //
 // Errors are reported on w and logged.
-func login(w http.ResponseWriter, r *http.Request, tx *sql.Tx) (userid int, err error) {
+func login(w http.ResponseWriter, r *http.Request, tx *sql.Tx) (username string, userid int, err error) {
 	// For the moment, we have a custom "authorization" header that contains
 	// just the username. We can upgrade this to Basic-Auth or something fancy
 	// later.
-	username := r.Header.Get("X-User")
+	username = r.Header.Get("X-User")
 	if username == "" {
 		const msg = "no username provided"
 		log.Print(msg)

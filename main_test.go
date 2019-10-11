@@ -173,9 +173,10 @@ func TestExport(t *testing.T) {
 	assert.Equal(t, "text/csv", w.HeaderMap.Get("Content-Type"))
 
 	expect := []string{
-		`bar,no,test,2006-01-02T15:04:05-07:00,`,
-		`baz,,test,2006-01-02T15:04:05-07:00,`,
-		`foo,yes,test,2006-01-02T15:04:05-07:00,`,
+		`id,relevant,username,timestamp,seed,text`,
+		`bar,no,test,2006-01-02T15:04:05-07:00,no,`,
+		`baz,,test,2006-01-02T15:04:05-07:00,no,`,
+		`foo,yes,test,2006-01-02T15:04:05-07:00,no,`,
 	}
 
 	assert.Equal(t, expect, strings.Fields(w.Body.String()))

@@ -345,18 +345,20 @@ func (s *server) inTx(f txHandler) httprouter.Handle {
 }
 
 // LoggedIn is an adapter that adds to a handler the requirement that a user logs in.
-// The user id can be retrieved using the function userId.
+// The user id and name can be retrieved using the functions userId and userName.
 func loggedIn(f txHandler) txHandler {
 	return func(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) error {
-		userid, err := login(w, r, tx)
+		username, userid, err := login(w, r, tx)
 		if err != nil {
 			return err
 		}
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, "userid", userid)
+		ctx = context.WithValue(ctx, "username", username)
 		r = r.WithContext(ctx)
 		return f(tx, w, r, ps)
 	}
 }
 
-func userId(r *http.Request) int { return r.Context().Value("userid").(int) }
+func userId(r *http.Request) int      { return r.Context().Value("userid").(int) }
+func userName(r *http.Request) string { return r.Context().Value("username").(string) }
