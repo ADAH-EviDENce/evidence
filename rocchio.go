@@ -1,13 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -97,28 +94,6 @@ func rocchioWeights(r *http.Request) (wq, wpos, wneg float64, err error) {
 		wneg, err = formWeight(r, "negweight", .15)
 	}
 	return
-}
-
-var loggingClient http.Client = *http.DefaultClient
-
-func loggingTransport(r *http.Request) (*http.Response, error) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("cannot read Body from HTTP request to ES: %v", err)
-		return nil, err
-	}
-	log.Printf("HTTP request to Elasticsearch: %s to %s with body %q",
-		r.Method, r.URL, body)
-	r.Body = ioutil.NopCloser(bytes.NewReader(body))
-	return http.DefaultTransport.RoundTrip(r)
-}
-
-type functionRoundTripper func(*http.Request) (*http.Response, error)
-
-func (f functionRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
-
-func init() {
-	loggingClient.Transport = functionRoundTripper(loggingTransport)
 }
 
 func formWeight(r *http.Request, name string, def float64) (float64, error) {

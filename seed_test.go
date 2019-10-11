@@ -32,7 +32,10 @@ func TestSeed(t *testing.T) {
 
 		removeSeed(t, r, "user1", "foo", http.StatusOK) &&
 		removeSeed(t, r, "user1", "foo", http.StatusNotFound) &&
-		removeSeed(t, r, "user2", "bar", http.StatusNotFound)
+		removeSeed(t, r, "user2", "bar", http.StatusNotFound) &&
+
+		testPurge(t, r, "user1") &&
+		testPurge(t, r, "user2")
 }
 
 func addSeed(t *testing.T, r *httprouter.Router, username, ids string) bool {
@@ -93,4 +96,18 @@ func removeSeed(t *testing.T, r *httprouter.Router, username, id string, status 
 	r.ServeHTTP(w, req)
 	res := w.Result()
 	return assert.Equal(t, status, res.StatusCode)
+}
+
+// Purge should empty the seed set.
+func testPurge(t *testing.T, r *httprouter.Router, username string) bool {
+	t.Helper()
+
+	req := httptest.NewRequest("GET", "/purge", nil)
+	req.Header.Set("X-User", username)
+
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	res := w.Result()
+	return assert.Equal(t, http.StatusOK, res.StatusCode) &&
+		testListSeed(t, r, username)
 }
