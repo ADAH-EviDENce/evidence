@@ -73,6 +73,9 @@ for d in os.listdir('data/text_preserve_paragraph'):
     assert files[0].endswith('_text.txt')
     files = [name[:-9] for name in files]
 
+    assert d.endswith('_clipped')
+    docid = d[:-len('_clipped')]
+
     for i, name in enumerate(files):
         json.dump({'index': {'_id': name}}, data)
         data.write('\n')
@@ -81,14 +84,11 @@ for d in os.listdir('data/text_preserve_paragraph'):
                             name + '_lemma.txt')
         lemma = open(path).read()
 
-        json.dump({'text': texts[i], 'lemma': lemma, 'document': d}, data)
+        json.dump({'text': texts[i], 'lemma': lemma, 'document': docid}, data)
         data.write('\n')
 
     snippets = [name[len(d)+1:] if name.startswith(d) else name
                 for name in files]
-
-    assert d.endswith('_clipped')
-    docid = d[:-len('_clipped')]
 
     es.index(index='documents', doc_type='document', id=docid, body={
         'sub': files,
