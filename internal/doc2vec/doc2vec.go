@@ -6,6 +6,7 @@ package doc2vec
 import (
 	"context"
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"io"
 	"math"
@@ -83,6 +84,31 @@ loop:
 		docs = append(docs, &Document{
 			id:     record[0],
 			vector: vector.Normalize(),
+		})
+	}
+
+	return NewIndex(docs)
+}
+
+func NewIndexFromJSON(filename string) (idx *Index, err error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	dec := json.NewDecoder(f)
+	m := make(map[string][]float32)
+	err = dec.Decode(&m)
+	if err != nil {
+		m = nil
+	}
+
+	docs := make([]interface{}, 0, len(m))
+	for id, v := range m {
+		docs = append(docs, &Document{
+			id:     id,
+			vector: vectors.Vector(v).Normalize(),
 		})
 	}
 

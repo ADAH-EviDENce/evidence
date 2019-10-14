@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from collections import defaultdict
 import json
 from io import StringIO
 import os
@@ -18,7 +19,7 @@ def natural_key(s):
     return [int(part) if part.isdigit() else part for part in NUM_PARTS.split(s)]
 
 
-es = elasticsearch.Elasticsearch(*sys.argv[1:])
+es = elasticsearch.Elasticsearch(*sys.argv[3:])
 
 es.indices.delete('_all')
 
@@ -57,42 +58,26 @@ es.indices.create('snippets', body={
     },
 })
 
-for d in os.listdir('data/text_preserve_paragraph'):
-    print(d)
-    dirpath = os.path.join('data', 'text_preserve_paragraph', d)
 
-    data = StringIO()
-    files = os.listdir(dirpath)
+snippets = defaultdict(set)
 
-    if len(files) == 0:
-        continue
+print('Indexing...')
+with open(sys.argv[1]) as idfile, open(sys.argv[2]) as textfile:
+    for ident, text in zip(idfile, textfile):
+        ident = ident.strip()
 
-    files.sort(key=natural_key)
-    texts = [open(os.path.join(dirpath, f)).read() for f in files]
+        doc, _ = ident.split('_paragraph', 1)
+        snippets[doc].add(ident)
 
-    assert files[0].endswith('_text.txt')
-    files = [name[:-9] for name in files]
+        es.index(index='snippets', doc_type='snippet', id=ident, body={
+            'text': text, 'document': doc,
+        })
+        print(ident)
 
-    assert d.endswith('_clipped')
-    docid = d[:-len('_clipped')]
-
-    for i, name in enumerate(files):
-        json.dump({'index': {'_id': name}}, data)
-        data.write('\n')
-
-        path = os.path.join('data', 'lemma_preserve_paragraph', d,
-                            name + '_lemma.txt')
-        lemma = open(path).read()
-
-        json.dump({'text': texts[i], 'lemma': lemma, 'document': docid}, data)
-        data.write('\n')
-
-    snippets = [name[len(d)+1:] if name.startswith(d) else name
-                for name in files]
-
-    es.index(index='documents', doc_type='document', id=docid, body={
-        'sub': files,
+for doc, snippetset in snippets.items():
+    es.index(index='documents', doc_type='document', body={
+        'sub': sorted(snippetset),
     })
-    es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+    print(doc)
 
-print('Indexing done.')
+print('... done.')
