@@ -82,7 +82,7 @@ data = StringIO()
 for doc, snippetset in snippets.items():
     json.dump({'index': {'_id': doc}}, data)
     data.write('\n')
-    json.dump({'sub': sorted(snippetset)}, data)
+    json.dump({'sub': sorted(snippetset, key=natural_key)}, data)
     data.write('\n')
 
 es.bulk(index='documents', doc_type='document', body=data.getvalue())
