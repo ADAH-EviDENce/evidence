@@ -58,12 +58,16 @@ es.indices.create('snippets', body={
 })
 
 
+CHUNKSIZE = 100
+
+
 snippets = defaultdict(set)
 
 print('Indexing snippets...')
 with open(sys.argv[1]) as idfile, open(sys.argv[2]) as textfile:
     data = StringIO()
 
+    n = 0
     for ident, text in zip(idfile, textfile):
         ident = ident.strip()
         json.dump({'index': {'_id': ident}}, data)
@@ -75,7 +79,14 @@ with open(sys.argv[1]) as idfile, open(sys.argv[2]) as textfile:
         json.dump({'text': text, 'document': doc}, data)
         data.write('\n')
 
-    es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+        n += 1
+        if n >= CHUNKSIZE:
+            es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+            data = StringIO()
+            n = 0
+
+    if n > 0:
+        es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
 
 print('Indexing documents...')
 data = StringIO()
