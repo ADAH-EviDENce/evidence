@@ -4,6 +4,7 @@ package doc2vec
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/knaw-huc/evidence-gui/internal/vectors"
 )
@@ -11,7 +12,12 @@ import (
 func (idx *Index) Rocchio(ctx context.Context, qid string, offset, size int,
 	pos, neg []string, wq, wpos, wneg float32) ([]string, error) {
 
-	q := idx.docs[qid].vector
+	d, ok := idx.docs[qid]
+	if !ok {
+		err := fmt.Errorf("no vector for id %q", qid)
+		return nil, err
+	}
+	q := d.vector
 	q = idx.expand(q, pos, neg, wq, wpos, wneg)
 	// doc gets the query's id for filtering in idx.nearest.
 	doc := &Document{qid, q}
