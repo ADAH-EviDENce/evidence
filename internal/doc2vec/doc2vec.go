@@ -101,7 +101,7 @@ func NewIndexFromJSON(filename string) (idx *Index, err error) {
 	m := make(map[string][]float32)
 	err = dec.Decode(&m)
 	if err != nil {
-		m = nil
+		return
 	}
 
 	docs := make([]interface{}, 0, len(m))
