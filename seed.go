@@ -50,7 +50,8 @@ func listPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httpro
 		`SELECT * FROM (
 			SELECT id FROM seed WHERE userid = ?
 			UNION
-			SELECT id FROM assessments WHERE userid = ?
+			SELECT id FROM assessments
+				WHERE userid = ? AND relevant = 1
 		) LIMIT ? OFFSET ?`,
 		userid, userid, size, offset)
 
@@ -66,7 +67,8 @@ func numPositives(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprou
 	row := tx.QueryRow(`SELECT COUNT(*) FROM (
 			SELECT id FROM seed WHERE userid = ?
 			UNION
-			SELECT id FROM assessments WHERE userid = ?
+			SELECT id FROM assessments
+				WHERE userid = ? AND relevant = 1
 		)`, userid, userid)
 	var n uint
 	err = row.Scan(&n)

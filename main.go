@@ -27,7 +27,7 @@ func main() {
 		dbFile = flag.String("db", "relevance.db",
 			"filename of relevance database")
 		doc2vecFile = flag.String("doc2vec", "",
-			"filename of doc2vec output (CSV)")
+			"filename of doc2vec output (JSON)")
 		elasticEndpoint = flag.String("elastic", "http://localhost:9200",
 			"Elasticsearch endpoint")
 	)
@@ -68,7 +68,7 @@ func newServer(db *sql.DB, doc2vecFile string, elasticEndpoint string, r *httpro
 
 	// Doc2vec can be disabled for testing.
 	if doc2vecFile != "" {
-		s.d2vIndex, err = doc2vec.NewIndexFromCSV(doc2vecFile)
+		s.d2vIndex, err = doc2vec.NewIndexFromJSON(doc2vecFile)
 		if err != nil {
 			log.Fatal(err)
 		}

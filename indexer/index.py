@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
+from collections import defaultdict
 import json
 from io import StringIO
-import os
 import re
 import sys
-import time
 
 import elasticsearch
 
@@ -15,10 +14,11 @@ NUM_PARTS = re.compile(r'(\d+)')
 
 def natural_key(s):
     '''Key function for natural sort.'''
-    return [int(part) if part.isdigit() else part for part in NUM_PARTS.split(s)]
+    return [int(part) if part.isdigit() else part
+            for part in NUM_PARTS.split(s)]
 
 
-es = elasticsearch.Elasticsearch(*sys.argv[1:])
+es = elasticsearch.Elasticsearch(*sys.argv[3:])
 
 es.indices.delete('_all')
 
@@ -57,42 +57,45 @@ es.indices.create('snippets', body={
     },
 })
 
-for d in os.listdir('data/text_preserve_paragraph'):
-    print(d)
-    dirpath = os.path.join('data', 'text_preserve_paragraph', d)
 
+CHUNKSIZE = 100
+
+
+snippets = defaultdict(set)
+
+print('Indexing snippets...')
+with open(sys.argv[1]) as idfile, open(sys.argv[2]) as textfile:
     data = StringIO()
-    files = os.listdir(dirpath)
 
-    if len(files) == 0:
-        continue
-
-    files.sort(key=natural_key)
-    texts = [open(os.path.join(dirpath, f)).read() for f in files]
-
-    assert files[0].endswith('_text.txt')
-    files = [name[:-9] for name in files]
-
-    assert d.endswith('_clipped')
-    docid = d[:-len('_clipped')]
-
-    for i, name in enumerate(files):
-        json.dump({'index': {'_id': name}}, data)
+    n = 0
+    for ident, text in zip(idfile, textfile):
+        ident = ident.strip()
+        json.dump({'index': {'_id': ident}}, data)
         data.write('\n')
 
-        path = os.path.join('data', 'lemma_preserve_paragraph', d,
-                            name + '_lemma.txt')
-        lemma = open(path).read()
+        doc, _ = ident.split('_paragraph', 1)
+        snippets[doc].add(ident)
 
-        json.dump({'text': texts[i], 'lemma': lemma, 'document': docid}, data)
+        json.dump({'text': text, 'document': doc}, data)
         data.write('\n')
 
-    snippets = [name[len(d)+1:] if name.startswith(d) else name
-                for name in files]
+        n += 1
+        if n >= CHUNKSIZE:
+            es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+            data = StringIO()
+            n = 0
 
-    es.index(index='documents', doc_type='document', id=docid, body={
-        'sub': files,
-    })
-    es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+    if n > 0:
+        es.bulk(index='snippets', doc_type='snippet', body=data.getvalue())
+
+print('Indexing documents...')
+data = StringIO()
+for doc, snippetset in snippets.items():
+    json.dump({'index': {'_id': doc}}, data)
+    data.write('\n')
+    json.dump({'sub': sorted(snippetset, key=natural_key)}, data)
+    data.write('\n')
+
+es.bulk(index='documents', doc_type='document', body=data.getvalue())
 
 print('Indexing done.')

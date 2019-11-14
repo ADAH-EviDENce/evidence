@@ -37,7 +37,7 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
                     <p className="small snippet-text">{this.props.text}</p>
                 </CardBody>
                 <CardFooter>
-                    <span>Bevat dit fragment een geweldsincident?</span>
+                    <span>Is dit fragment relevant?</span>
                     <div className="float-right btn-group btn-group-sm" role="group">
                         <button type="button"
                                 className={`btn btn-outline-success ${this.props.relevant === MoreLikeThisOption.YES ? "active" : ""}`}

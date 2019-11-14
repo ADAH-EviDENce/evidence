@@ -28,7 +28,7 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
     };
 
     onDocument = () => {
-        this.props.history.push(`/documents/${this.props.documentId}/`);
+        this.props.history.push(`/seedset/`);
     };
 
     onSearch = () => {
@@ -50,8 +50,8 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
                     </ModalBody>
                     <ModalFooter>
                         <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
-                        <Button color="success" onClick={this.onDocument}>Terug naar document</Button>
-                        <Button color="success" onClick={this.onSearch}>Zoek nieuw document</Button>
+                        <Button color="success" onClick={this.onDocument}>Terug naar startset</Button>
+                        <Button color="success" onClick={this.onSearch}>Nieuwe zoekactie</Button>
                     </ModalFooter>
                 </Modal>
 
