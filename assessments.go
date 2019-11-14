@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/julienschmidt/httprouter"
@@ -81,23 +82,38 @@ func (s *server) addAssessments(tx *sql.Tx, assess []assessment, t time.Time, us
 // Exports the entire assessments table and the seed set in CSV format.
 func (s *server) export(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps httprouter.Params) (err error) {
 	w.Header().Set("Content-Type", "text/csv")
+
 	cw := csv.NewWriter(w)
+	cw.Comma = ';'
+	cw.UseCRLF = true
 	cw.Write([]string{"id", "relevant", "username", "timestamp", "seed", "text"})
 
 	// First the seed set, which is implicitly a set of positive assessments.
 	userid, username := userId(r), userName(r)
+
+	getText := func(id string) string {
+		text, err := s.getSource(r.Context(), w, id)
+		if err != nil {
+			log.Printf("Failed to get source for %q: %v\n", id, err)
+			text = ""
+		}
+
+		// Replace any newlines by spaces. Excel chokes on newlines in
+		// quoted strings.
+		return strings.TrimSpace(strings.Map(func(r rune) rune {
+			if r == '\n' || r == '\r' {
+				r = ' '
+			}
+			return r
+		}, text))
+	}
 
 	ids, err := gatherSeed(w, tx, userid)
 	if err != nil {
 		return
 	}
 	for _, id := range ids {
-		text, err := s.getSource(r.Context(), w, id)
-		if err != nil {
-			log.Printf("Failed to get source for %q: %v\n", id, err)
-			text = ""
-		}
-		cw.Write([]string{id, "yes", username, "", "yes", text})
+		cw.Write([]string{id, "yes", username, "", "yes", getText(id)})
 	}
 
 	rows, err := tx.Query(
@@ -120,14 +136,8 @@ func (s *server) export(tx *sql.Tx, w http.ResponseWriter, r *http.Request, ps h
 			http.Error(w, "database error", http.StatusInternalServerError)
 		}
 
-		text, err := s.getSource(r.Context(), w, id)
-		if err != nil {
-			log.Printf("Failed to get source for %q: %v\n", id, err)
-			text = ""
-		}
-
 		t, _ := timestamp.MarshalText()
-		row := [...]string{id, stringOfBool(relevant), username, string(t), "no", text}
+		row := [...]string{id, stringOfBool(relevant), username, string(t), "no", getText(id)}
 		// No error checking here. What can go wrong is a connection error,
 		// which we can't report to the client.
 		cw.Write(row[:])
