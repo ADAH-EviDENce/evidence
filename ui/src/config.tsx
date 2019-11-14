@@ -5,7 +5,7 @@ const prod = {
     MORE_LIKE_THIS_SIZE: 10,
     SEARCH_RESULTS_SIZE: 10,
     POSITIVE_SIZE: 10,
-    USE_ROCCHIO: true,
+    USE_ROCCHIO: false,
     DEFAULT_USER: ""
 };
 
@@ -14,7 +14,7 @@ const dev = {
     MORE_LIKE_THIS_SIZE: 3,
     SEARCH_RESULTS_SIZE: 3,
     POSITIVE_SIZE: 3,
-    USE_ROCCHIO: true,
+    USE_ROCCHIO: false,
     DEFAULT_USER: "henk"
 };
 
