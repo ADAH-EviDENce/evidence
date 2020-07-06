@@ -1,6 +1,6 @@
 # EviDENce_doc2vec_docker_framework
 
-The repository provides the functionality to ingest a corpus (of document fragments), build a doc2vec model incl. model space vectors for each fragment, and infer vectors for out-of-corpus fragments. Furthermore, it provides an API serving the model representation of the full corpus (id, vector pairs) as well as the model representation (vector) for a in-corpus fragment based on its id. The derived models, the inferal-engine, and the representation api can and are meant to be interfaced with the user-interface framwork in the XXX repository.
+The repository provides the functionality to ingest a corpus (of document fragments), build a doc2vec model incl. model space vectors for each fragment, and infer vectors for out-of-corpus fragments. Furthermore, it provides an API serving the model representation of the full corpus (id, vector pairs) as well as the model representation (vector) for a in-corpus fragment based on its id. The derived models, the inferal-engine, and the representation api can and are meant to be interfaced with the user-interface framwork in the [evidence-gui](https://github.com/knaw-huc/evidence-gui) repository. Initial, limited instructions are provided [below](#interface-to-evidence-gui) .
 
 In order to provide portable and reproducible models we make use of a framework of Docker containers coordinated by the Docker Compose tool.
 
@@ -30,3 +30,18 @@ The command `docker-compose -p <tag-name> down`
 stops the framework and removes the containers. Results are perpetuated to the DOCKER volumes created.
 
 See Docker and Docker Compose documentation for more details
+
+
+## Interface to evidence-gui
+While the framework provided in this repository deals with the ingestion and (pre-)processing of a corpus, as well as the subsequent construction of a doc2vec model, a complementary backend/database and GUI frontend supporting user-interactions and queries on the corpus has been developed by the KNAW HUC team text and can be found [here](https://github.com/knaw-huc/evidence-gui).
+
+Work on the interface between both components is in progress, and not all functionality provided here is currently supported. In particular the inference for out of corpus fragments is not integrated. Combinded use of both elements requires some preparatory action byt the user. A set of instructions is provided in the following:
+
+- Run `EviDENce_doc2vec_docker_framework`, performing preprocessing and model creation steps
+- query the representation API and save the corpus model represenatation as `doc2vec.json`
+- clone the [evidence-gui repository](https://github.com/knaw-huc/evidence-gui)
+    - following the local setup instructions `mkdir data`
+    - copy the full corpus_input directory into data
+    - copy the `<your_corpus>_corpus`, `<your_corpus>_ids`, and `doc2vec.json` files into the data directory
+    - follow the Run instructions to bring the backed and GUI up for the corpus and model provided
+    - further instructions, e.g. on how to add users, are available in the [repository](https://github.com/knaw-huc/evidence-gui).
