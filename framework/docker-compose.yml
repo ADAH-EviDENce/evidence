@@ -1,0 +1,188 @@
+version: '3.2'
+services:
+  datastorage:
+    build:
+      context: .
+      dockerfile: ./storagecontainers/dockerfile-storage-data
+      args:
+        - inputpath=${INPUTPATH}
+    image: "datastorage:${CORPUSNAME}"
+    container_name: "${TAG}_datastorage"
+    #environment:
+    #  - inpath=${INPUTPATH}
+    user: "1000:100"
+    volumes:
+      - "volume_data:/input"
+
+  configstorage:
+    build:
+      context: .
+      dockerfile: ./storagecontainers/dockerfile-storage-config
+      args:
+        - configpath=${CONFIGPATH}
+    image: "configstorage:${TAG}"
+    container_name: "${TAG}_configstorage"
+    user: "1000:100"
+    volumes:
+      - "volume_config:/config"
+
+  codestorage:
+    build:
+      context: .
+      dockerfile: ./storagecontainers/dockerfile-storage-code
+      args:
+        - codepath=${CODEPATH}
+    image: "codestorage:${TAG}"
+    container_name: "${TAG}_codestorage"
+    #environment:
+    #  - inpath=${INPUTPATH}
+    user: "1000:100"
+    volumes:
+      - "volume_code:/code"
+
+  derivedstorage:
+    build:
+      context: .
+      dockerfile: ./storagecontainers/dockerfile-storage-derived
+      args:
+        - derivedpath=${DERIVEDPATH}
+    image: "derivedstorage:${TAG}"
+    container_name: "${TAG}_derivedstorage"
+    #environment:
+    #  - inpath=${INPUTPATH}
+    user: "1000:100"
+    volumes:
+      - "volume_derived:/derived"
+
+  generate_doc2vec_model:
+    build:
+      context: .
+      dockerfile: ./d2vcontainer/dockerfile-d2v
+    depends_on:
+      - datastorage
+      - configstorage
+      - codestorage
+      - derivedstorage
+    image: "gend2v:${TAG}"
+    container_name: "${TAG}_generate_doc2vec_model"
+    ports:
+      - "6789:8888"
+    volumes:
+      - type: volume
+        source: volume_data
+        target: "/home/jovyan/input/"
+        read_only: true
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_config
+        target: /home/jovyan/config/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_code
+        target: /home/jovyan/code/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_derived
+        target: /home/jovyan/output/
+        read_only: false
+        volume:
+          nocopy: true
+
+      #- "volume_data:/home/jovyan/input/:ro"
+      #- "volume_code:/home/jovyan/"
+      #- "volume_derived:/home/jovyan/output"
+
+  inferal:
+    build:
+      context: .
+      dockerfile: ./inferalcontainer/dockerfile-inferal
+    depends_on:
+      - datastorage
+      - configstorage
+      - codestorage
+      - derivedstorage
+      - generate_doc2vec_model
+    image: "inferal:${TAG}"
+    container_name: "${TAG}_inferal"
+    ports:
+      - "5000:5000"
+    volumes:
+      - type: volume
+        source: volume_config
+        target: /home/jovyan/config/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_code
+        target: /home/jovyan/code/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_derived
+        target: /home/jovyan/output/
+        read_only: false
+        volume:
+          nocopy: true
+
+
+
+  representationapi:
+    build:
+      context: .
+      dockerfile: ./representationapicontainer/dockerfile-representationapi
+    depends_on:
+      - datastorage
+      - configstorage
+      - codestorage
+      - derivedstorage
+      - generate_doc2vec_model
+    image: "representationapi:${TAG}"
+    container_name: "${TAG}_representationapi"
+    ports:
+      - "5001:5000"
+    volumes:
+      - type: volume
+        source: volume_config
+        target: /home/jovyan/config/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_code
+        target: /home/jovyan/code/
+        read_only: false
+        volume:
+          nocopy: true
+
+      - type: volume
+        source: volume_derived
+        target: /home/jovyan/output/
+        read_only: false
+        volume:
+          nocopy: true
+
+
+
+volumes:
+  #test:
+  volume_data:
+  volume_config:
+  volume_code:
+  volume_derived:
+
+
+  #volume_code_${CORPUSNAME}_${MODELNAME}:
+  #volume_derived_${CORPUSNAME}_${MODELNAME}:

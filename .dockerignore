@@ -1,0 +1,11 @@
+Dockerfile
+docker-compose.yml
+evidence-gui
+indexer
+
+**/.*
+**/_*
+
+__pycache__
+
+ui/node_modules

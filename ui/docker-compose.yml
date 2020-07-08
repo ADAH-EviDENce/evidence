@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["./start.sh"]
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data:ro
+      - ./db:/db
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
+    environment:
+      discovery.type: "single-node"
+    expose:
+      - "9200"
+
+  indexer:
+    build:
+      context: indexer
+      dockerfile: Dockerfile
+    depends_on:
+      - "elasticsearch"
+    command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
+      "--timeout=0",
+      "--", "/utils/index.py",
+      "data/Getuigen_Verhalen_ids",
+      "data/Getuigen_Verhalen_corpus",
+      "elasticsearch"]
+    volumes:
+      - ./data:/data:ro

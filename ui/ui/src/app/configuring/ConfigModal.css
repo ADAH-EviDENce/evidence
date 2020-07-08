@@ -1,0 +1,8 @@
+.config-modal .modal-header .close {
+    display: none;
+}
+
+.config-modal .modal-title {
+    margin-top: 0.5em;
+    font-size: 2em;
+}

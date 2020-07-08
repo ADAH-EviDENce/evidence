@@ -1,0 +1,11 @@
+.snippet-list-item em {
+    font-style: normal;
+    font-weight: bold;
+    background-color: #e6faff;
+    padding: 2px;
+}
+
+.snippet-title {
+    height: 3em;
+    line-height: 1.4em;
+}
