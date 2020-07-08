@@ -1,0 +1,20 @@
+h1, h2, h3 {
+    padding-top: 1em;
+    text-align: center;
+}
+
+.nav-link {
+    float: left;
+}
+
+.nav-item {
+    margin: 10px;
+}
+
+.search-bar {
+    margin-top: 2em;
+}
+
+.clickable {
+    cursor: pointer;
+}
