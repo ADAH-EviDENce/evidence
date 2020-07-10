@@ -27,9 +27,9 @@ docker cp testcorpus_testmodel_generate_doc2vec_model:/home/jovyan/output/prepro
 docker cp testcorpus_testmodel_generate_doc2vec_model:/home/jovyan/output/preprocessed_corpus/template_corpus 
 ```
 
-Copy corpus to ui's data/
+Copy corpus to ui's ``data/``
 
-Contents of my ``/ui/data data`` directory look like this
+Contents of my ``ui/data/`` directory look like this
 
 ```
 data
@@ -69,7 +69,6 @@ data
 Then,
 
 ```
-../ui/data/
 docker-compose -p testcorpus_testmodel stop
 cd ../ui
 ```
