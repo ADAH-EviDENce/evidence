@@ -20,7 +20,7 @@ cp template_filenames_config.txt filenames.txt
 cp config_template_docker.conf my.conf
 # edit my.conf filenames.txt
 ./run_evidence_framework.sh my.conf filenames.txt
-# log into Jupyter server with token
+# log into Jupyter server with token (http://localhost:6789)
 # run 2 notebooks
 curl -X POST http://127.0.0.1:5001/corpusmodelrep -H "Content-Type: application/json" > ../ui/data/doc2vec.json #Looks like you may need to select just the second element of the response, maybe use | jq .'[1]' or something
 docker cp testcorpus_testmodel_generate_doc2vec_model:/home/jovyan/output/preprocessed_corpus/template_ids ../ui/data/
