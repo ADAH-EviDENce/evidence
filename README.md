@@ -22,6 +22,7 @@ cp config_template_docker.conf my.conf
 ```
 
 Verify that your ``docker-compose`` version is at least 1.25.4
+
 Verify that your ``docker`` version is at least 19.03.12
 
 ```
