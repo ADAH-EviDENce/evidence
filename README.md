@@ -19,6 +19,13 @@ cd framework
 cp template_filenames_config.txt filenames.txt
 cp config_template_docker.conf my.conf
 # edit my.conf filenames.txt
+```
+
+Verify that your ``docker-compose`` version is at least 1.25.4
+
+Verify that your ``docker`` version is at least 19.03.12
+
+```
 ./run_evidence_framework.sh my.conf filenames.txt
 # log into Jupyter server with token (http://localhost:6789)
 # run notebook code/preprocess_corpus.ipynb
