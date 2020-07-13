@@ -32,7 +32,7 @@ Verify that your ``docker`` version is at least 19.03.12
 # run notebook code/generate_doc2vec_model.ipynb
 curl -X POST http://127.0.0.1:5001/corpusmodelrep -H "Content-Type: application/json" | jq '.[1]' > ../ui/data/doc2vec.json
 docker cp testcorpus_testmodel_generate_doc2vec_model:/home/jovyan/output/preprocessed_corpus/template_ids ../ui/data/
-docker cp testcorpus_testmodel_generate_doc2vec_model:/home/jovyan/output/preprocessed_corpus/template_corpus 
+docker cp testcorpus_testmodel_generate_doc2vec_model:/home/jovyan/output/preprocessed_corpus/template_corpus ../ui/data/
 ```
 
 Copy corpus to ui's ``data/``
