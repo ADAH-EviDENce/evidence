@@ -4,12 +4,12 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - configparser
-  - dask
   - gensim
-  - nbformat
-  - numpy
+  - ipykernel
+  - jupyter
+  - nbconvert
   - pandas
-  - scipy
   - smart_open
-  - nb_conda_kernels
+  - pip
+  - pip:
+    - import-ipynb

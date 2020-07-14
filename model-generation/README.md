@@ -17,6 +17,5 @@ docker run -ti --mount type=bind,source="$(pwd)"/notebooks,target=/data ${IMAGE_
 or
 
 ```shell
-docker run -ti -v ${PWD}/notebooks:/data ${CONTAINER_NAME} /bin/bash
-
+docker run -ti -v ${PWD}/notebooks:/data/notebooks -v ${PWD}/../experiments/getuigenverhalen/corpus:/data/corpus ${IMAGE_NAME} /bin/bash
 ```
