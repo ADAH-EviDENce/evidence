@@ -8,7 +8,69 @@ assisted close reading tool
 
 [https://github.com/ADAH-EviDENce/evidence-gui](https://github.com/ADAH-EviDENce/evidence-gui)
 
+## Running a demo on Windows
 
+Prerequisites:
+- Docker desktop
+
+[Download](https://github.com/ADAH-EviDENce/WorkingTitleCloseReader/archive/master.zip) a copy of WorkingTitleCloseReader archive and extract its contents on your machine.
+
+Open a Powershell prompt:
+Change your current working directory to where you extracted the files. For instance:
+
+```shell
+cd C:\Users\JohnDoe\Downloads\WorkingTitleCloseReader-master
+```
+
+The demo can be started with the following command:
+
+```shell
+docker-compose --env-file getuigenverhalen.env up --build
+```
+
+The command above downloads necessary docker images, does a docker build and starts containers needed. 
+
+The command prints many log messages. If all goes well, the last lines of the output should be:
+```
+...
+indexer_1        | Indexing done.
+WorkingTitleCloseReader-master_indexer_1 exited with code 0
+```
+
+If you get output like the following:
+```
+PS C:\Users\ChristiaanMeijer\WorkingTitleCloseReader-master> docker-compose --env-file getuigenverhalen.env up --build
+Creating network "WorkingTitleCloseReader-master_default" with the default driver
+Building server
+Step 1/28 : FROM golang:1.12-stretch as buildserver
+ ---> 563601c9e3b2
+...
+Creating WorkingTitleCloseReader-master_elasticsearch_1 ... done                                                                               Creating WorkingTitleCloseReader-master_indexer_1       ... error
+ERROR: for WorkingTitleCloseReader-master_indexer_1  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for WorkingTitleCloseReader-master_server_1  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for indexer  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for server  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+ERROR: Encountered errors while bringing up the project.
+```
+
+The above error means that the docker containers cannot access the necessary folder. This can be solved by explicitly giving docker access to it. Do this by opening the Docker dashboard by right-clicking the docker icon in the Windows taskbar. Then, go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before, and try running the command above again.
+
+Keep the Powershell window open during the demo.
+
+For the demo we need to create a user. This can be done by opening a new powershell and run the following command in it:
+```
+invoke-webrequest -method Post -uri http://localhost:8080/users -body JohnDoe
+```
+
+Browse to [http://localhost:8080/](http://localhost:8080/ui/search/).
+
+Once you done exploring the demo, you can stop the demo by selecting the powershell that is still running the demo and press Ctrl+C.
+
+
+## Old instructions
 
 Steps to get the frontend up and running
 
