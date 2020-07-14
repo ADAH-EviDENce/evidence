@@ -1,4 +1,4 @@
-name: myopic
+name: EviDENce
 channels:
   - bioconda
   - conda-forge
@@ -12,3 +12,4 @@ dependencies:
   - pandas
   - scipy
   - smart_open
+  - nb_conda_kernels
