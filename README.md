@@ -22,8 +22,14 @@ cp config_template_docker.conf my.conf
 ```
 
 Verify that your ``docker-compose`` version is at least 1.25.4
+```
+docker-compose --version
+```
 
 Verify that your ``docker`` version is at least 19.03.12
+```
+docker --version
+```
 
 ```
 ./run_evidence_framework.sh my.conf filenames.txt
