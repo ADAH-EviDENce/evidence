@@ -1,0 +1,14 @@
+name: myopic
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - configparser
+  - dask
+  - gensim
+  - nbformat
+  - numpy
+  - pandas
+  - scipy
+  - smart_open
