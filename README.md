@@ -19,7 +19,7 @@ Open a Powershell prompt:
 Change your current working directory to where you extracted the files. For instance:
 
 ```shell
-cd C:\Users\JohnDoe\Downloads\WorkingTitleCloseReader-master
+cd C:\Users\JohnDoe\Downloads\WorkingTitleCloseReader-master\WorkingTitleCloseReader-master
 ```
 
 The demo can be started with the following command:
@@ -62,8 +62,9 @@ Keep the Powershell window open during the demo.
 
 For the demo we need to create a user. This can be done by opening a new powershell and run the following command in it:
 ```
-invoke-webrequest -method Post -uri http://localhost:8080/users -body JohnDoe
+invoke-webrequest -method Post -uri http://localhost:8080/users -body johndoe
 ```
+Note that the username, in our case 'johndoe', in the above command should be alpha-numerical and lowercase.
 
 Browse to [http://localhost:8080/](http://localhost:8080/ui/search/).
 
