@@ -1,6 +1,0 @@
-[filenames]
-corpus_file_name = Getuigen_Verhalen_corpus
-corpus_ids_file_name = Getuigen_Verhalen_ids
-model_output_file_name = Getuigen_Verhalen_model_standard.d2v
-model_output_corpus_vectors = Getuigen_Verhalen_corpus_model_standard_vectors.pkl
-model_output_corpus_vectors_json = Getuigen_Verhalen_corpus_model_standard_vectors.js

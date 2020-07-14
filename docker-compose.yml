@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+  server:
+    build:
+      context: ./ui
+    entrypoint: ["./start.sh"]
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./experiments/${EXPERIMENT}:/data:ro
+      - ./db:/db
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
+    environment:
+      discovery.type: "single-node"
+    expose:
+      - "9200"
+
+  indexer:
+    build:
+      context: ./ui/indexer
+    depends_on:
+      - "elasticsearch"
+    command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
+      "--timeout=0",
+      "--", "/utils/index.py",
+      "data/vocabulary_ids.txt",
+      "data/vocabulary_bow.txt",
+      "elasticsearch"]
+    volumes:
+      - ./experiments/${EXPERIMENT}:/data:ro
