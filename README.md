@@ -98,4 +98,6 @@ $ curl -XPOST http://localhost:8080/users -d jspaaks   # note different port tha
 
 Frontend should be at ``http://localhost:8080/ui/search/``
 
+## Diagram
 
+![EviDENce_framework_intial-2.png](EviDENce_framework_intial-2.png)
