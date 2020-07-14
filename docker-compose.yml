@@ -28,7 +28,7 @@ services:
       "--timeout=0",
       "--", "/utils/index.py",
       "data/vocabulary_ids.txt",
-      "data/vocabulary_corpus.txt",
+      "data/vocabulary_bow.txt",
       "elasticsearch"]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
