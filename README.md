@@ -19,6 +19,18 @@ EXPERIMENT=getuigenverhalen
 
 Be aware that building can take a couple of minutes.
 
+Verify that your ``docker-compose`` version is at least 1.25.4
+
+```
+docker-compose --version
+```
+
+Verify that your ``docker`` version is at least 19.03.12
+
+```
+docker --version
+```
+
 ```shell
 # (starting from the repo root directory)
 docker build --tag doc2vec model-generation/
