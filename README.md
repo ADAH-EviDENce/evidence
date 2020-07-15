@@ -99,4 +99,4 @@ export FRONTEND_USER=mynewusername
 docker-compose run usercreator
 ```
 
-To add more repeat the command with differnent values for `FRONTEND_USER`.
+To add more users, repeat the command with different values for `FRONTEND_USER`.
