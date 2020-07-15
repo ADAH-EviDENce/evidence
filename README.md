@@ -71,7 +71,7 @@ docker-compose up
 Frontend should now be usable at [``http://localhost:8080``](http://localhost:8080).
 
 > We strongly suggest not making the frontend available publicly as we do not have autentication. Anyone that knows the url may have an access to the frontend.
-Running it on local network, for example university network, should be protected enough.
+Running it on local network, for example university network, should be protected from most evil-doers.
 
 ## Frontend users
 
