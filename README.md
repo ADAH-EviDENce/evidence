@@ -10,7 +10,7 @@ assisted close reading tool
 
 ## Generating a model from the corpus
 
-Define the name you want to use for the image, and define the name of the dataset/experiment
+Define the name of the dataset/experiment
 ```shell
 EXPERIMENT=getuigenverhalen
 ```
