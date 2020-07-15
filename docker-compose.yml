@@ -24,7 +24,9 @@ services:
       context: ./ui/indexer
     depends_on:
       - "elasticsearch"
-    command: ["sh","-c",
-"/utils/wait-for-it.sh elasticsearch:9200 --timeout=0 -- /utils/index.py data/vocabulary_ids.txt data/vocabulary_bow.txt elasticsearch && echo Now browse to http://localhost:8080/ for the user interface."]
+    command: ["sh","-c","/utils/wait-for-it.sh elasticsearch:9200 
+        --timeout=0 
+        -- /utils/index.py data/vocabulary_ids.txt data/vocabulary_bow.txt elasticsearch
+        && echo Now browse to http://localhost:8080/ for the user interface."]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
