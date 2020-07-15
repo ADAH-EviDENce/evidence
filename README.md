@@ -103,3 +103,10 @@ docker-compose run usercreator
 ```
 
 To add more users, repeat the command with different values for `FRONTEND_USER`.
+
+
+## Diagram
+
+![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
+
+
