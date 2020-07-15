@@ -1,4 +1,4 @@
-name: Docker Compose Actions Workflow
+name: Docker-compose
 on: [push, pull_request]
 jobs:
   test:
