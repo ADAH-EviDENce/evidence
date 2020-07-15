@@ -79,7 +79,7 @@ A user called `demo` exists and can be selected.
 
 The initial user in the frontend can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
 
-For example to have `myinitialusername` as user.
+For example to have `myinitialusername` as user do the following
 
 ```shell
 # (starting from the repo root directory)
@@ -90,10 +90,13 @@ docker-compose up
 
 ### Add additional users
 
-If the single existing user is not enough. You can add users to the frontend with the following command
+If the existing user is not enough. You can add a user to the frontend with the following command
 (you can choose your own username by replacing `mynewusername` value in command)
 
 ```shell
+export EXPERIMENT=getuigenverhalen
 export FRONTEND_USER=mynewusername
 docker-compose run usercreator
 ```
+
+To add more repeat the command with differnent values for `FRONTEND_USER`.
