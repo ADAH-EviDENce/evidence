@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook
+FROM jupyter/base-notebook:latest
 
 COPY environment.yml run.sh /home/jovyan/
 

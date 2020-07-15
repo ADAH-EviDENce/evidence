@@ -40,8 +40,8 @@ Work on the interface between both components is in progress, and not all functi
 - Run `EviDENce_doc2vec_docker_framework`, performing preprocessing and model creation steps
 - query the representation API and save the corpus model represenatation as `doc2vec.json`
 - clone the [evidence-gui repository](https://github.com/knaw-huc/evidence-gui)
-    - following the local setup instructions `mkdir data`
-    - copy the full corpus_input directory into data
-    - copy the `<your_corpus>_corpus`, `<your_corpus>_ids`, and `doc2vec.json` files into the data directory
-    - follow the Run instructions to bring the backed and GUI up for the corpus and model provided
-    - further instructions, e.g. on how to add users, are available in the [repository](https://github.com/knaw-huc/evidence-gui).
+  - following the local setup instructions `mkdir data`
+  - copy the full corpus_input directory into data
+  - copy the `<your_corpus>_corpus`, `<your_corpus>_ids`, and `doc2vec.json` files into the data directory
+  - follow the run instructions to bring the backed and GUI up for the corpus and model provided
+  - further instructions, e.g. on how to add users, are available in the [repository](https://github.com/knaw-huc/evidence-gui).

@@ -1,0 +1,4 @@
+gensim
+flask
+numpy
+import_ipynb
