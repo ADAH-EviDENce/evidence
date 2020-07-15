@@ -10,7 +10,6 @@ services:
       - "8080:8080"
     volumes:
       - ./experiments/${EXPERIMENT}/model:/data:ro
-      - ./experiments/${EXPERIMENT}/db:/db
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
@@ -32,3 +31,14 @@ services:
       "elasticsearch"]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
+
+  usercreator:
+    build:
+      context: ./ui/usercreator
+    depends_on:
+      - server
+    command: [
+        "/utils/wait-for-it.sh", "server:8080", "--timeout=0",
+        "--",
+        "/usr/bin/curl", "-X", "POST", "http://server:8080/users", "-d", "${FRONTEND_USER:-demo}"
+    ]
