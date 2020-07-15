@@ -13,5 +13,5 @@ RUN echo -e "#Activate the evidence virtual environment\nconda activate evidence
 
 WORKDIR /data/notebooks/
 
-ENTRYPOINT []
+ENTRYPOINT ["/bin/bash", "/home/jovyan/run.sh"]
 CMD ""

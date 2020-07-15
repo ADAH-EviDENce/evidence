@@ -73,4 +73,4 @@ Add user to the server (you can choose your own username)
 $ curl -XPOST http://localhost:8080/users -d jspaaks   # note different port than what docs say
 ```
 
-Frontend should be at ``http://localhost:8080/ui/search/``
+Frontend should now be usable at [``http://localhost:8080``](http://localhost:8080).
