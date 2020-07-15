@@ -90,7 +90,7 @@ docker-compose up
 
 ### Add additional users
 
-If the existing user is not enough. You can add a user to the frontend with the following command
+If the existing user is not enough, you can add a new user to the frontend with the following command:
 (you can choose your own username by replacing `mynewusername` value in command)
 
 ```shell
