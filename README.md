@@ -77,5 +77,5 @@ Frontend should now be usable at [``http://localhost:8080``](http://localhost:80
 
 ## Diagram
 
-![EviDENce_framework_intial-2.png](EviDENce_framework_intial-2.png)
+![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
 
