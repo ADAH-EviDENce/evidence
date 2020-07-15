@@ -68,9 +68,32 @@ docker-compose build
 docker-compose up -d
 ```
 
-Add user to the server (you can choose your own username)
-```
-$ curl -XPOST http://localhost:8080/users -d jspaaks   # note different port than what docs say
+Frontend should now be usable at [``http://localhost:8080``](http://localhost:8080).
+
+## Frontend users
+
+The first page of the frontend forces you to select a user or gebruiker in Dutch.
+A user called `demo` exists and can be selected.
+
+### Change initial user
+
+The initial user in the frontend is called `demo` can be renamed by setting the `WORKINGTITLECLOSEREADER_USER` environment variable before running `docker-compose up`.
+
+For example to have `myinitialusername` as user.
+
+```shell
+# (starting from the repo root directory)
+export EXPERIMENT=getuigenverhalen
+export WORKINGTITLECLOSEREADER_USER=myinitialusername
+docker-compose up
 ```
 
-Frontend should now be usable at [``http://localhost:8080``](http://localhost:8080).
+### Add additional users
+
+If the single existing user is not enough. You can add users to the frontend with the following command
+(you can choose your own username instead of `mynewusername`)
+
+```shell
+WORKINGTITLECLOSEREADER_USER=mynewusername
+docker-compose run usercreator
+```
