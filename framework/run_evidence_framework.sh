@@ -10,7 +10,7 @@
 
 #source the config file
 echo 'sourcing config file'
-#shellcheck source=config_template_docker.conf
+#shellcheck disable=SC1091
 source "$1"
 
 
@@ -19,10 +19,10 @@ echo 'setting tag name'
 TAG_NAME=${CORPUS_NAME}_${MODEL_NAME}
 
 echo "writing environment file"
-ENVIRONMENTFILE=${TAG_NAME}.env
+ENVIRONMENTFILE="${TAG_NAME}".env
 
 true > "${ENVIRONMENTFILE}"
-echo "TAG=${TAG_NAME}" >> "${ENVIRONMENTFILE}"
+echo "TAG=\"${TAG_NAME}\"" >> "${ENVIRONMENTFILE}"
 echo "CORPUSNAME=${CORPUS_NAME}" >> "${ENVIRONMENTFILE}"
 echo "MODELNAME=${MODEL_NAME}" >> "${ENVIRONMENTFILE}"
 echo "INPUTPATH=${INPUT_PATH}" >> "${ENVIRONMENTFILE}"
