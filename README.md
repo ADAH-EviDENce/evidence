@@ -65,7 +65,7 @@ docker run --volume ${PWD}/model-generation/notebooks:/data/notebooks \
 # (starting from the repo root directory)
 export EXPERIMENT=getuigenverhalen
 docker-compose build
-docker-compose up -d
+docker-compose up
 ```
 
 Add user to the server (you can choose your own username)
