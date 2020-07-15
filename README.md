@@ -77,7 +77,7 @@ A user called `demo` exists and can be selected.
 
 ### Change initial user
 
-The initial user in the frontend is called `demo` can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
+The initial user in the frontend can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
 
 For example to have `myinitialusername` as user.
 
