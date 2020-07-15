@@ -10,7 +10,6 @@ services:
       - "8080:8080"
     volumes:
       - ./experiments/${EXPERIMENT}/model:/data:ro
-      - ./experiments/${EXPERIMENT}/db:/db
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
