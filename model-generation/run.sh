@@ -2,16 +2,10 @@
 
 echo "starting corpus preprocessing"
 
-conda activate EviDENce
+jupyter nbconvert --to notebook --execute preprocess_corpus.ipynb && rm preprocess_corpus.nbconvert.ipynb || exit 1
 
-cd /data/notebooks/
+echo "starting doc2vec model generation - this takes a few minutes"
 
-jupyter nbconvert --to notebook --execute preprocess_corpus.ipynb
-rm preprocess_corpus.nbconvert.ipynb
-
-echo "starting doc2vec model generation"
-
-jupyter nbconvert --to notebook --execute generate_doc2vec_model.ipynb --ExecutePreprocessor.timeout=3600
-rm generate_doc2vec_model.nbconvert.ipynb
+jupyter nbconvert --to notebook --execute generate_doc2vec_model.ipynb --ExecutePreprocessor.timeout=3600 && rm generate_doc2vec_model.nbconvert.ipynb || exit 1
 
 echo "done"

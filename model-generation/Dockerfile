@@ -1,17 +1,17 @@
-FROM continuumio/miniconda3
+FROM jupyter/base-notebook
 
-COPY environment.yml run.sh /app/
+COPY environment.yml run.sh /home/jovyan/
 
-WORKDIR /app
-
-# create and activate virtual environment
 RUN conda env create --file environment.yml
 
-ENV PATH /opt/conda/envs/EviDENce/bin:$PATH
+RUN source /opt/conda/etc/profile.d/conda.sh && \
+    conda init bash && \
+    conda activate evidence && \
+    ipython kernel install --name "evidence" --user
 
-SHELL ["conda", "run", "--name", "EviDENce", "/bin/bash", "-c"]
+RUN echo -e "#Activate the evidence virtual environment\nconda activate evidence" >> /home/jovyan/.bashrc
 
-RUN conda info && conda init bash
-RUN python -m ipykernel install --user --name conda-env-EviDENce-py
+WORKDIR /data/notebooks/
 
-ENTRYPOINT ["/bin/bash", "/app/run.sh"]
+ENTRYPOINT []
+CMD ""

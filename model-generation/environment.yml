@@ -1,4 +1,4 @@
-name: EviDENce
+name: evidence
 channels:
   - bioconda
   - conda-forge
@@ -9,7 +9,7 @@ dependencies:
   - jupyter
   - nbconvert
   - pandas
-  - smart_open
   - pip
   - pip:
     - import-ipynb
+    - smart-open
