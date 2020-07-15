@@ -10,6 +10,7 @@
 
 #source the config file
 echo 'sourcing config file'
+#shellcheck source=config_template_docker.conf
 source "$1"
 
 
@@ -20,7 +21,7 @@ TAG_NAME=${CORPUS_NAME}_${MODEL_NAME}
 echo "writing environment file"
 ENVIRONMENTFILE=${TAG_NAME}.env
 
-> "${ENVIRONMENTFILE}"
+true > "${ENVIRONMENTFILE}"
 echo "TAG=${TAG_NAME}" >> "${ENVIRONMENTFILE}"
 echo "CORPUSNAME=${CORPUS_NAME}" >> "${ENVIRONMENTFILE}"
 echo "MODELNAME=${MODEL_NAME}" >> "${ENVIRONMENTFILE}"
