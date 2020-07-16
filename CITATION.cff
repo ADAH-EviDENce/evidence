@@ -42,7 +42,7 @@ authors:
     affiliation: "Netherlands eScience Center"
     family-names: Verhoeven
     given-names: Stefan
-    orcid:
+    orcid: "https://orcid.org/0000-0002-5821-2060"
 cff-version: "1.1.0"
 doi: "10.0000/FIXME"
 keywords:
