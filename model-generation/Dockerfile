@@ -1,5 +1,7 @@
 FROM jupyter/base-notebook
 
+ENV DEBIAN_FRONTEND noninteractive
+
 COPY environment.yml run.sh /home/jovyan/
 
 RUN conda env create --file environment.yml
