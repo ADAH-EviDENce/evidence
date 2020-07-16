@@ -10,7 +10,7 @@ Assisted close reading tool
 | 4. Enable citation | [![DOI](https://zenodo.org/badge/DOI/10.0000/FIXME.svg)](https://doi.org/10.0000/FIXME) |
 | 5. Checklist | N/A |
 | **Other best practices** | |
-| Markdown Link Checker| [![Check Markdown links](https://github.com/ADAH-EviDENce/evidence/workflows/Check%20Markdown%20links/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Check+Markdown+links%22) |
+| GitHub Super Linter| [![Lint Code Base](https://github.com/ADAH-EviDENce/evidence/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Lint+Code+Base%22) |
 | docker-compose | [![Docker-compose](https://github.com/ADAH-EviDENce/evidence/workflows/Docker-compose/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3ADocker-compose) |
 
 ## Related repositories
