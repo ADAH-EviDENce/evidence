@@ -57,6 +57,6 @@ keywords:
 license: "GPL-3.0+"
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/ADAH-EviDENce/evidence"
-title: evidence - Assisted close reading
+title: evidence
 version: "0.1.0"
 ...
