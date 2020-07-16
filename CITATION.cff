@@ -1,0 +1,56 @@
+# YAML 1.2
+---
+authors: 
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Grootes
+    given-names: "Meiert Willem"
+    orcid: "https://orcid.org/0000-0002-5733-4795"
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: "van Hage"
+    given-names: Willem
+  -
+    affiliation: "KNAW-HUC"
+    family-names: Buitinck
+    given-names: Lars
+  -
+    affiliation: "KNAW-HUC"
+    family-names: "de Jong"
+    given-names: Hayco
+  -
+    affiliation: "KNAW-HUC"
+    family-names: Leenknegt
+    given-names: Bas
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Diblen
+    given-names: Faruk
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Meijer
+    given-names: Christiaan
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Spaaks
+    given-names: Jurriaan
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Verhoeven
+    given-names: Stefan
+cff-version: "1.1.0"
+date-released: 2020-12-30
+doi: "10.0000/FIXME"
+keywords: 
+  - "close-reading"
+  - humanities
+  - text
+  - corpus
+  - "AI "
+  - 
+license: "GPL-3.0+"
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/ADAH-EviDENce/WorkingTitleCloseReader"
+title: WorkingTitleCloseReader
+version: "0.1.0"
+...
