@@ -9,8 +9,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./experiments/${EXPERIMENT}:/data:ro
-      - ./db:/db
+      - ./experiments/${EXPERIMENT}/model:/data:ro
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
@@ -26,7 +25,22 @@ services:
       - "elasticsearch"
     command: ["sh","-c","/utils/wait-for-it.sh elasticsearch:9200 
         --timeout=0 
-        -- /utils/index.py data/vocabulary_ids.txt data/vocabulary_bow.txt elasticsearch
-        && echo Now browse to http://localhost:8080/ for the user interface."]
+        -- /utils/index.py 
+        data/model/vocabulary_ids.txt 
+        data/model/vocabulary_bow.txt 
+        elasticsearch
+        && echo Now go to the following URL in your webbrowser 
+        http://localhost:8080/ for the user interface."]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
+
+  usercreator:
+    build:
+      context: ./ui/usercreator
+    depends_on:
+      - server
+    command: [
+        "/utils/wait-for-it.sh", "server:8080", "--timeout=0",
+        "--",
+        "/usr/bin/curl", "-X", "POST", "http://server:8080/users", "-d", "${FRONTEND_USER:-demo}"
+    ]
