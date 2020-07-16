@@ -10,6 +10,7 @@ dependencies:
   - nbconvert
   - pandas
   - pip
+  - tqdm
   - pip:
     - import-ipynb
     - smart-open
