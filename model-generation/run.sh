@@ -2,6 +2,7 @@
 
 set -e
 
+echo "User: "$(whoami)
 source /opt/conda/bin/activate evidence
 echo "Using Python: "$(which python)
 
