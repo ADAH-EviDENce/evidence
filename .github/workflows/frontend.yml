@@ -1,7 +1,7 @@
-name: Docker-compose
+name: Frontend
 on: [push, pull_request]
 jobs:
-  test:
+  frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
