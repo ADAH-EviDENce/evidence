@@ -12,7 +12,7 @@ assisted close reading tool
 
 Define the name of the dataset/experiment
 ```shell
-EXPERIMENT=getuigenverhalen
+export EXPERIMENT=getuigenverhalen
 ```
 
 ### Building the image
