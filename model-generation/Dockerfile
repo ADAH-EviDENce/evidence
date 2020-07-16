@@ -1,4 +1,5 @@
-FROM jupyter/base-notebook
+FROM jupyter/base-notebook:python-3.8.3
+
 
 COPY environment.yml run.sh /home/jovyan/
 
