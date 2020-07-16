@@ -1,17 +1,17 @@
 ---
-name: Lint Code Base
+name: Linting
 
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: Lint Code Base
+  linting:
+    name: Lint the code base
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Ignore ui folder by removing it
-        run: rm -rf ./ui        
+        run: rm -rf ./ui
       - name: GitHub Super Linter
         uses: docker://github/super-linter:v3.2.0
         env:

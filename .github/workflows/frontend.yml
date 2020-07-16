@@ -1,5 +1,7 @@
 name: Frontend
+
 on: [push, pull_request]
+
 jobs:
   frontend:
     runs-on: ubuntu-latest
@@ -14,10 +16,10 @@ jobs:
       - name: Test if server is up
         run: docker-compose ps server | grep Up
       - name: Test if elasticsearch is up
-        run: docker-compose ps elasticsearch | grep Up        
+        run: docker-compose ps elasticsearch | grep Up
       - name: Test if usercreator exited successfully
         run: docker-compose ps usercreator | grep 'Exit 0'
       - name: Test if indexer exited successfully
-        run: docker-compose ps indexer | grep 'Exit 0'        
+        run: docker-compose ps indexer | grep 'Exit 0'
       - name: Test if the UI is accessible
         run: curl --show-error --retry 10 --retry-connrefused http://0.0.0.0:8080/
