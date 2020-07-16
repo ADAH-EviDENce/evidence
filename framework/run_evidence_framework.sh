@@ -10,7 +10,7 @@
 
 #source the config file
 echo 'sourcing config file'
-#shellcheck disable=SC1091
+#shellcheck disable=SC1090
 source "$1"
 
 
@@ -22,13 +22,25 @@ echo "writing environment file"
 ENVIRONMENTFILE="${TAG_NAME}".env
 
 true > "${ENVIRONMENTFILE}"
-echo "TAG=\"${TAG_NAME}\"" >> "${ENVIRONMENTFILE}"
-echo "CORPUSNAME=${CORPUS_NAME}" >> "${ENVIRONMENTFILE}"
-echo "MODELNAME=${MODEL_NAME}" >> "${ENVIRONMENTFILE}"
-echo "INPUTPATH=${INPUT_PATH}" >> "${ENVIRONMENTFILE}"
-echo "CONFIGPATH=${CONFIG_PATH}" >> "${ENVIRONMENTFILE}"
-echo "CODEPATH=${CODE_PATH}" >> "${ENVIRONMENTFILE}"
-echo "DERIVEDPATH=${DERIVED_PATH}" >> "${ENVIRONMENTFILE}"
+{
+echo "TAG=\"${TAG_NAME}\""
+echo "CORPUSNAME=${CORPUS_NAME}"
+echo "MODELNAME=${MODEL_NAME}"
+echo "INPUTPATH=${INPUT_PATH}"
+echo "CONFIGPATH=${CONFIG_PATH}"
+echo "CODEPATH=${CODE_PATH}"
+echo "DERIVEDPATH=${DERIVED_PATH}"
+} >> "${ENVIRONMENTFILE}"
+
+#echo "TAG=\"${TAG_NAME}\"" >> "${ENVIRONMENTFILE}"
+#echo "CORPUSNAME=${CORPUS_NAME}" >> "${ENVIRONMENTFILE}"
+#echo "MODELNAME=${MODEL_NAME}" >> "${ENVIRONMENTFILE}"
+#echo "INPUTPATH=${INPUT_PATH}" >> "${ENVIRONMENTFILE}"
+#echo "CONFIGPATH=${CONFIG_PATH}" >> "${ENVIRONMENTFILE}"
+#echo "CODEPATH=${CODE_PATH}" >> "${ENVIRONMENTFILE}"
+#echo "DERIVEDPATH=${DERIVED_PATH}" >> "${ENVIRONMENTFILE}"
+
+
 
 #copy the environment file to the .env file used by docker-compose
 echo "copying environment file"
