@@ -2,9 +2,11 @@
 
 set -e
 
-echo "User: "$(whoami)
+echo "User: $(whoami)"
+
+# shellcheck disable=SC1091
 source /opt/conda/bin/activate evidence
-echo "Using Python: "$(which python)
+echo "Using Python: $(which python)"
 
 echo "starting corpus preprocessing"
 jupyter nbconvert --to python preprocess_corpus.ipynb
