@@ -8,13 +8,22 @@ assisted close reading tool
 
 [https://github.com/ADAH-EviDENce/evidence-gui](https://github.com/ADAH-EviDENce/evidence-gui)
 
-## Running a demo on Windows
+## Running the demo on Windows
 
 Prerequisites:
-- Docker desktop
+- [Docker desktop](https://docs.docker.com/docker-for-windows/install/)
 
+### Step 1
+First test that the docker installation is working. Open a Powershell prompt (press Windows+S and type Powershell) and run:
+```shell
+docker run hello-world
+```
+This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of WorkingTitleCloseReader, otherwise we suggest to check the steps in the [Docker installation guide](https://docs.docker.com/docker-for-windows/install/).
+
+### Step 2
 [Download](https://github.com/ADAH-EviDENce/WorkingTitleCloseReader/archive/master.zip) a copy of WorkingTitleCloseReader archive and extract its contents on your machine.
 
+### Step 3
 Open a Powershell prompt:
 Change your current working directory to where you extracted the files. For instance:
 
@@ -22,7 +31,7 @@ Change your current working directory to where you extracted the files. For inst
 cd C:\Users\JohnDoe\Downloads\WorkingTitleCloseReader-master\WorkingTitleCloseReader-master
 ```
 
-The demo can be started with the following command:
+The demo can be started with the below command. Keep this Powershell window open and running during the demo.
 
 ```shell
 docker-compose --env-file getuigenverhalen.env up --build
@@ -37,7 +46,7 @@ indexer_1        | Indexing done.
 WorkingTitleCloseReader-master_indexer_1 exited with code 0
 ```
 
-If you get output like the following:
+In some cases, the docker containers cannot access the necessary folder. In this case, you get output like the following:
 ```
 PS C:\Users\ChristiaanMeijer\WorkingTitleCloseReader-master> docker-compose --env-file getuigenverhalen.env up --build
 Creating network "WorkingTitleCloseReader-master_default" with the default driver
@@ -56,18 +65,19 @@ ERROR: for server  Cannot create container for service server: status code not O
 ERROR: Encountered errors while bringing up the project.
 ```
 
-The above error means that the docker containers cannot access the necessary folder. This can be solved by explicitly giving docker access to it. Do this by opening the Docker dashboard by right-clicking the docker icon in the Windows taskbar. Then, go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before, and try running the command above again.
+This can be solved by explicitly giving docker access to it. Do this by opening the Docker dashboard by right-clicking the docker icon in the Windows taskbar. Then, go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before, and try running the command above again.
 
-Keep the Powershell window open during the demo.
 
-For the demo we need to create a user. This can be done by opening a new powershell and run the following command in it:
+For the demo we need to create a user, in our case 'johndoe'. This can be done by opening another powershell prompt and run the following command in it:
 ```
 invoke-webrequest -method Post -uri http://localhost:8080/users -body johndoe
 ```
-Note that the username, in our case 'johndoe', in the above command should be alpha-numerical and lowercase.
+Note that any username you choose to use in the command above, must be alpha-numerical and lowercase.
 
-Browse to [http://localhost:8080/](http://localhost:8080/ui/search/).
+### Step 4
+Go to the following URL in your webbrowser: [http://localhost:8080/](http://localhost:8080/ui/search/).
 
+### Step 5
 Once you done exploring the demo, you can stop the demo by selecting the powershell that is still running the demo and press Ctrl+C.
 
 
