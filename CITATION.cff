@@ -53,7 +53,8 @@ keywords:
   - "AI"
   - "search"
   - "collections"
-
+  - "context based"
+  - "concept based"
 license: "GPL-3.0"
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/ADAH-EviDENce/evidence"
