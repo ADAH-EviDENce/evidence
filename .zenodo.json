@@ -1,0 +1,61 @@
+{
+    "creators": [
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Grootes, Meiert Willem",
+            "orcid": "0000-0002-5733-4795"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "van Hage, Willem",
+            "orcid": "0000-0002-6478-3003"
+        },
+        {
+            "affiliation": "KNAW-HUC",
+            "name": "Buitinck, Lars"
+        },
+        {
+            "affiliation": "KNAW-HUC",
+            "name": "de Jong, Hayco"
+        },
+        {
+            "affiliation": "KNAW-HUC",
+            "name": "Leenknegt, Bas"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Diblen, Faruk",
+            "orcid": "0000-0002-0989-929X"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Meijer, Christiaan",
+            "orcid": "0000-0002-5529-5761"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Spaaks, Jurriaan H.",
+            "orcid": "0000-0002-7064-4069"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Verhoeven, Stefan",
+            "orcid": "0000-0002-5821-2060"
+        }
+    ],
+    "keywords": [
+        "close reading",
+        "humanities",
+        "text",
+        "corpus",
+        "AI",
+        "search",
+        "collections",
+        "context based",
+        "concept based"
+    ],
+    "license": {
+        "id": "GPL-3.0+"
+    },
+    "title": "evidence"
+}
