@@ -2,7 +2,7 @@
 
 [ -e /db/relevance.db ] || (\
 	echo "Installing empty relevance database in /db"
-        mkdir -p /db
+	mkdir -p /db
 	cp /evidence/empty.db /db/relevance.db
 )
 
