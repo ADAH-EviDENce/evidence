@@ -5,11 +5,14 @@ services:
   server:
     build:
       context: ./ui
+    image: ${EXPERIMENT}/server
     entrypoint: ["./start.sh"]
     ports:
       - "8080:8080"
     volumes:
       - ./experiments/${EXPERIMENT}/model:/data:ro
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
@@ -21,6 +24,7 @@ services:
   indexer:
     build:
       context: ./ui/indexer
+    image: ${EXPERIMENT}/indexer
     depends_on:
       - "elasticsearch"
     command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
@@ -31,10 +35,13 @@ services:
       "elasticsearch"]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}
 
   usercreator:
     build:
       context: ./ui/usercreator
+    image: ${EXPERIMENT}/usercreator
     depends_on:
       - server
     command: [
