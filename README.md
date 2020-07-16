@@ -11,7 +11,7 @@ Assisted close reading tool
 | 5. Checklist | N/A |
 | **Other best practices** | |
 | GitHub Super Linter| [![Lint Code Base](https://github.com/ADAH-EviDENce/evidence/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Lint+Code+Base%22) |
-| docker-compose | [![Docker-compose](https://github.com/ADAH-EviDENce/evidence/workflows/Docker-compose/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3ADocker-compose) |
+| docker-compose | [![docker-compose](https://github.com/ADAH-EviDENce/evidence/workflows/docker-compose/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3Adocker-compose) |
 
 ## Related repositories
 
