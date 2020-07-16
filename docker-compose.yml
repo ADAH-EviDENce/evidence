@@ -44,7 +44,5 @@ services:
     command: [
         "/utils/wait-for-it.sh", "server:8080", "--timeout=0",
         "--",
-        "/usr/bin/curl", "-X", "POST", "http://server:8080/users", "-d", "${FRONTEND_USER}"
+        "/usr/bin/curl", "-X", "POST", "http://server:8080/users", "-d", "${FRONTEND_USER:-demo}"
     ]
-    environment:
-      - CHECK=${FRONTEND_USER:?You need to define a value for FRONTEND_USER.}
