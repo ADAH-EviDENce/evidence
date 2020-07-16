@@ -9,6 +9,7 @@ jobs:
         run: docker-compose up --build -d
         env:
           EXPERIMENT: getuigenverhalen
+          FRONTEND_USER: demo
       - name: Wait for services
         run: sleep 30
       - name: Test if server is up
