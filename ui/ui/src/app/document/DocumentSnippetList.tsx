@@ -28,7 +28,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
         Resources.getSnippetsByIds(this.props.snippetIds).then((json) => {
             this.setState({snippets: json});
         }).catch(() => {
-            this.setState({error: 'Er konden geen fragmenten gevonden worden op basis van de opgegeven zoektermen.'});
+            this.setState({error: 'No fragments where found based on the provided search terms.'});
         });
 
         Resources.getSeedSet(this.context.user).then((response) => {
@@ -36,7 +36,7 @@ class DocumentSnippetList extends React.Component<DocumentSnippetListProps, any>
                 this.setState({seedset: ids ? ids : []})
             });
         }).catch(() => {
-            this.setState({error: 'Fout bij ophalen startset.'});
+            this.setState({error: 'Error retrieving startset'});
         });
 
     };

@@ -1,6 +1,5 @@
 FROM jupyter/base-notebook:python-3.8.3
 
-
 ENV DEBIAN_FRONTEND noninteractive
 
 COPY environment.yml run.sh /home/jovyan/

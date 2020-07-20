@@ -10,11 +10,11 @@ class ConfigSummary extends React.Component<any, any> {
     render() {
         const user = this.context.user;
         if(!user) {
-            return <>Nog geen gebruiker geselecteerd</>;
+            return <>No users selected yet</>;
         }
         const search = this.context.moreLikeThisType;
-        const rocchio = this.context.useRocchio ? 'rocchio' : 'geen rocchio';
-        return <>{`Ingelogd als ${user} (${search}, ${rocchio})`}</>;
+        const rocchio = this.context.useRocchio ? 'rocchio' : 'no rocchio';
+        return <>{`Logged in as ${user} (${search}, ${rocchio})`}</>;
     }
 }
 

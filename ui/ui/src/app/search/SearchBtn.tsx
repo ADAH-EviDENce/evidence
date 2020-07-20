@@ -35,7 +35,7 @@ class SearchBtn extends React.Component<any, any> {
                 <button className="btn btn-outline-secondary" onClick={() => {
                     this.setSearch();
                 }}>
-                    Zoek fragmenten
+                    Search fragments
                 </button>
         );
 

@@ -23,15 +23,15 @@ export default class DataPage extends React.Component<any, any> {
             const csv = new Blob([data], {type: "text/csv;charset=utf-8"});
             FileSaver.saveAs(csv, exportFilename);
         }).catch(() => {
-            this.setState({error: 'Csv-bestand kon niet opgehaald worden.'});
+            this.setState({error: 'CSV-file could not be retrieved'});
         });
     };
 
     private purgeDatabase = () => {
         Resources.purgeDatabase(this.context.user).then(() => {
-            this.setState({purging: false, info: 'Database is geleegd.'});
+            this.setState({purging: false, info: 'Database has been emptied.'});
         }).catch(() => {
-            this.setState({purging: false, error: 'Database kon niet geleegd worden.'});
+            this.setState({purging: false, error: 'Database could not be emptied.'});
         });
     };
 
@@ -43,7 +43,7 @@ export default class DataPage extends React.Component<any, any> {
         if(this.state.purgeOnSaveFile) {
             this.setState({savingWithPurge: true});
         } else {
-            this.saveFile();   
+            this.saveFile();
         }
     };
 
@@ -56,7 +56,7 @@ export default class DataPage extends React.Component<any, any> {
             this.setState({savingWithPurge: false});
         });
     };
-    
+
     render() {
         return (
             <Page>
@@ -65,7 +65,7 @@ export default class DataPage extends React.Component<any, any> {
                 <InfoBox msg={this.state.info} type="info" onClose={() => this.setState({info: null})}/>
                 <ul className="list-group d-flex" role="group">
                     <li className="list-group-item list-group-item-action">
-                        Exporteer als csv
+                        Export as csv
                         <div className="btn-group float-right">
                             <button
                                 onClick={this.conformSaveWhenWithPurge}
@@ -81,19 +81,19 @@ export default class DataPage extends React.Component<any, any> {
                             >
                                 <i className={`far ${this.state.purgeOnSaveFile ? 'fa-check-square' :'fa-square'}`}/>
                                 &nbsp;
-                                En leeg database?
+                                and empty database?
                             </button>
                         </div>
                     </li>
                     <li className="list-group-item list-group-item-action">
-                        Leeg database
+                        Empty database
                         <button
                             onClick={this.confirmPurge}
                             className="float-right btn btn-danger btn-sm"
                         >
                             <i className='fa fa-trash'/>
                             &nbsp;
-                            Leeg
+                            Empty
                         </button>
                     </li>
                 </ul>
@@ -101,13 +101,13 @@ export default class DataPage extends React.Component<any, any> {
                     onCancel={() => this.setState({purging: false})}
                     onContinue={this.purgeDatabase}
                     isOpen={this.state.purging}
-                    msg="U gaat de database legen."
+                    msg="You are going to empty the database"
                 />
                 <ConfirmModal
                     onCancel={() => this.setState({savingWithPurge: false})}
                     onContinue={this.saveFileAndPurge}
                     isOpen={this.state.savingWithPurge}
-                    msg="U gaat ook de database legen."
+                    msg="You are also going to empty the database."
                 />
             </Page>
         );

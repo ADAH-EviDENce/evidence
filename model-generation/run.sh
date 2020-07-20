@@ -2,7 +2,6 @@
 
 set -e
 
-echo "User: $(whoami)"
 
 # shellcheck disable=SC1091
 source /opt/conda/bin/activate evidence
