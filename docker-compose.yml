@@ -17,8 +17,6 @@ services:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
     environment:
       discovery.type: "single-node"
-    expose:
-      - "9200"
 
   indexer:
     build:
