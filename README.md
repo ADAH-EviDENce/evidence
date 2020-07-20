@@ -84,7 +84,7 @@ Frontend should now be usable at [``http://localhost:8080``](http://localhost:80
 > We strongly suggest not making the frontend available publicly as we do not have autentication. Anyone that knows the url may have an access to the frontend.
 Running it on local network, for example university network, should be protected from most evil-doers.
 
-Besides interaction with the frontend with a web browser you can also interact with it from the command line see [here](ui#elastic-search-example-queries) and [here](ui#doc2vec-example-queries) for examples.
+Besides interaction with a web browser you can also interact with the frontend from the command line see [here](ui#elastic-search-example-queries) and [here](ui#doc2vec-example-queries) for examples.
 
 ## Frontend users
 
