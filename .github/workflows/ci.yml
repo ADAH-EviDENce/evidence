@@ -2,13 +2,14 @@ name: Docker-compose
 on: [push, pull_request]
 jobs:
   test:
+    env:
+      EXPERIMENT: getuigenverhalen
+      FRONTEND_USER: demo    
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Start the stack
         run: docker-compose up --build -d
-        env:
-          EXPERIMENT: getuigenverhalen
       - name: Wait for services
         run: sleep 30
       - name: Test if server is up
