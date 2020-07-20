@@ -37,7 +37,7 @@ This should show a message that your Docker installation is working correctly. I
 
 ### Step 2
 
-[Download](https://github.com/ADAH-EviDENce/evidence/archive/master.zip) a copy of WorkingTitleCloseReader archive and extract its contents on your machine.
+[Download](https://github.com/ADAH-EviDENce/evidence/archive/master.zip) a copy of evidence archive and extract its contents on your machine.
 
 ### Step 3
 
