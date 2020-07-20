@@ -86,12 +86,15 @@ ERROR: Encountered errors while bringing up the project.
 ```
 
 This can be solved by explicitly giving Docker access to the folder. You can do this by:
-1. opening the Docker dashboard by right-clicking the Docker icon in the Windows taskbar 
+
+1. opening the Docker dashboard by right-clicking the Docker icon in the Windows taskbar
 2. go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before
 3. try running the command again:
-```shell
-$Env:EXPERIMENT="demo"
-docker-compose up --build
+
+    ```shell
+    $Env:EXPERIMENT="demo"
+    docker-compose up --build
+    ```
 
 ### Step 4
 
