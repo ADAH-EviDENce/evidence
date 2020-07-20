@@ -38,7 +38,7 @@ class PositivePage extends React.Component<any, any> {
                 this.setState({loadingTotal: false, totalSnippets, total: totalPages})
             });
         }).catch(() => {
-            this.setState({loadingTotal: false, error: 'Error retrieving results'});
+            this.setState({loadingTotal: false, error: 'Error retrieving some results'});
         });
     }
 

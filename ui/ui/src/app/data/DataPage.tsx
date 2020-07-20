@@ -86,14 +86,14 @@ export default class DataPage extends React.Component<any, any> {
                         </div>
                     </li>
                     <li className="list-group-item list-group-item-action">
-                        Empy database
+                        Empty database
                         <button
                             onClick={this.confirmPurge}
                             className="float-right btn btn-danger btn-sm"
                         >
                             <i className='fa fa-trash'/>
                             &nbsp;
-                            Empy
+                            Empty
                         </button>
                     </li>
                 </ul>

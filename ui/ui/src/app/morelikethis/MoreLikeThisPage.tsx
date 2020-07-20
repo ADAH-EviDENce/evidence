@@ -83,7 +83,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
                         :
                         <InfoBox
                             type='info'
-                            msg={<><Link to="/user/">Select</Link> a user first to store results.</>}
+                            msg={<>First select <Link to="/user/">a user</Link> to assess the relevance.</>}
                         />
                     }
                 </div>
