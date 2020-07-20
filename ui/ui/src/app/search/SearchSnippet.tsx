@@ -14,7 +14,7 @@ export class SearchSnippet extends React.Component<SearchSnippetProps, any> {
             <SnippetListItem id={this.props.id} text={this.props.text}>
                 <Link className="ml-1 btn btn-primary btn-sm float-right"
                       to={`/documents/${this.props.docid}/`}>
-                    <span>Bekijk document</span>
+                    <span>View document</span>
                     &nbsp;
                     <i className='fa fa-chevron-right '/>
                 </Link>

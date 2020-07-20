@@ -38,7 +38,7 @@ class PositivePage extends React.Component<any, any> {
                 this.setState({loadingTotal: false, totalSnippets, total: totalPages})
             });
         }).catch(() => {
-            this.setState({loadingTotal: false, error: 'Fout bij ophalen aantal resultaten'});
+            this.setState({loadingTotal: false, error: 'Error retrieving results'});
         });
     }
 
@@ -69,7 +69,7 @@ class PositivePage extends React.Component<any, any> {
                 });
             });
         }).catch(() => {
-            this.setState({loading: false, error: 'Fout bij ophalen van resultaten'});
+            this.setState({loading: false, error: 'Error retrieving results'});
         });
     }
 
@@ -111,8 +111,8 @@ class PositivePage extends React.Component<any, any> {
     render() {
         return (
             <Page>
-                <h2>Resultaten</h2>
-                <Subtitle text={<>Alle positief beoordeelde fragmenten, inclusief de startset</>} />
+                <h2>Results</h2>
+                <Subtitle text={<>All positively assessed fragments, including the startset</>} />
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <InfoBox msg={this.state.info} type="info" onClose={() => this.setState({info: null})}/>
 

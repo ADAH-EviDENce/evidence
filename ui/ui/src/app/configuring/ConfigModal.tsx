@@ -34,20 +34,20 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
     render() {
         const selectUserWarning = this.context.user
             ? null
-            : <> (verplicht) <IconWarning/></>;
+            : <> (mandatory) <IconWarning/></>;
 
             return (<>
                 <Modal className="config-modal" size="lg" isOpen={this.props.isOpen} >
-                    <ModalHeader className="text-center">Instellingen</ModalHeader>
+                    <ModalHeader className="text-center">Settings</ModalHeader>
                     <ModalBody>
 
                         <Alert color='info'>
-                            Instellingen worden alleen in de huidige pagina van de browser opgeslagen.
+                            Settings are only saved in current page of the browser.
                         </Alert>
 
                         <div className="card">
                             <div className="card-header">
-                                Gebruiker{selectUserWarning}
+                                User{selectUserWarning}
                             </div>
                             <div className="card-block">
                                 <UserForm
@@ -58,7 +58,7 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                         </div>
                         <div className="card mt-3">
                             <div className="card-header">
-                                Zoeken en beoordelen
+                                Search and assess relevance
                             </div>
                             <div className="card-block">
                                 <ConfigForm
@@ -76,7 +76,7 @@ class ConfigModal extends React.Component<ConfigModalProps, any> {
                                 disabled={!this.state.formContext.user}
                             >
                                 <i className="fa fa-check"/>
-                                Sluiten
+                                Close
                             </button>
                         </div>
                     </ModalFooter>

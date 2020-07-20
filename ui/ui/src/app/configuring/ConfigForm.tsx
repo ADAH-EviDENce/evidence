@@ -53,7 +53,7 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
             <ListGroup flush>
                 <ListGroupItem>
                     <Row>
-                        <Col><Label for='more-like-this-buttons'><em>'More like this'</em>-methode:</Label></Col>
+                        <Col><Label for='more-like-this-buttons'><em>'More like this'</em>-method:</Label></Col>
                         <Col>
                             <ButtonGroup id='more-like-this-buttons' size='sm' className="float-right">
                                 {doc2vecButton}
@@ -65,7 +65,7 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
                 <ListGroupItem>
                         <Row>
                             <Col sm='10'>
-                                <Label for="more-like-this-size">Aantal fragmenten per <em>'more like this'</em>-pagina:</Label>
+                                <Label for="more-like-this-size">Number of fragments on each <em>'more like this'</em>-page:</Label>
                             </Col>
                             <Col sm='2'>
                                 <Input id="more-like-this-size"
@@ -82,9 +82,9 @@ class ConfigForm extends React.Component<ConfigFormProps, any> {
                     <Row>
                         <Col sm='10'>
                             <Label for="use-rocchio-check" check>
-                                Weeg geannoteerde fragmenten mee tijdens zoeken:
+                                Weigh annotated fragments during searching:
                                 <InfoPopover>
-                                    <>Op basis van het
+                                    <>On basis of the
                                         <a href="https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio71-algorithm-1.html"
                                            target="_blank"
                                            rel="noopener noreferrer"

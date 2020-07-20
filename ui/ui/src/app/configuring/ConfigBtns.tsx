@@ -17,14 +17,14 @@ class ConfigBtns extends React.Component<any, any> {
             >
                 <i className='fa fa-chevron-left'/>
                 &nbsp;
-                Terug
+                Back
             </button>
             <button
                 onClick={() => this.props.history.push("/search/")}
                 className="search btn btn-sm btn-success"
                 disabled={!this.context.user}
             >
-                Zoeken
+                Search
                 &nbsp;
                 <i className='fa fa-chevron-right'/>
             </button>

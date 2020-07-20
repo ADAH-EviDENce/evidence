@@ -19,19 +19,19 @@ class MainHeader extends React.Component<MainHeaderProps, any> {
                 <h1><Link to="/">Evidence</Link></h1>
                 <div className="main-nav text-center">
                     <Link className="nav-item" to={"/search/"}>
-                        <i className="fas fa-search"/> zoeken
+                        <i className="fas fa-search"/> search
                     </Link>
                     <Link className="nav-item" to={"/seedset/"}>
                         <i className="fas fa-seedling"/> startset
                     </Link>
                     <Link className="nav-item" to={"/positive/1/"}>
-                        <i className="fas fa-check-double"/> resultaten
+                        <i className="fas fa-check-double"/> results
                     </Link>
                     <Link className="nav-item" to={"/data/"}>
                         <i className="fas fa-table"/> data
                     </Link>
                     <Button color="link" className="nav-item" onClick={() => this.props.openConfig()}>
-                        <i className="fas fa-cog"/> instellingen
+                        <i className="fas fa-cog"/> settings
                     </Button>
                 </div>
             </div>
