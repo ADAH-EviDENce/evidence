@@ -85,15 +85,21 @@ ERROR: for server  Cannot create container for service server: status code not O
 ERROR: Encountered errors while bringing up the project.
 ```
 
-This can be solved by explicitly giving docker access to it. Do this by opening the Docker dashboard by right-clicking the docker icon in the Windows taskbar. Then, go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before, and try running the command above again.
+This can be solved by explicitly giving Docker access to the folder. You can do this by:
+1. opening the Docker dashboard by right-clicking the Docker icon in the Windows taskbar 
+2. go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before
+3. try running the command again:
+```shell
+$Env:EXPERIMENT="demo"
+docker-compose up --build
 
 ### Step 4
 
-Go to the following URL in your webbrowser: [http://localhost:8080/](http://localhost:8080/ui/search/).
+Go to the following URL in your web browser: [http://localhost:8080/](http://localhost:8080/ui/search/).
 
 ### Step 5
 
-Once you done exploring the demo, you can stop the demo by selecting the powershell that is still running the demo and press Ctrl+C.
+Once you are done with exploring the demo, you can stop it by selecting the PowerShell that is still running the demo and press Ctrl+C.
 
 ## Generating a model from the corpus
 
