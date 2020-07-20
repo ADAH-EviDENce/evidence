@@ -1,4 +1,4 @@
-name: Docker-compose
+name: docker-compose
 on: [push, pull_request]
 jobs:
   test:
