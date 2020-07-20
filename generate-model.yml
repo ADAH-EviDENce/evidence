@@ -6,7 +6,7 @@ services:
 
     build:
       context: ./model-generation
-    image: ${EXPERIMENT}/model-generation
+    image: evidence/model-generation
     volumes:
       - ./model-generation/notebooks:/data/notebooks
       - ./experiments/${EXPERIMENT}/corpus:/data/corpus:ro
