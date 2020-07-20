@@ -1,72 +1,46 @@
-# WorkingTitleCloseReader
-assisted close reading tool
+# evidence
 
+Word2Vec-based assisted close reading tool with support for context-based search and concept-based search.
 
-## Related repositories
+## Prerequisites
 
-[https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework](https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework)
-
-[https://github.com/ADAH-EviDENce/evidence-gui](https://github.com/ADAH-EviDENce/evidence-gui)
-
-## Generating a model from the corpus
-
-Define the name of the dataset/experiment
-```shell
-EXPERIMENT=getuigenverhalen
-```
-
-### Building the image
-
-Be aware that building can take a couple of minutes.
-
-Verify that your ``docker-compose`` version is at least 1.25.4
+Verify that your ``docker-compose`` version is at least 1.25.4. (Earlier versions may work).
 
 ```shell
 docker-compose --version
 ```
 
-Verify that your ``docker`` version is at least 19.03.12
+Verify that your ``docker`` version is at least 19.03.12. (Earlier versions may work).
 
 ```shell
 docker --version
 ```
 
+## Define which corpus to use
+
+Define the name of the dataset/experiment. Here we choose 'getuigenverhalen'. The corpus files should reside under ``/experiments/<EXPERIMENT>/corpus``, see sample corpora.
+
+```shell
+export EXPERIMENT=getuigenverhalen
+```
+
+## Building the model generation image
+
+Be aware that building can take a couple of minutes.
+
 ```shell
 # (starting from the repo root directory)
-docker build --tag doc2vec model-generation/
+docker-compose --file generate-model.yml build generate-model
 ```
 
-### Running interactively
+## Generating the word2vec model
 
 ```shell
-docker run -ti --volume ${PWD}/model-generation/notebooks:/data/notebooks \
-               --volume ${PWD}/experiments/${EXPERIMENT}/corpus:/data/corpus \
-               --volume ${PWD}/experiments/${EXPERIMENT}/model:/data/model \
-               --user $(id -u):$(id -g) \
-               doc2vec /bin/bash
-```
-
-### Running non-interactively
-
-with ``docker``:
-
-```shell
-docker run --volume ${PWD}/model-generation/notebooks:/data/notebooks \
-           --volume ${PWD}/experiments/${EXPERIMENT}/corpus:/data/corpus \
-           --volume ${PWD}/experiments/${EXPERIMENT}/model:/data/model \
-           --user $(id -u):$(id -g) \
-           doc2vec
-```
-
-or the equivalent with ``docker-compose``:
-```shell
+# (starting from the repo root directory)
 docker-compose --file generate-model.yml run --user $(id -u):$(id -g) generate-model
 ```
 
-## Steps to get the frontend up and running
-
-- Verify that your ``docker-compose`` version is at least 1.25.4
-- Verify that your ``docker`` version is at least 19.03.12
+## Build the user interface web application and start it
 
 ```shell
 # (starting from the repo root directory)
@@ -77,19 +51,19 @@ docker-compose up
 
 Frontend should now be usable at [``http://localhost:8080``](http://localhost:8080).
 
-> We strongly suggest not making the frontend available publicly as we do not have autentication. Anyone that knows the url may have an access to the frontend.
-Running it on local network, for example university network, should be protected from most evil-doers.
+> We strongly suggest not making the frontend available publicly as there is no authentication. Anyone with the url will have access to the frontend.
+Running it on a local network, for example a university network, should be protected from most evil-doers.
 
-## Frontend users
+## Optional: manage frontend users
 
-The first page of the frontend forces you to select a user or gebruiker in Dutch.
+The first page of the frontend forces you to select a user or 'gebruiker' in Dutch.
 A user called `demo` exists and can be selected.
 
 ### Change initial user
 
-The initial user in the frontend can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
+The initial user named ``demo`` can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
 
-For example to have `myinitialusername` as user do the following
+For example to have `myinitialusername` as a user name, do the following:
 
 ```shell
 # (starting from the repo root directory)
@@ -100,8 +74,8 @@ docker-compose up
 
 ### Add additional users
 
-If the existing user is not enough, you can add a new user to the frontend with the following command:
-(you can choose your own username by replacing `mynewusername` value in command)
+If the existing user is not enough, you can add a new user to the frontend with the following command
+(you can choose your own username by replacing `mynewusername` value in the command below):
 
 ```shell
 export EXPERIMENT=getuigenverhalen
@@ -111,7 +85,16 @@ docker-compose run usercreator
 
 To add more users, repeat the command with different values for `FRONTEND_USER`.
 
+---
+
 
 ## Diagram
 
 ![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
+
+
+## Related repositories
+
+[https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework](https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework)
+
+[https://github.com/ADAH-EviDENce/evidence-gui](https://github.com/ADAH-EviDENce/evidence-gui)
