@@ -51,7 +51,8 @@ cd C:\Users\JohnDoe\Downloads\evidence-master\evidence-master
 The demo can be started with the below command. Keep this Powershell window open and running during the demo.
 
 ```shell
-docker-compose --env-file getuigenverhalen.env up --build
+$Env:EXPERIMENT="getuigenverhalen"
+docker-compose up --build
 ```
 
 The command above downloads necessary docker images, does a docker build and starts containers needed.
@@ -67,7 +68,7 @@ evidence-master_indexer_1 exited with code 0
 In some cases, the docker containers cannot access the necessary folder. In this case, you get output like the following:
 
 ```powershell
-PS C:\Users\JohnDoe\evidence-master> docker-compose --env-file getuigenverhalen.env up --build
+PS C:\Users\JohnDoe\evidence-master> docker-compose up --build
 Creating network "evidence-master_default" with the default driver
 Building server
 Step 1/28 : FROM golang:1.12-stretch as buildserver
