@@ -27,7 +27,6 @@ export default {
     // Common config values:
     MORE_LIKE_THIS_TYPE: MoreLikeThisType.DOC2VEC,
     BASENAME: '/ui',
-    ES_HOST: config.HOST + '/es',
     ES_ROCCHIO_HOST: config.HOST + '/rocchio',
     ASSESS_HOST: config.HOST + '/assess',
     USERS_HOST: config.HOST + '/users',
