@@ -2,6 +2,18 @@
 
 Word2Vec-based assisted close reading tool with support for context-based search and concept-based search.
 
+| Five recommendations for fair software from [fair-software.nl](https://fair-software.nl) | Badges |
+| --- | --- |
+| 1. Code repository | [![GitHub badge](https://img.shields.io/badge/github-repo-000.svg?logo=github&labelColor=gray&color=blue)](https://github.com/ADAH-EviDENce/evidence/) |
+| 2. License | [![License badge](https://img.shields.io/github/license/ADAH-EviDENce/evidence)](https://github.com/ADAH-EviDENce/evidence/) |
+| 3. Community registry | [![Research Software Directory](https://img.shields.io/badge/rsd-evidence-00a3e3.svg)](https://www.research-software.nl/software/evidence) |
+| 4. Enable citation | [![DOI](https://zenodo.org/badge/DOI/10.0000/FIXME.svg)](https://doi.org/10.0000/FIXME) |
+| 5. Checklist | N/A |
+| **Other best practices** | |
+| GitHub Super Linter| [![Lint Code Base](https://github.com/ADAH-EviDENce/evidence/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Lint+Code+Base%22) |
+| docker-compose | [![docker-compose](https://github.com/ADAH-EviDENce/evidence/workflows/docker-compose/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3Adocker-compose) |
+
+
 ## Prerequisites
 
 Verify that your ``docker-compose`` version is at least 1.25.4. (Earlier versions may work).
@@ -87,11 +99,9 @@ To add more users, repeat the command with different values for `FRONTEND_USER`.
 
 ---
 
-
 ## Diagram
 
 ![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
-
 
 ## Related repositories
 

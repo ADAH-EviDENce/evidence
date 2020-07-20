@@ -9,6 +9,7 @@ dependencies:
   - jupyter
   - nbconvert
   - pip
+  - tqdm
   - pip:
     - import-ipynb
     - smart-open

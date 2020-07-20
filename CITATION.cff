@@ -1,0 +1,63 @@
+# YAML 1.2
+---
+authors:
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Grootes
+    given-names: "Meiert Willem"
+    orcid: "https://orcid.org/0000-0002-5733-4795"
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: "van Hage"
+    given-names: Willem
+    orcid: "https://orcid.org/0000-0002-6478-3003"
+  -
+    affiliation: "KNAW-HUC"
+    family-names: Buitinck
+    given-names: Lars
+  -
+    affiliation: "KNAW-HUC"
+    family-names: "de Jong"
+    given-names: Hayco
+  -
+    affiliation: "KNAW-HUC"
+    family-names: Leenknegt
+    given-names: Bas
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Diblen
+    given-names: Faruk
+    orcid: "https://orcid.org/0000-0002-0989-929X"
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Meijer
+    given-names: Christiaan
+    orcid: "https://orcid.org/0000-0002-5529-5761"
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Spaaks
+    given-names: Jurriaan H.
+    orcid: "https://orcid.org/0000-0002-7064-4069"
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Verhoeven
+    given-names: Stefan
+    orcid: "https://orcid.org/0000-0002-5821-2060"
+cff-version: "1.1.0"
+doi: "10.0000/FIXME"
+keywords:
+  - "close reading"
+  - "humanities"
+  - "text"
+  - "corpus"
+  - "AI"
+  - "search"
+  - "collections"
+  - "context based"
+  - "concept based"
+license: "GPL-3.0"
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/ADAH-EviDENce/evidence"
+title: evidence
+version: "0.1.0"
+...
