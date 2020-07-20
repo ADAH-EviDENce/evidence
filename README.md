@@ -33,7 +33,7 @@ First test that the docker installation is working. Open a Powershell prompt (pr
 docker run hello-world
 ```
 
-This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of WorkingTitleCloseReader, otherwise we suggest to check the steps in the [Docker installation guide](https://docs.docker.com/docker-for-windows/install/).
+This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of evidence tool, otherwise we suggest to check the steps in the [Docker installation guide](https://docs.docker.com/docker-for-windows/install/).
 
 ### Step 2
 
@@ -51,7 +51,7 @@ cd C:\Users\JohnDoe\Downloads\evidence-master\evidence-master
 The demo can be started with the below command. Keep this Powershell window open and running during the demo.
 
 ```shell
-$Env:EXPERIMENT="getuigenverhalen"
+$Env:EXPERIMENT="demo"
 docker-compose up --build
 ```
 
