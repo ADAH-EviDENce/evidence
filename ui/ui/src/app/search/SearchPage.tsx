@@ -59,7 +59,7 @@ class SearchPage extends React.Component<any, any> {
             });
         }).catch(() => {
             this.setState({
-                error: 'Er konden geen fragmenten gevonden worden op basis van de opgegeven zoektermen.',
+                error: 'No fragments could be found based on the supplied search terms.',
                 searching: false
             });
         });
@@ -74,7 +74,7 @@ class SearchPage extends React.Component<any, any> {
 
     render() {
         const breadcrumbTrail = this.context.search ? [
-            {text: "zoeken", path: "/search/"},
+            {text: "search", path: "/search/"},
             {text: this.context.search, path: `/search/${this.context.search}/`}
         ] : undefined;
 

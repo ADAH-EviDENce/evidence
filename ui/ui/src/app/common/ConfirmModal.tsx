@@ -22,12 +22,12 @@ class ConfirmModal extends React.Component<ConfirmModalProps, any> {
                     <ModalBody>
                         <span className="confirm-modal-p">
                             <p>{this.props.msg}</p>
-                            <p>Weet u het zeker?</p>
+                            <p>Are you sure?</p>
                         </span>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="outline-secondary" onClick={() => this.props.onCancel()}>Nee</Button>
-                        <Button color="danger" onClick={() => this.props.onContinue()}>Ja</Button>
+                        <Button color="outline-secondary" onClick={() => this.props.onCancel()}>No</Button>
+                        <Button color="danger" onClick={() => this.props.onContinue()}>Yes</Button>
                     </ModalFooter>
                 </Modal>
 

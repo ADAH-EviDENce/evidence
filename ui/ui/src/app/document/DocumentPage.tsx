@@ -27,7 +27,7 @@ class DocumentPage extends React.Component<any, any> {
         }).catch((data) => {
             this.setState({
                 loading: false,
-                error: 'Er konden geen documenten gevonden worden op basis van de opgegeven zoektermen.'
+                error: 'No documents where found based on provided search terms.'
             });
         });
 
