@@ -1,30 +1,16 @@
-# Evidence
+# Evidence user interface
 
-## Local setup
+User interface consists of
 
-Create single data directory for all models / input data
-
-    mkdir data
-
-Obtain `TargetSize150.zip`, unpack and move into data directory
-
-    unzip -qq TargetSize150.zip && mv TargetSize150/* data && rmdir TargetSize150
-
-Obtain `doc2vec.csv`, then store in data directory
-
-    mv doc2vec.csv data
+* a web service written in Go language in current folder.
+* a single page web application written in React in `ui/` folder.
 
 ## Run
 
-After local deploy (requires ./data setup as per "Local setup" instructions)
-
-    docker-compose up --build
-
-Add a user:
-    
-    curl -XPOST http://localhost:3000/users -d '${username}'
+See [../README.md#steps-to-get-the-frontend-up-and-running](../README.md#steps-to-get-the-frontend-up-and-running).
 
 ## Elastic search example queries
+
 List of snippets:
 
     http://localhost:8080/es/snippets/_search
