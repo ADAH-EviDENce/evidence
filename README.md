@@ -55,7 +55,7 @@ $Env:EXPERIMENT="demo"
 docker-compose up --build
 ```
 
-The command above downloads necessary docker images, does a docker build and starts containers needed.
+The command above downloads necessary Docker images, builds all the Docker images and starts the demo.
 
 The command prints many log messages. If all goes well, the last lines of the output should be:
 
