@@ -5,7 +5,7 @@ services:
   server:
     build:
       context: ./ui
-    image: ${EXPERIMENT}/server
+    image: evidence/server
     entrypoint: ["./start.sh"]
     ports:
       - "8080:8080"
@@ -24,7 +24,7 @@ services:
   indexer:
     build:
       context: ./ui/indexer
-    image: ${EXPERIMENT}/indexer
+    image: evidence/indexer
     depends_on:
       - "elasticsearch"
     command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
@@ -41,7 +41,7 @@ services:
   usercreator:
     build:
       context: ./ui/usercreator
-    image: ${EXPERIMENT}/usercreator
+    image: evidence/usercreator
     depends_on:
       - server
     command: [
