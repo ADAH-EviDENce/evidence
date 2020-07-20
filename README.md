@@ -23,7 +23,7 @@ Assisted close reading tool
 
 Prerequisites:
 
-- [Docker desktop](https://docs.docker.com/docker-for-windows/install/) from stable channel
+- [Docker desktop](https://docs.docker.com/docker-for-windows/install/)
 
 ### Step 1
 
