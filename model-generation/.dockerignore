@@ -1,0 +1,5 @@
+*.md
+Dockerfile
+**/_*
+__pycache__
+notebooks/.ipynb_checkpoints

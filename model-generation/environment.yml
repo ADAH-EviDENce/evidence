@@ -1,0 +1,15 @@
+name: evidence
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - gensim
+  - ipykernel
+  - jupyter
+  - nbconvert
+  - pandas
+  - pip
+  - pip:
+    - import-ipynb
+    - smart-open

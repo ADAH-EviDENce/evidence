@@ -9,8 +9,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./experiments/${EXPERIMENT}:/data:ro
-      - ./db:/db
+      - ./experiments/${EXPERIMENT}/model:/data:ro
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
@@ -27,8 +28,21 @@ services:
     command: ["/utils/wait-for-it.sh", "elasticsearch:9200",
       "--timeout=0",
       "--", "/utils/index.py",
-      "data/vocabulary_ids.txt",
-      "data/vocabulary_bow.txt",
+      "data/model/vocabulary_ids.txt",
+      "data/model/vocabulary_bow.txt",
       "elasticsearch"]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}
+
+  usercreator:
+    build:
+      context: ./ui/usercreator
+    depends_on:
+      - server
+    command: [
+        "/utils/wait-for-it.sh", "server:8080", "--timeout=0",
+        "--",
+        "/usr/bin/curl", "-X", "POST", "http://server:8080/users", "-d", "${FRONTEND_USER:-demo}"
+    ]
