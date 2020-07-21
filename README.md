@@ -159,6 +159,8 @@ Frontend should now be usable at [``http://localhost:8080``](http://localhost:80
 > We strongly suggest not making the frontend available publicly as there is no authentication. Anyone with the url will have access to the frontend.
 Running it on a local network, for example a university network, should be protected from most evil-doers.
 
+Besides interaction with a web browser you can also interact with the frontend from the command line see [here](ui#elastic-search-example-queries) and [here](ui#doc2vec-example-queries) for examples.
+
 ## Optional: manage frontend users
 
 The first page of the frontend forces you to select a user or 'gebruiker' in Dutch.

@@ -12,11 +12,11 @@ User interface of Evidence.
 
 - Run in ./ui: `npm install`
 
-## Build
+## Build & run
 
-- Use Dockerfile, one level up.
-- When React app and Go web service (one level up) are not being hosted from same web server then
-  set host of Go web service with env var `REACT_APP_HOST` when building React app Docker image.
+See [/README.md#build-the-user-interface-web-application-and-start-it](/README.md#build-the-user-interface-web-application-and-start-it).
+
+To run the Go web service (one level up) and the React app from different hosts, the React app must be built with environment variable `REACT_APP_HOST` set to the host URL of the Go web service.
 
 ## React Starter App
 
