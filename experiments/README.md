@@ -3,7 +3,7 @@
 The aim of the `evidence` tool is to enable and support researchers interested in
 applying a close-reading methodology for their scientific question to efficiently
 make use of large digitized text corpora. Of course, different researchers will
-be intersted in different corpora based on their scientific focus. Rather than
+be interested in different corpora based on their scientific focus. Rather than
 provide support for (a selection of) specific corpora, `evidence` is therefore designed
 to ingest and make accessible via its user interface (UI) a corpus of the user's choice.
 
