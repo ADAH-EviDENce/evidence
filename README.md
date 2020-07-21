@@ -18,6 +18,95 @@ Word2Vec-based assisted close reading tool with support for context-based search
 
 ## Documentation for users
 
+## Running the demonstration on Windows
+
+The repository contains a demonstration including a corpus and a model. The demonstration allows you the explore the features of this software without supplying your own corpus.
+
+Prerequisites:
+
+- [Docker desktop](https://docs.docker.com/docker-for-windows/install/)
+
+### Step 1
+
+First test that the docker installation is working. Open a Powershell prompt (press Windows+S and type Powershell) and run:
+
+```shell
+docker run hello-world
+```
+
+This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of evidence tool, otherwise we suggest to check the [Docker troubleshooting page](https://docs.docker.com/docker-for-windows/troubleshoot/).
+
+### Step 2
+
+[Download](https://github.com/ADAH-EviDENce/evidence/archive/master.zip) a copy of evidence archive and extract its contents on your machine.
+
+### Step 3
+
+Open a Powershell prompt:
+Change your current working directory to where you extracted the files. For instance:
+
+```shell
+cd C:\Users\JohnDoe\Downloads\evidence-master\evidence-master
+```
+
+The demo can be started with the below command. Keep this Powershell window open and running during the demo.
+
+```shell
+$Env:EXPERIMENT="demo"
+docker-compose up --build
+```
+
+The command above downloads necessary Docker images, builds all the Docker images and starts the demo.
+
+The command prints many log messages. If all goes well, the last lines of the output should be:
+
+```shell
+...
+indexer_1        | Indexing done.
+evidence-master_indexer_1 exited with code 0
+```
+
+When using Windows 10 Pro, the Docker containers may not be able to read or write to the folder with the corpus and model. In this case, you get output like the following:
+
+```powershell
+PS C:\Users\JohnDoe\evidence-master\evidence-master> docker-compose up --build
+Creating network "evidence-master_default" with the default driver
+Building server
+Step 1/28 : FROM golang:1.12-stretch as buildserver
+ ---> 563601c9e3b2
+...
+Creating evidence-master_elasticsearch_1 ... done                                                                               Creating evidence-master_indexer_1       ... error
+ERROR: for evidence-master_indexer_1  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for evidence-master_server_1  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for indexer  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for server  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+ERROR: Encountered errors while bringing up the project.
+```
+
+This can be solved by explicitly giving Docker access to the folder. You can do this by:
+
+1. opening the Docker dashboard by right-clicking the Docker icon in the Windows taskbar
+2. go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before
+3. try running the command again:
+
+    ```shell
+    $Env:EXPERIMENT="demo"
+    docker-compose up --build
+    ```
+
+### Step 4
+
+Go to the following URL in your web browser: [http://localhost:8080/](http://localhost:8080/ui/search/).
+
+### Step 5
+
+Once you are done with exploring the demo, you can stop it by selecting the PowerShell that is still running the demo and press Ctrl+C.
+
+## Generating a model
+
 ### Prerequisites
 
 Verify that your ``docker-compose`` version is at least 1.25.4. (Earlier versions may work).
@@ -72,12 +161,12 @@ Running it on a local network, for example a university network, should be prote
 
 Besides interaction with a web browser you can also interact with the frontend from the command line see [here](ui#elastic-search-example-queries) and [here](ui#doc2vec-example-queries) for examples.
 
-### Optional: manage frontend users
+## Optional: manage frontend users
 
 The first page of the frontend forces you to select a user or 'gebruiker' in Dutch.
 A user called `demo` exists and can be selected.
 
-#### Change initial user
+### Change initial user
 
 The initial user named ``demo`` can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
 
@@ -90,7 +179,7 @@ export FRONTEND_USER=myinitialusername
 docker-compose up
 ```
 
-#### Add additional users
+### Add additional users
 
 If the existing user is not enough, you can add a new user to the frontend with the following command
 (you can choose your own username by replacing `mynewusername` value in the command below):
