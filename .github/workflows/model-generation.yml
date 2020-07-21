@@ -4,6 +4,8 @@ on: [push, pull_request]
 
 jobs:
   test:
+    env:
+      EXPERIMENT: getuigenverhalen
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,5 +24,3 @@ jobs:
            --volume ${PWD}/experiments/${EXPERIMENT}/model:/data/model \
            --user $(id -u):$(id -g) \
            doc2vec
-        env:
-          EXPERIMENT: test
