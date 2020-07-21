@@ -5,18 +5,18 @@ on: [push, pull_request]
 jobs:
   test:
     env:
-      EXPERIMENT: getuigenverhalen
+      EXPERIMENT: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         run: |
           docker build --tag doc2vec ./model-generation
-      # - name: Prepare the test data
-      #   run: |
-      #     cd experiments
-      #     mkdir -p test/corpus test/model
-      #     cp -irv getuigenverhalen/corpus/GV_Zigma_koopvaardij_08_conversation_clipped test/corpus/
+      - name: Prepare the test data
+        run: |
+          mkdir -p experiments/${EXPERIMENT}/corpus
+          mkdir -p experiments/${EXPERIMENT}/model
+          cp --recursive --verbose experiments/getuigenverhalen/corpus/GV_Zigma_koopvaardij_08_conversation_clipped experiments/${EXPERIMENT}/corpus/
       - name: Generate the model
         run: |
           docker run --volume ${PWD}/model-generation/notebooks:/data/notebooks \
