@@ -37,28 +37,28 @@ class MoreLikeThisSnippet extends React.Component<MoreLikeThisSnippetProps, any>
                     <p className="small snippet-text">{this.props.text}</p>
                 </CardBody>
                 <CardFooter>
-                    <span>Is dit fragment relevant?</span>
+                    <span>Is this fragment relevant?</span>
                     <div className="float-right btn-group btn-group-sm" role="group">
                         <button type="button"
                                 className={`btn btn-outline-success ${this.props.relevant === MoreLikeThisOption.YES ? "active" : ""}`}
                                 onClick={this.onClickYes}>
                             <i className='fas fa-check-circle'/>
                             &nbsp;
-                            Ja
+                            Yes
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-danger ${this.props.relevant === MoreLikeThisOption.NO ? "active" : ""}`}
                                 onClick={this.onClickNo}>
                             <i className='fas fa-times-circle'/>
                             &nbsp;
-                            Nee
+                            No
                         </button>
                         <button type="button"
                                 className={`btn btn-outline-secondary ${this.props.relevant === MoreLikeThisOption.MAYBE ? "active" : ""}`}
                                 onClick={this.onClickMaybe}>
                             <i className='fas fa-question-circle'/>
                             &nbsp;
-                            Blanco
+                            Maybe
                         </button>
                     </div>
                 </CardFooter>

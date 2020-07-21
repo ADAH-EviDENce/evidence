@@ -18,7 +18,7 @@ class SeedSetPage extends React.Component<any, any> {
         Resources.getSeedSet(this.context.user).then((dataIds) => {
             dataIds.json().then(jsonIds => {
                 if (!jsonIds) {
-                    this.setState({snippets: [], info: "U heeft nog geen fragmenten geselecteerd", loading: false});
+                    this.setState({snippets: [], info: "You have not selected fragments yet", loading: false});
                     return;
                 }
                 const ids = jsonIds.map((id: string) => {return {_id: id}});
@@ -28,7 +28,7 @@ class SeedSetPage extends React.Component<any, any> {
             });
         }).catch(() => {
             this.setState({
-                error: "Er trad een fout op bij het ophalen van de geselecteerde fragmenten",
+                error: "Error occurred during retrieval of selected fragments",
                 loading: false
             });
         });
@@ -59,7 +59,7 @@ class SeedSetPage extends React.Component<any, any> {
         return (
             <Page>
                 <h2>Startset</h2>
-                <Subtitle text={<>Eerste selectie fragmenten om beoordeling mee te beginnen</>} />
+                <Subtitle text={<>First fragment selection to start assessing relevance with</>} />
 
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <InfoBox msg={this.state.info} type="info" onClose={() => this.setState({info: null})}/>

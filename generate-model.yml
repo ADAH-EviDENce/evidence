@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  generate-model:
+
+    build:
+      context: ./model-generation
+    image: evidence/model-generation
+    volumes:
+      - ./model-generation/notebooks:/data/notebooks
+      - ./experiments/${EXPERIMENT}/corpus:/data/corpus:ro
+      - ./experiments/${EXPERIMENT}/model:/data/model
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}

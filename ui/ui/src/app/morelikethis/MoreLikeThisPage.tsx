@@ -36,7 +36,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
         Resources.getSnippetsByIds([{_id: this.props.match.params.sid}]).then((json) => {
             let docs = json.docs;
             this.setState({snippet: docs ? docs[0] : null});
-        }).catch(() => this.setState({error: 'De fragmenten konden niet worden gevonden op basis van ID.'}));
+        }).catch(() => this.setState({error: 'The fragments could not be found based on ID'}));
 
     };
 
@@ -48,7 +48,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
         this.setState({savingAnswers: true});
         Resources.commitAnswers(this.state.answers, this.context.user).then(() => {
             this.setState({answersSaved: true, savingAnswers: false});
-        }).catch(() => this.setState({error: 'De antwoorden konden niet worden opgeslagen.', savingAnswers: false}));
+        }).catch(() => this.setState({error: 'The answers could not be saved.', savingAnswers: false}));
     };
 
     render() {
@@ -83,7 +83,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
                         :
                         <InfoBox
                             type='info'
-                            msg={<><Link to="/user/">Selecteer</Link> eerst een gebruiker om op te kunnen beoordelen.</>}
+                            msg={<>First select <Link to="/user/">a user</Link> to assess the relevance.</>}
                         />
                     }
                 </div>
@@ -93,7 +93,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
 
     private renderScoreForm(from: number, snippetId: string, documentId: string) {
         return <>
-            <h2>Te beoordelen #{from + 1}-{from + this.context.moreLikeThisSize}</h2>
+            <h2>To assess relevance #{from + 1}-{from + this.context.moreLikeThisSize}</h2>
             <MoreLikeThisSnippetList
                 snippetId={snippetId}
                 docId={documentId}
@@ -108,7 +108,7 @@ class MoreLikeThisPage extends React.Component<any, any> {
                     disabled={(!this.state.answersSet && !this.state.answersSaved) || !this.context.user}
                     onClick={this.handleCommit}
                 >
-                    Opslaan ({this.context.user})
+                    Save ({this.context.user})
                     &nbsp;
                     {this.state.savingAnswers
                         ? <Spinner />
