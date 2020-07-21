@@ -14,9 +14,11 @@ Word2Vec-based assisted close reading tool with support for context-based search
 | Frontend | [![Frontend](https://github.com/ADAH-EviDENce/evidence/workflows/Frontend/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Frontend%22) |
 | docker-compose | [![docker-compose](https://github.com/ADAH-EviDENce/evidence/workflows/docker-compose/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3Adocker-compose) |
 | GitHub Super Linter| [![Lint Code Base](https://github.com/ADAH-EviDENce/evidence/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Lint+Code+Base%22) |
+| Markdown Link Checker| [![Check Markdown links](https://github.com/ADAH-EviDENce/evidence/workflows/Check%20Markdown%20links/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Check+Markdown+links%22) |
 
+## Documentation for users
 
-## Prerequisites
+### Prerequisites
 
 Verify that your ``docker-compose`` version is at least 1.25.4. (Earlier versions may work).
 
@@ -30,7 +32,7 @@ Verify that your ``docker`` version is at least 19.03.12. (Earlier versions may 
 docker --version
 ```
 
-## Define which corpus to use
+### Define which corpus to use
 
 Define the name of the dataset/experiment. Here we choose 'getuigenverhalen'. The corpus files should reside under ``/experiments/<EXPERIMENT>/corpus``, see sample corpora.
 
@@ -38,7 +40,7 @@ Define the name of the dataset/experiment. Here we choose 'getuigenverhalen'. Th
 export EXPERIMENT=getuigenverhalen
 ```
 
-## Building the model generation image
+### Building the model generation image
 
 Be aware that building can take a couple of minutes.
 
@@ -47,14 +49,14 @@ Be aware that building can take a couple of minutes.
 docker-compose --file generate-model.yml build generate-model
 ```
 
-## Generating the word2vec model
+### Generating the word2vec model
 
 ```shell
 # (starting from the repo root directory)
 docker-compose --file generate-model.yml run --user $(id -u):$(id -g) generate-model
 ```
 
-## Build the user interface web application and start it
+### Build the user interface web application and start it
 
 ```shell
 # (starting from the repo root directory)
@@ -68,12 +70,12 @@ Frontend should now be usable at [``http://localhost:8080``](http://localhost:80
 > We strongly suggest not making the frontend available publicly as there is no authentication. Anyone with the url will have access to the frontend.
 Running it on a local network, for example a university network, should be protected from most evil-doers.
 
-## Optional: manage frontend users
+### Optional: manage frontend users
 
 The first page of the frontend forces you to select a user or 'gebruiker' in Dutch.
 A user called `demo` exists and can be selected.
 
-### Change initial user
+#### Change initial user
 
 The initial user named ``demo`` can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
 
@@ -86,7 +88,7 @@ export FRONTEND_USER=myinitialusername
 docker-compose up
 ```
 
-### Add additional users
+#### Add additional users
 
 If the existing user is not enough, you can add a new user to the frontend with the following command
 (you can choose your own username by replacing `mynewusername` value in the command below):
@@ -101,11 +103,22 @@ To add more users, repeat the command with different values for `FRONTEND_USER`.
 
 ---
 
-## Diagram
+## Documentation for developers
+
+### Checking the MarkDown links
+
+When updating the documentation, you can check if the links are all working by running:
+
+```shell
+npm install
+npm run mlc
+```
+
+### Diagram
 
 ![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
 
-## Related repositories
+### Related repositories
 
 [https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework](https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework)
 
