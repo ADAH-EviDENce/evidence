@@ -114,10 +114,6 @@ npm install
 npm run mlc
 ```
 
-### Diagram
-
-![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
-
 ### Related repositories
 
 [https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework](https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework)
