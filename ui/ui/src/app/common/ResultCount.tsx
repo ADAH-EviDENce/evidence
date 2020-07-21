@@ -7,7 +7,7 @@ interface ResultCountProps {
 class ResultCount extends React.Component<ResultCountProps, any> {
     render() {
         return (
-            <p className="result-count">In totaal {this.props.count} resultaten:</p>
+            <p className="result-count">In total {this.props.count} results:</p>
         );
     }
 }

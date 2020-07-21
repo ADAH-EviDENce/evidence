@@ -1,7 +1,7 @@
 import {MoreLikeThisType} from "./app/configuring/MoreLikeThisType";
 
 const prod = {
-    HOST: process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : 'http://localhost:8080',
+    HOST: process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : '',
     MORE_LIKE_THIS_SIZE: 10,
     SEARCH_RESULTS_SIZE: 10,
     POSITIVE_SIZE: 10,
@@ -27,7 +27,6 @@ export default {
     // Common config values:
     MORE_LIKE_THIS_TYPE: MoreLikeThisType.DOC2VEC,
     BASENAME: '/ui',
-    ES_HOST: config.HOST + '/es',
     ES_ROCCHIO_HOST: config.HOST + '/rocchio',
     ASSESS_HOST: config.HOST + '/assess',
     USERS_HOST: config.HOST + '/users',

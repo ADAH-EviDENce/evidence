@@ -32,7 +32,7 @@ class SearchBar extends React.Component<SearchBarProps, any> {
                     <div className="input-group mb-3">
                         <input className="form-control"
                                id="main-search-query"
-                               placeholder="Zoekterm"
+                               placeholder="Search term"
                                value={this.state.search}
                                onChange={this.onSearchUpdate}/>
                         <div className="input-group-append">
@@ -43,7 +43,7 @@ class SearchBar extends React.Component<SearchBarProps, any> {
                         id="help"
                         className="form-text text-muted"
                     >
-                        Bijvoorbeeld: <code>geweld AND pantser</code>
+                        For example: <code>geweld AND pantser</code>
                     </small>
                 </div>
             </div>

@@ -58,13 +58,13 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                     this.handleNewSnippets(json)
                 });
             }).catch((data) => {
-                this.setState({error: 'Fout bij ophalen ElasticSearch fragmenten met Rocchio.'})
+                this.setState({error: 'Error retrieving ElasticSearch fragments with Rocchio.'})
             });
         } else {
             Resources.getMoreLikeThisSnippetsFromES(snippetId, docId, from, size).then((json) => {
                 this.handleNewSnippets(json);
             }).catch((data) => {
-                this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit ElasticSearch.'});
+                this.setState({error: 'Error occured during retrieval of the fragmentes from ElasticSearch.'});
             });
         }
     }
@@ -95,7 +95,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 this.handleNewSnippets(json);
             });
         }).catch((data) => {
-            this.setState({error: 'Er trad een fout op bij het ophalen van de fragmenten uit doc2vec.'});
+            this.setState({error: 'Error occured during retrieval of the fragmentes from doc2vec.'});
         });
     }
 
@@ -133,7 +133,7 @@ class MoreLikeThisSnippetList extends React.Component<MoreLikeThisSnippetListPro
                 <InfoBox msg={this.state.error} type="warning" onClose={() => this.setState({error: null})}/>
                 <div>
                     <Subtitle text={
-                        <>Fragmenten gevonden met {this.state.moreLikeThisType}{this.context.useRocchio ? ' en rocchio' : ''}</>}
+                        <>Fragments found with {this.state.moreLikeThisType}{this.context.useRocchio ? ' en rocchio' : ''}</>}
                     />
                     {this.renderSnippets()}
                 </div>

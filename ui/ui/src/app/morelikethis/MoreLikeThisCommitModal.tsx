@@ -44,14 +44,14 @@ class MoreLikeThisCommitModal extends React.Component<MoreLikeThisCommitModalPro
         return (
             <div className="more-like-this-commit-modal">
                 <Modal isOpen={this.props.committed}>
-                    <ModalHeader>Keuzemenu</ModalHeader>
+                    <ModalHeader>Choice menu</ModalHeader>
                     <ModalBody>
-                        Uw antwoorden zijn opgeslagen.
+                        Your answers have been saved.
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="success" onClick={this.onQuery}>Beoordeel meer fragmenten</Button>
-                        <Button color="success" onClick={this.onDocument}>Terug naar startset</Button>
-                        <Button color="success" onClick={this.onSearch}>Nieuwe zoekactie</Button>
+                        <Button color="success" onClick={this.onQuery}>Assess relevance of more fragments</Button>
+                        <Button color="success" onClick={this.onDocument}>Back to startset</Button>
+                        <Button color="success" onClick={this.onSearch}>New search action</Button>
                     </ModalFooter>
                 </Modal>
 

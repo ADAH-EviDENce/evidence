@@ -1,0 +1,22 @@
+name: Test model generation
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    env:
+      EXPERIMENT: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare the test data
+        run: |
+          mkdir -p experiments/${EXPERIMENT}/corpus
+          mkdir -p experiments/${EXPERIMENT}/model
+          cp --recursive --verbose experiments/getuigenverhalen/corpus/GV_Zigma_koopvaardij_08_conversation_clipped experiments/${EXPERIMENT}/corpus/
+      - name: Build the Docker image
+        run: |
+          docker-compose --file generate-model.yml build generate-model
+      - name: Generate the model
+        run: |
+          docker-compose --file generate-model.yml run --user $(id -u):$(id -g) generate-model
