@@ -5,7 +5,7 @@ Doc2Vec-based assisted close reading tool with support for abstract concept-base
 ## Machine-supported research in humanities
 While research in the humanities has been able to leverage the digitization of text corpora and the development of computer based text analysis tools to its benefit, the interface current systems provide the user with is incompatible with the proven method of scholarly close reading of texts which is key in many research scenarios pursuing complex research questions.
 
-What this boils down to, is the fact that it is often restrictive and difficult to formulate selection criteria, in particular for more complex or abstract concept, in the framework of a keyword based search which is the standard entry point to digitized text collections.
+What this boils down to, is the fact that it is often restrictive and difficult, if not impossible, to formulate adequate selection criteria, in particular for more complex or abstract concepts, in the framework of a keyword based search which is the standard entry point to digitized text collections.
 
 ## Querying by example - close reading with tailored suggestions  
 Evidence provides an alternative, intuitive entry point into collections. Using the doc2vec framework evidence learns abstract representations of the content of the elements of the user's corpus.
