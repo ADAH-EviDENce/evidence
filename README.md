@@ -68,7 +68,7 @@ evidence-master_indexer_1 exited with code 0
 When using Windows 10 Pro, the Docker containers may not be able to read or write to the folder with the corpus and model. In this case, you get output like the following:
 
 ```powershell
-PS C:\Users\JohnDoe\evidence-master> docker-compose up --build
+PS C:\Users\JohnDoe\evidence-master\evidence-master> docker-compose up --build
 Creating network "evidence-master_default" with the default driver
 Building server
 Step 1/28 : FROM golang:1.12-stretch as buildserver
