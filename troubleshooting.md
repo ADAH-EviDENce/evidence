@@ -1,4 +1,4 @@
-# Troubleshooting:
+# Troubleshooting
 
 ## Permisson issue on Windows
 When using Windows 10 Pro, the Docker containers may not be able to read or write to the folder with the corpus and model. In this case, you get output like the following:
