@@ -18,9 +18,9 @@ Word2Vec-based assisted close reading tool with support for context-based search
 
 ## Documentation for users
 
-## Running the demo on Windows
+## Running the demonstration on Windows
 
-The repository contains a demonstration corpus and model. The demonstration allows you the explore the features of this software without supplying your own corpus.
+The repository contains a demonstration including a corpus and a model. The demonstration allows you the explore the features of this software without supplying your own corpus.
 
 Prerequisites:
 
