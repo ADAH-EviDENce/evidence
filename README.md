@@ -21,50 +21,93 @@ While research in the humanities has been able to leverage the digitization of t
 
 What this boils down to, is the fact that it is often restrictive and difficult, if not impossible, to formulate adequate selection criteria, in particular for more complex or abstract concepts, in the framework of a keyword based search which is the standard entry point to digitized text collections.
 
-## Querying by example - close reading with tailored suggestions  
+## Querying by example - close reading with tailored suggestions
 `evidence` provides an alternative, intuitive entry point into collections. Using the doc2vec framework, `evidence` learns abstract representations of the content of the elements of the user's corpus.
 Departing from a set of corpus elements that the user selects as relevant starting points, `evidence` retrieves similar elements and presents them to the user, using the users feedback to refine its retrieval.
 This enables a user to combine the power of a close-reading approach with that of a large digitized corpus, selecting elements from the entire corpus which are likely to be of interest, but leaving the decision up to the user as to what evidence they deem useful.
 
 ## Documentation for users
 
-## Running the demonstration on Windows
+## Running the demo
 
 The repository contains a demonstration including a corpus and a model. The demonstration allows you the explore the features of this software without supplying your own corpus.
 
 Prerequisites:
 
-- [Docker desktop](https://docs.docker.com/docker-for-windows/install/)
+- [docker](https://docs.docker.com/engine/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
 
 ### Step 1
 
-First test that the docker installation is working. Open a Powershell prompt (press Windows+S and type Powershell) and run:
+First test that the docker installation is working. Depending on your system, you need to use either a PowerShell (on Windows) or a terminal (on Linux or on MacOS).
 
-```shell
-docker run hello-world
-```
+- For Windows:
 
-This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of evidence tool, otherwise we suggest to check the [Docker troubleshooting page](https://docs.docker.com/docker-for-windows/troubleshoot/).
+    Open a Powershell prompt (press Windows+S and type Powershell) and run:
+
+    ```powershell
+    docker run hello-world
+    ```
+
+- For Linux/MacOs:
+
+    Open a terminal and run:
+
+    ```shell
+    docker run hello-world
+    ```
+
+This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of ``evidence``, otherwise we suggest to check the [Docker troubleshooting page](https://docs.docker.com/docker-for-windows/troubleshoot/).
 
 ### Step 2
 
 [Download](https://github.com/ADAH-EviDENce/evidence/archive/master.zip) a copy of evidence archive and extract its contents on your machine.
 
+Alternatively, if you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed, you can also clone the repository.
+
+```shell
+git clone https://github.com/ADAH-EviDENce/evidence.git
+```
+
 ### Step 3
 
-Open a Powershell prompt:
-Change your current working directory to where you extracted the files. For instance:
+- For Windows:
+  - Open a Powershell prompt
+  - Change your current working directory to where you extracted the files. For instance:
 
-```shell
-cd C:\Users\JohnDoe\Downloads\evidence-master\evidence-master
-```
+      ```powershell
+      cd C:\Users\JohnDoe\Downloads\evidence-master\evidence-master
+      ```
 
-The demo can be started with the below command. Keep this Powershell window open and running during the demo.
+- Linux/MacOS:
+  - Open a terminal
+  - Change your current working directory to where you extracted the files. For instance:
 
-```shell
-$Env:EXPERIMENT="demo"
-docker-compose up --build
-```
+      ```shell
+      cd /home/JohnDoe/Downloads/evidence
+      ```
+
+The demo can be started with the commands below. Keep this PowerShell/Terminal window open and running during the demo.
+
+- Set the experiment name
+
+    For Windows:
+
+    ```powershell
+    $Env:EXPERIMENT="getuigenverhalen"
+    ```
+
+    For Linux/MacOS:
+
+    ```shell
+    export EXPERIMENT="getuigenverhalen"
+    ```
+
+- Start the demo
+
+    ```shell
+    docker-compose up --build
+    ```
 
 The command above downloads necessary Docker images, builds all the Docker images and starts the demo.
 
@@ -76,36 +119,7 @@ indexer_1        | Indexing done.
 evidence-master_indexer_1 exited with code 0
 ```
 
-When using Windows 10 Pro, the Docker containers may not be able to read or write to the folder with the corpus and model. In this case, you get output like the following:
-
-```powershell
-PS C:\Users\JohnDoe\evidence-master\evidence-master> docker-compose up --build
-Creating network "evidence-master_default" with the default driver
-Building server
-Step 1/28 : FROM golang:1.12-stretch as buildserver
- ---> 563601c9e3b2
-...
-Creating evidence-master_elasticsearch_1 ... done                                                                               Creating evidence-master_indexer_1       ... error
-ERROR: for evidence-master_indexer_1  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
-
-ERROR: for evidence-master_server_1  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
-
-ERROR: for indexer  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
-
-ERROR: for server  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
-ERROR: Encountered errors while bringing up the project.
-```
-
-This can be solved by explicitly giving Docker access to the folder. You can do this by:
-
-1. opening the Docker dashboard by right-clicking the Docker icon in the Windows taskbar
-2. go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before
-3. try running the command again:
-
-    ```shell
-    $Env:EXPERIMENT="demo"
-    docker-compose up --build
-    ```
+Check [troubleshooting](troubleshooting.md) if you have any issues about this step.
 
 ### Step 4
 
@@ -113,7 +127,7 @@ Go to the following URL in your web browser: [http://localhost:8080/](http://loc
 
 ### Step 5
 
-Once you are done with exploring the demo, you can stop it by selecting the PowerShell that is still running the demo and press Ctrl+C.
+Once you are done with exploring the demo, you can stop it by selecting the PowerShell/Terminal that is still running the demo and press Ctrl+C.
 
 ## Generating a model
 
