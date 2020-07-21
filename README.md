@@ -1,6 +1,18 @@
 # evidence
 
-Word2Vec-based assisted close reading tool with support for context-based search and concept-based search.
+`evidence` --  a doc2Vec-based assisted close reading tool with support for abstract concept-based search and context-based search.
+
+## Machine-supported research in humanities
+While research in the humanities has been able to leverage the digitization of text corpora and the development of computer based text analysis tools to its benefit, the interface current systems provide the user with is incompatible with the proven method of scholarly close reading of texts which is key in many research scenarios pursuing complex research questions.
+
+What this boils down to, is the fact that it is often restrictive and difficult, if not impossible, to formulate adequate selection criteria, in particular for more complex or abstract concepts, in the framework of a keyword based search which is the standard entry point to digitized text collections.
+
+## Querying by example - close reading with tailored suggestions  
+`evidence` provides an alternative, intuitive entry point into collections. Using the doc2vec framework, `evidence` learns abstract representations of the content of the elements of the user's corpus.
+Departing from a set of corpus elements that the user selects as relevant starting points, `evidence` retrieves similar elements and presents them to the user, using the users feedback to refine its retrieval.
+This enables a user to combine the power of a close-reading approach with that of a large digitized corpus, selecting elements from the entire corpus which are likely to be of interest, but leaving the decision up to the user as to what evidence they deem useful.
+
+
 
 | Five recommendations for fair software from [fair-software.nl](https://fair-software.nl) | Badges |
 | --- | --- |
@@ -138,7 +150,7 @@ Be aware that building can take a couple of minutes.
 docker-compose --file generate-model.yml build generate-model
 ```
 
-### Generating the word2vec model
+## Generating the doc2vec model
 
 ```shell
 # (starting from the repo root directory)
