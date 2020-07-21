@@ -81,4 +81,4 @@ containing the full content of the contained paragraphs.
 ## Corpus ingestion
 The aforementioned `corpus` folder with its substructures and contents can then be copied to the folder the
 user has created in the `experiment` folder and ingested into the evidence tool as detailed in the instructions
-(see README).
+(see [README](../README.md)).
