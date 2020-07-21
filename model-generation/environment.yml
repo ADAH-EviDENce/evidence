@@ -8,7 +8,6 @@ dependencies:
   - ipykernel
   - jupyter
   - nbconvert
-  - pandas
   - pip
   - tqdm
   - pip:
