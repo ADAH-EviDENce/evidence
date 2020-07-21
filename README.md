@@ -10,7 +10,7 @@ What this boils down to, is the fact that it is often restrictive and difficult,
 ## Querying by example - close reading with tailored suggestions  
 Evidence provides an alternative, intuitive entry point into collections. Using the doc2vec framework, evidence learns abstract representations of the content of the elements of the user's corpus.
 Departing from a set of corpus elements that the user selects as relevant starting points, evidence retrieves similar elements and presents them to the user, using the users feedback to refine its retrieval.
-This enables a user to combine the power of a close-readiing approach with that of a large digitized corpus, selecting elements from the entire corpus which are likely to be of interest, but leaving the dcision up to the user.
+This enables a user to combine the power of a close-reading approach with that of a large digitized corpus, selecting elements from the entire corpus which are likely to be of interest, but leaving the decision up to the user.
 
 
 
