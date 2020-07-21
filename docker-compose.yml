@@ -5,22 +5,24 @@ services:
   server:
     build:
       context: ./ui
+    image: evidence/server
     entrypoint: ["./start.sh"]
     ports:
       - "8080:8080"
     volumes:
       - ./experiments/${EXPERIMENT}/model:/data:ro
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}
 
   elasticsearch:
     image: "docker.elastic.co/elasticsearch/elasticsearch:6.6.1"
     environment:
       discovery.type: "single-node"
-    expose:
-      - "9200"
 
   indexer:
     build:
       context: ./ui/indexer
+    image: evidence/indexer
     depends_on:
       - "elasticsearch"
     command: ["sh","-c","/utils/wait-for-it.sh elasticsearch:9200 
@@ -33,10 +35,13 @@ services:
         http://localhost:8080/ for the user interface."]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
+    environment:
+      - CHECK=${EXPERIMENT:?You need to define a value for EXPERIMENT.}
 
   usercreator:
     build:
       context: ./ui/usercreator
+    image: evidence/usercreator
     depends_on:
       - server
     command: [
