@@ -7,9 +7,9 @@ User interface consists of
 
 ## Run
 
-See [../README.md#steps-to-get-the-frontend-up-and-running](../README.md#steps-to-get-the-frontend-up-and-running).
+See [/README.md#build-the-user-interface-web-application-and-start-it](/README.md#build-the-user-interface-web-application-and-start-it).
 
-## Elastic search example queries
+## Elasticsearch example queries
 
 List of snippets:
 
