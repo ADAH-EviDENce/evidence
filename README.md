@@ -121,7 +121,7 @@ Verify that your ``docker`` version is at least 19.03.12. (Earlier versions may 
 docker --version
 ```
 
-If you want to use your own corpus, refer to [/experiments/README.md](/experiments/README.md) for notes on the required format and directory layout.
+If you want to use your own corpus, refer to [./experiments/README.md](./experiments/README.md) for notes on the required format and directory layout.
 
 ### Define which corpus to use
 
