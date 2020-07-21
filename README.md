@@ -164,7 +164,7 @@ Running it on a local network, for example a university network, should be prote
 The first page of the frontend forces you to select a user or 'gebruiker' in Dutch.
 A user called `demo` exists and can be selected.
 
-#### Change initial user
+### Change initial user
 
 The initial user named ``demo`` can be renamed by setting the `FRONTEND_USER` environment variable before running `docker-compose up`.
 
@@ -177,7 +177,7 @@ export FRONTEND_USER=myinitialusername
 docker-compose up
 ```
 
-#### Add additional users
+### Add additional users
 
 If the existing user is not enough, you can add a new user to the frontend with the following command
 (you can choose your own username by replacing `mynewusername` value in the command below):
