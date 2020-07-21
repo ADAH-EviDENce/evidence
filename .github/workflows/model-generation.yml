@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         run: |
-          docker build --tag doc2vec ./model-generation
+          docker-compose --file generate-model.yml build generate-model
       - name: Prepare the test data
         run: |
           cd experiments
@@ -17,10 +17,6 @@ jobs:
           cp -irv getuigenverhalen/corpus/GV_Zigma_koopvaardij_08_conversation_clipped test/corpus/
       - name: Generate the model
         run: |
-          docker run --volume ${PWD}/model-generation/notebooks:/data/notebooks \
-           --volume ${PWD}/experiments/${EXPERIMENT}/corpus:/data/corpus \
-           --volume ${PWD}/experiments/${EXPERIMENT}/model:/data/model \
-           --user $(id -u):$(id -g) \
-           doc2vec
+          docker-compose --file generate-model.yml run --user $(id -u):$(id -g) generate-model
         env:
           EXPERIMENT: test
