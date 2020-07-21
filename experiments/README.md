@@ -5,14 +5,14 @@ applying a close-reading methodology for their scientific question to efficientl
 make use of large digitized text corpora. Of course, different researchers will
 be intersted in different corpora based on their scientific focus. Rather than
 provide support for (a selection of) specific corpora, `evidence` is therefore designed
-to ingest and make accessible via it's user interface (UI) a corpus of the user's choice.
+to ingest and make accessible via its user interface (UI) a corpus of the user's choice.
 
 The ability to do so, however, depends on the user presenting `evidence` the corpus in
 question in a manner the tool understands. Accordingly, this document outlines what is
 understood as a corpus in the context of `evidence`, and in what format the user should
 supply their corpus in order to make use of `evidence`. Given the plethora of formats in
-which corpora may exist in digital archives we DO NOT provide general instructions on
-how to prepare any specific corpus to meet the required format, instead focussing only on
+which corpora may exist in digital archives we do not provide general instructions on
+how to prepare any specific corpus to meet the required format, instead focusing only on
 the structure `evidence` expects.
 
 ## A corpus
@@ -22,7 +22,7 @@ or texts.
 
 ### Documents
 There are no strict upper or lower limits to the number of documents a collection
-can/should contain, however, as `evidence` trains a machine learning model over the corpus,
+can/should contain, however, as `evidence` trains a machine learning model on the corpus,
 too small corpora may give rise to poor performance. Typically, a corpus containing several
 million words, respectively several ten thousand paragraphs (see below) should suffice.
 
@@ -37,7 +37,7 @@ Preferably, all documents within a corpus should be written in one language. How
 not a strict requirement. If multiple languages are present, the fractions of the total corpus in
 each language should ideally be balanced. If this is not the case, `evidence` will still work,
 however results for the minority language(s) may be untrustworthy, especially if the corpus itself
-is small.
+is small ( < 10.000 fragments).
 
 ## Structure within `evidence`
 
@@ -48,7 +48,7 @@ documents of a corpus.
 
 ### Fragments
 Referred to as fragments, these sub-sections represent the atomic unit of a corpus within `evidence` and
-the totality of all elements represents the corpus. Each fragment has a unique id, which simultaneously also links it to its parent document. Together the fragments form a flat hierarchical layer on which search queries are executed.
+the set of all fragments makes up the corpus. Each fragment has a unique id, which simultaneously also links it to its parent document. Together the fragments form a flat hierarchical layer on which search queries are executed.
 
 We strongly suggest a fragment length of ca. 150 words, while not splitting inside of a paragraph. This choice
 is meant to restrain a fragment to one main topic, while providing enough length/context to account for more
