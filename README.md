@@ -26,9 +26,100 @@ This enables a user to combine the power of a close-reading approach with that o
 | Frontend | [![Frontend](https://github.com/ADAH-EviDENce/evidence/workflows/Frontend/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Frontend%22) |
 | docker-compose | [![docker-compose](https://github.com/ADAH-EviDENce/evidence/workflows/docker-compose/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3Adocker-compose) |
 | GitHub Super Linter| [![Lint Code Base](https://github.com/ADAH-EviDENce/evidence/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Lint+Code+Base%22) |
+| Markdown Link Checker| [![Check Markdown links](https://github.com/ADAH-EviDENce/evidence/workflows/Check%20Markdown%20links/badge.svg)](https://github.com/ADAH-EviDENce/evidence/actions?query=workflow%3A%22Check+Markdown+links%22) |
 
+## Documentation for users
 
-## Prerequisites
+## Running the demonstration on Windows
+
+The repository contains a demonstration including a corpus and a model. The demonstration allows you the explore the features of this software without supplying your own corpus.
+
+Prerequisites:
+
+- [Docker desktop](https://docs.docker.com/docker-for-windows/install/)
+
+### Step 1
+
+First test that the docker installation is working. Open a Powershell prompt (press Windows+S and type Powershell) and run:
+
+```shell
+docker run hello-world
+```
+
+This should show a message that your Docker installation is working correctly. If so, we can proceed to the installation of evidence tool, otherwise we suggest to check the [Docker troubleshooting page](https://docs.docker.com/docker-for-windows/troubleshoot/).
+
+### Step 2
+
+[Download](https://github.com/ADAH-EviDENce/evidence/archive/master.zip) a copy of evidence archive and extract its contents on your machine.
+
+### Step 3
+
+Open a Powershell prompt:
+Change your current working directory to where you extracted the files. For instance:
+
+```shell
+cd C:\Users\JohnDoe\Downloads\evidence-master\evidence-master
+```
+
+The demo can be started with the below command. Keep this Powershell window open and running during the demo.
+
+```shell
+$Env:EXPERIMENT="demo"
+docker-compose up --build
+```
+
+The command above downloads necessary Docker images, builds all the Docker images and starts the demo.
+
+The command prints many log messages. If all goes well, the last lines of the output should be:
+
+```shell
+...
+indexer_1        | Indexing done.
+evidence-master_indexer_1 exited with code 0
+```
+
+When using Windows 10 Pro, the Docker containers may not be able to read or write to the folder with the corpus and model. In this case, you get output like the following:
+
+```powershell
+PS C:\Users\JohnDoe\evidence-master\evidence-master> docker-compose up --build
+Creating network "evidence-master_default" with the default driver
+Building server
+Step 1/28 : FROM golang:1.12-stretch as buildserver
+ ---> 563601c9e3b2
+...
+Creating evidence-master_elasticsearch_1 ... done                                                                               Creating evidence-master_indexer_1       ... error
+ERROR: for evidence-master_indexer_1  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for evidence-master_server_1  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for indexer  Cannot create container for service indexer: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+
+ERROR: for server  Cannot create container for service server: status code not OK but 500: {"Message":"Unhandled exception: Filesharing has been cancelled",...
+ERROR: Encountered errors while bringing up the project.
+```
+
+This can be solved by explicitly giving Docker access to the folder. You can do this by:
+
+1. opening the Docker dashboard by right-clicking the Docker icon in the Windows taskbar
+2. go to Settings/Resources/FILE SHARING and add the folder where you extracted the files before
+3. try running the command again:
+
+    ```shell
+    $Env:EXPERIMENT="demo"
+    docker-compose up --build
+    ```
+
+### Step 4
+
+Go to the following URL in your web browser: [http://localhost:8080/](http://localhost:8080/ui/search/).
+
+### Step 5
+
+Once you are done with exploring the demo, you can stop it by selecting the PowerShell that is still running the demo and press Ctrl+C.
+
+## Generating a model
+
+### Prerequisites
 
 Verify that your ``docker-compose`` version is at least 1.25.4. (Earlier versions may work).
 
@@ -42,7 +133,7 @@ Verify that your ``docker`` version is at least 19.03.12. (Earlier versions may 
 docker --version
 ```
 
-## Define which corpus to use
+### Define which corpus to use
 
 Define the name of the dataset/experiment. Here we choose 'getuigenverhalen'. The corpus files should reside under ``/experiments/<EXPERIMENT>/corpus``, see sample corpora.
 
@@ -50,7 +141,7 @@ Define the name of the dataset/experiment. Here we choose 'getuigenverhalen'. Th
 export EXPERIMENT=getuigenverhalen
 ```
 
-## Building the model generation image
+### Building the model generation image
 
 Be aware that building can take a couple of minutes.
 
@@ -66,7 +157,7 @@ docker-compose --file generate-model.yml build generate-model
 docker-compose --file generate-model.yml run --user $(id -u):$(id -g) generate-model
 ```
 
-## Build the user interface web application and start it
+### Build the user interface web application and start it
 
 ```shell
 # (starting from the repo root directory)
@@ -79,6 +170,8 @@ Frontend should now be usable at [``http://localhost:8080``](http://localhost:80
 
 > We strongly suggest not making the frontend available publicly as there is no authentication. Anyone with the url will have access to the frontend.
 Running it on a local network, for example a university network, should be protected from most evil-doers.
+
+Besides interaction with a web browser you can also interact with the frontend from the command line see [here](ui#elastic-search-example-queries) and [here](ui#doc2vec-example-queries) for examples.
 
 ## Optional: manage frontend users
 
@@ -113,11 +206,18 @@ To add more users, repeat the command with different values for `FRONTEND_USER`.
 
 ---
 
-## Diagram
+## Documentation for developers
 
-![EviDENce_framework_intial-2.png](documentation/EviDENce_framework_intial-2.png)
+### Checking the MarkDown links
 
-## Related repositories
+When updating the documentation, you can check if the links are all working by running:
+
+```shell
+npm install
+npm run mlc
+```
+
+### Related repositories
 
 [https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework](https://github.com/ADAH-EviDENce/EviDENce_doc2vec_docker_framework)
 
