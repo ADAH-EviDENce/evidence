@@ -1,10 +1,20 @@
 import elasticsearch from 'elasticsearch';
 import config from "../config";
 
+function es_host() {
+    if (config.HOST) {
+        return config.HOST + '/es';
+    }
+    // ES queries are piped through Go web service
+    const url = new URL(window.location.href);
+    url.pathname = '/es';
+    return url.href;
+}
+
 export default class Resources {
 
     public static getSnippetsByDocumentId = (documentId: string) => {
-        return fetch(config.ES_HOST + "/documents/document/" + documentId);
+        return fetch(es_host() + "/documents/document/" + documentId);
     };
 
     public static searchSnippets = (
@@ -13,7 +23,7 @@ export default class Resources {
         size: number
     ) => {
         const client = new elasticsearch.Client({
-            host: config.ES_HOST + "/snippets",
+            host: es_host() + "/snippets",
             log: 'error'
         });
         return client.search({
@@ -38,7 +48,7 @@ export default class Resources {
 
     public static getSnippetsByIds = (docs: Array<any>) => {
         const client = new elasticsearch.Client({
-            host: config.ES_HOST + "/snippets/snippet",
+            host: es_host() + "/snippets/snippet",
             log: 'error'
         });
         return client.mget({body: {docs: docs}});
@@ -51,7 +61,7 @@ export default class Resources {
         size: number
     ) => {
         const client = new elasticsearch.Client({
-            host: config.ES_HOST + "/snippets",
+            host: es_host() + "/snippets",
             log: 'error'
         });
         return client.search({

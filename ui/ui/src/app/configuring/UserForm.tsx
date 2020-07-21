@@ -36,12 +36,12 @@ class UserForm extends React.Component<UserFormProps, any> {
                 if (json && json.length > 0) {
                     this.setState({loading: false, users: json});
                 } else {
-                    this.setState({loading: false, error: 'Geen gebruikers gevonden.'});
+                    this.setState({loading: false, error: 'No users found.'});
                 }
             });
         }).catch((e: Error) => {
             if(e.name  === 'AbortError') return;
-            this.setState({loading: false, error: 'Er trad een fout op bij het ophalen van de gebruikers.'});
+            this.setState({loading: false, error: 'Error occured during retrieval of users.'});
         });
     }
 
