@@ -1,6 +1,6 @@
 # evidence
 
-Doc2Vec-based assisted close reading tool with support for abtract concept-based search and context-based search.
+Doc2Vec-based assisted close reading tool with support for abstract concept-based search and context-based search.
 
 ## Machine supported research in humanities
 While research in the humanities has been able to leverage the digitization of text corpora and the development of computer based text analysis tools to its benefit, the interface current systems provide the user with is incompatible with the the proven method of scholarly close reading of texts which is key in many research scenarios pursuing complex research questions.
