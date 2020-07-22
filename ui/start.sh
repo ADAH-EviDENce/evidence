@@ -9,5 +9,5 @@
 echo "Starting server"
 exec ./evidence-gui \
 	-db /db/relevance.db \
-	-doc2vec /data/doc2vec.json \
+	-doc2vec /data/corpus-vectors.json \
 	-elastic http://elasticsearch:9200
