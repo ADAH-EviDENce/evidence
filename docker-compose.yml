@@ -25,13 +25,13 @@ services:
     image: evidence/indexer
     depends_on:
       - "elasticsearch"
-    command: ["sh","-c","/utils/wait-for-it.sh elasticsearch:9200 
-        --timeout=0 
-        -- /utils/index.py 
-        data/model/vocabulary_ids.txt 
-        data/model/vocabulary_bow.txt 
+    command: ["sh","-c","/utils/wait-for-it.sh elasticsearch:9200
+        --timeout=0
+        -- /utils/index.py
+        data/model/fragment_ids.txt
+        data/model/fragments.txt 
         elasticsearch
-        && echo Now go to the following URL in your webbrowser 
+        && echo Now go to the following URL in your webbrowser
         http://localhost:8080/ for the user interface."]
     volumes:
       - ./experiments/${EXPERIMENT}:/data:ro
