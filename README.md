@@ -22,9 +22,10 @@ While research in the humanities has been able to leverage the digitization of t
 What this boils down to, is the fact that it is often restrictive and difficult, if not impossible, to formulate adequate selection criteria, in particular for more complex or abstract concepts, in the framework of a keyword based search which is the standard entry point to digitized text collections.
 
 ## Querying by example - close reading with tailored suggestions
-`evidence` provides an alternative, intuitive entry point into collections. Using the doc2vec framework, `evidence` learns abstract representations of the content of the elements of the user's corpus.
-Departing from a set of corpus elements that the user selects as relevant starting points, `evidence` retrieves similar elements and presents them to the user, using the users feedback to refine its retrieval.
-This enables a user to combine the power of a close-reading approach with that of a large digitized corpus, selecting elements from the entire corpus which are likely to be of interest, but leaving the decision up to the user as to what evidence they deem useful.
+`evidence` provides an alternative, intuitive entry point into collections by leveraging the doc2vec framework. Using doc2vec `evidence` learns abstract representations of the theme and content of the elements of the user's corpus. Then, instead of trying to translate the scientific query into keywords, after compiling a set of relevant elements as starting points, i.e. examples of the concept the user is interested in, the user can query the corpus based on these examples of their concept of interest. Specifically, `evidence` retrieves elements with similar abstract representations and presents them to the user, using the users feedback to refine its retrieval.
+Furthermore, this concept-based query mode is complemented by the ability to perform additional retrieval using `more-like-this` context based retrieval function provided by `elasticsearch`.
+Together, this enables a user to combine the power of a close-reading approach with that of a large digitized corpus, selecting elements from the entire corpus which are likely to be of interest, but leaving the decision up to the user as to what evidence they deem useful.
+
 
 ## Documentation for users
 
